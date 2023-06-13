@@ -24,7 +24,7 @@ GitOps driven homelab using ArgoCD
 ```
 homelab                        # vault used for containing secrets
 ├── stringreplacesecret        # secret used for basic string replacement by ArgoCD Vault Plugin
-└── <namespace>                # secret for dedicated for each namespace
+└── <namespace>                # secret dedicated for each namespace
 ```
 
 # Getting Started
