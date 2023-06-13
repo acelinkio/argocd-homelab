@@ -1,0 +1,5 @@
+.DS_Store
+*.swp
+
+*.secret
+1password-credentials.json
