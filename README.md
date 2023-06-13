@@ -4,6 +4,7 @@ GitOps driven homelab using ArgoCD
 # Prerequisites
 * 1Password
 * Cloudflare managed domain
+* At least 1 private static ip
 * Kubernetes cluster
 * helm
 * kubectl
