@@ -1,0 +1,33 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ingress-nginx-internal
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx-internal
+  namespace: argocd
+spec:
+  destination:
+    namespace: ingress-nginx-internal
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.6.1
+    helm:
+      values: |
+        controller:
+          ingressClass: ingress-nginx-internal
+          ingressClassResource:
+            name: ingress-nginx-internal
+            controllerValue: "k8s.io/ingress-nginx-internal"
+          admissionWebhooks:
+            enabled: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true

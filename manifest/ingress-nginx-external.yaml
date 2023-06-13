@@ -1,0 +1,35 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: ingress-nginx-external
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx-external
+  namespace: argocd
+spec:
+  destination:
+    namespace: ingress-nginx-external
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: ingress-nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    targetRevision: 4.6.1
+    helm:
+      values: |
+        controller:
+          service:
+            type: ClusterIP
+          ingressClass: ingress-nginx-external
+          ingressClassResource:
+            name: ingress-nginx-external
+            controllerValue: "k8s.io/ingress-nginx-external"
+          admissionWebhooks:
+            enabled: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true

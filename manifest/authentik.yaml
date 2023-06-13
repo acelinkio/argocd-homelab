@@ -1,0 +1,52 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: authentik
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik
+  namespace: argocd
+spec:
+  destination:
+    namespace: authentik
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: authentik
+    repoURL: https://charts.goauthentik.io
+    targetRevision: 2023.5.3
+    helm:
+      values: |
+        authentik:
+            secret_key: "<path:vaults/homelab/items/authentik#secret_key>"
+            postgresql:
+                password: "<path:vaults/homelab/items/authentik#postgrespassword>"
+        ingress:
+            enabled: true
+            ingressClassName: ingress-nginx-internal
+            annotations:
+              external-dns.custom/type: private
+              external-dns.alpha.kubernetes.io/hostname: "authentik.<path:vaults/homelab/items/stringreplacesecret#domain>"
+              external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+            hosts:
+                - host: authentik.<path:vaults/homelab/items/stringreplacesecret#domain>
+                  paths:
+                      - path: "/"
+                        pathType: Prefix
+        postgresql:
+            enabled: true
+            postgresqlPassword: "<path:vaults/homelab/items/authentik#postgrespassword>"
+            persistence:
+              size: 4Gi
+        redis:
+            enabled: true
+            master:
+              persistence:
+                enabled: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
