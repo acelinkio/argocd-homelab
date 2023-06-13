@@ -67,6 +67,6 @@ kubectl apply -f bootstrap/argocd-config.yaml
 
     That is the format for using ArgoCD Vault Plugin. https://argocd-vault-plugin.readthedocs.io/en/stable/howitworks/#inline-path-placeholders  Example: `<path:vaults/homelab/items/stringreplacesecret#domain>`
 
-* Why use argo-vault-plugin and external-dns?
+* Why use argo-vault-plugin and external-secrets?
 
     Argo-Vault-Plugin provides a quick way to do do basic string replacements.  This is useful when prototyping and as many resources cannot quickly consume values from kubernetes secrets or configmaps.
