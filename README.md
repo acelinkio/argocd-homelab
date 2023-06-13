@@ -61,3 +61,12 @@ helm upgrade --install --repo https://argoproj.github.io/argo-helm --version 5.3
 # Configure ArgoCD
 kubectl apply -f bootstrap/argocd-config.yaml
 ```
+
+# FAQ
+* What is are these objects enclosed in <>?
+
+    That is the format for using ArgoCD Vault Plugin. https://argocd-vault-plugin.readthedocs.io/en/stable/howitworks/#inline-path-placeholders  Example: `<path:vaults/homelab/items/stringreplacesecret#domain>`
+
+* Why use argo-vault-plugin and external-dns?
+
+    Argo-Vault-Plugin provides a quick way to do do basic string replacements.  This is useful when prototyping and as many resources cannot quickly consume values from kubernetes secrets or configmaps.
