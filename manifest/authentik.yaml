@@ -32,7 +32,7 @@ spec:
   - secretKey: secret_key
     remoteRef:
       key: authentik
-      property: secret_key\
+      property: secret_key
   - secretKey: postgrespassword
     remoteRef:
       key: authentik
