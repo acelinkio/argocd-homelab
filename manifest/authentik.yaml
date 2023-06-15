@@ -29,6 +29,14 @@ spec:
     remoteRef:
       key: authentik
       property: bootstrap_email
+  - secretKey: secret_key
+    remoteRef:
+      key: authentik
+      property: secret_key\
+  - secretKey: postgrespassword
+    remoteRef:
+      key: authentik
+      property: postgrespassword
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -46,10 +54,6 @@ spec:
     targetRevision: 2023.5.3
     helm:
       values: |
-        authentik:
-            secret_key: "<path:vaults/homelab/items/authentik#secret_key>"
-            postgresql:
-                password: "<path:vaults/homelab/items/authentik#postgrespassword>"
         ingress:
             enabled: true
             ingressClassName: ingress-nginx-internal
@@ -73,6 +77,14 @@ spec:
               persistence:
                 enabled: false
         envValueFrom:
+          AUTHENTIK_SECRET_KEY:
+            secretKeyRef:
+              key: secret_key
+              name: authentik
+          AUTHENTIK_POSTGRESQL__PASSWORD:
+            secretKeyRef:
+              key: postgrespassword
+              name: authentik
           AUTHENTIK_BOOTSTRAP_PASSWORD:
             secretKeyRef:
               key: bootstrap_password
