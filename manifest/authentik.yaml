@@ -3,6 +3,33 @@ apiVersion: v1
 metadata:
   name: authentik
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: authentik
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+  - secretKey: bootstrap_password
+    remoteRef:
+      key: authentik
+      property: bootstrap_password
+  - secretKey: bootstrap_token
+    remoteRef:
+      key: authentik
+      property: bootstrap_token
+  - secretKey: bootstrap_email
+    remoteRef:
+      key: authentik
+      property: bootstrap_email
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -45,6 +72,19 @@ spec:
             master:
               persistence:
                 enabled: false
+        envValueFrom:
+          AUTHENTIK_BOOTSTRAP_PASSWORD:
+            secretKeyRef:
+              key: bootstrap_password
+              name: authentik
+          AUTHENTIK_BOOTSTRAP_TOKEN:
+            secretKeyRef:
+              key: bootstrap_token
+              name: authentik
+          AUTHENTIK_BOOTSTRAP_EMAIL:
+            secretKeyRef:
+              key: bootstrap_email
+              name: authentik
   syncPolicy:
     automated:
       allowEmpty: true
