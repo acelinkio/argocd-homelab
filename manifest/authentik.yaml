@@ -6,7 +6,7 @@ metadata:
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: authentik
+  name: authentik-configsecrets
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -80,23 +80,23 @@ spec:
           AUTHENTIK_SECRET_KEY:
             secretKeyRef:
               key: secret_key
-              name: authentik
+              name: authentik-configsecrets
           AUTHENTIK_POSTGRESQL__PASSWORD:
             secretKeyRef:
               key: postgrespassword
-              name: authentik
+              name: authentik-configsecrets
           AUTHENTIK_BOOTSTRAP_PASSWORD:
             secretKeyRef:
               key: bootstrap_password
-              name: authentik
+              name: authentik-configsecrets
           AUTHENTIK_BOOTSTRAP_TOKEN:
             secretKeyRef:
               key: bootstrap_token
-              name: authentik
+              name: authentik-configsecrets
           AUTHENTIK_BOOTSTRAP_EMAIL:
             secretKeyRef:
               key: bootstrap_email
-              name: authentik
+              name: authentik-configsecrets
   syncPolicy:
     automated:
       allowEmpty: true
