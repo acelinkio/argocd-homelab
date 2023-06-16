@@ -50,4 +50,3 @@ spec:
     args:
       - -d
       - --poll=5m
-      - --enable-external-secret-stores
