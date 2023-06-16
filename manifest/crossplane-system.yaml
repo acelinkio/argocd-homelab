@@ -46,7 +46,6 @@ kind: ControllerConfig
 metadata:
   name: terraform-config
 spec:
-  spec:
-    args:
-      - -d
-      - --poll=5m
+  args:
+    - -d
+    - --poll=5m
