@@ -38,3 +38,16 @@ metadata:
   name: provider-terraform
 spec:
   package: xpkg.upbound.io/upbound/provider-terraform:v0.8.0
+  controllerConfigRef:
+    name: terraform-config
+---
+apiVersion: pkg.crossplane.io/v1alpha1
+kind: ControllerConfig
+metadata:
+  name: terraform-config
+spec:
+  spec:
+    args:
+      - -d
+      - --poll=5m
+      - --enable-external-secret-stores
