@@ -18,14 +18,14 @@ spec:
         app.kubernetes.io/name: echo
     spec:
       containers:
-      - image: ealen/echo-server
-        imagePullPolicy: Always
-        name: echo
-        ports:
-        - containerPort: 80
-        env:
-          - name: cpu_architecture
-            value: $(dpkg --print-architecture)
+        - image: ealen/echo-server
+          imagePullPolicy: Always
+          name: echo
+          ports:
+            - containerPort: 80
+          env:
+            - name: cpu_architecture
+              value: $(dpkg --print-architecture)
 ---
 apiVersion: v1
 kind: Service
@@ -76,11 +76,11 @@ spec:
         app.kubernetes.io/name: helloworld
     spec:
       containers:
-      - image: nginx:latest
-        imagePullPolicy: Always
-        name: helloworld
-        ports:
-        - containerPort: 80
+        - image: nginx:latest
+          imagePullPolicy: Always
+          name: helloworld
+          ports:
+            - containerPort: 80
 ---
 apiVersion: v1
 kind: Service
