@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "ms-kubernetes-tools.vscode-kubernetes-tools",
+    "redhat.vscode-yaml",
+    "smoore.yaml-path"
+  ]
+}
