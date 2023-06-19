@@ -1,3 +1,5 @@
+# yaml linter does not know how to ignore specific formatting needed for this file
+# quotes need to be escaped
 configs:
   params:
     server.insecure: true
