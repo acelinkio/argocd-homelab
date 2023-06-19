@@ -29,15 +29,15 @@ spec:
       kind: CustomResourceDefinition
       name: bgppeers.metallb.io
       jsonPointers:
-      - /spec/conversion/webhook/clientConfig/caBundle
+        - /spec/conversion/webhook/clientConfig/caBundle
     - group: "apiextensions.k8s.io"
       kind: CustomResourceDefinition
       name: addresspools.metallb.io
       jsonPointers:
-      - /spec/conversion/webhook/clientConfig/caBundle
+        - /spec/conversion/webhook/clientConfig/caBundle
   info:
     - name: workaround1
-      value: 'https://github.com/metallb/metallb/issues/1681'
+      value: "https://github.com/metallb/metallb/issues/1681"
 ---
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
@@ -47,7 +47,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   addresses:
-  - <path:vaults/homelab/items/stringreplacesecret#metallbpooladdress>
+    - <path:vaults/homelab/items/stringreplacesecret#metallbpooladdress>
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
