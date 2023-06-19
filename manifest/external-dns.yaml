@@ -17,10 +17,10 @@ spec:
   target:
     creationPolicy: Owner
   data:
-  - secretKey: cloudflare_api_token
-    remoteRef:
-      key: external-dns
-      property: token
+    - secretKey: cloudflare_api_token
+      remoteRef:
+        key: external-dns
+        property: token
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
