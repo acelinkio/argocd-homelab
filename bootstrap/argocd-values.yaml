@@ -8,7 +8,7 @@ repoServer:
       verbs: ["get", "watch", "list"]
   volumes:
     - name: cmp-plugin
-      configMap: 
+      configMap:
         name: cmp-plugin
     - name: custom-tools
       emptyDir: {}
@@ -18,8 +18,8 @@ repoServer:
     - name: download-tools
       image: registry.access.redhat.com/ubi8
       env:
-      - name: AVP_VERSION
-        value: 1.14.0
+        - name: AVP_VERSION
+          value: 1.14.0
       command: [sh, -c]
       args:
         - >-

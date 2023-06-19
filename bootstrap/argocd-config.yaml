@@ -7,14 +7,14 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   destinations:
-    - name: '*'
-      namespace: '*'
-      server: '*'
+    - name: "*"
+      namespace: "*"
+      server: "*"
   sourceRepos:
-    - '*'
+    - "*"
   clusterResourceWhitelist:
-  - group: '*'
-    kind: '*'
+    - group: "*"
+      kind: "*"
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
@@ -24,11 +24,11 @@ metadata:
 spec:
   goTemplate: true
   generators:
-  - git:
-      repoURL: https://github.com/acelinkio/argocd-homelab.git
-      revision: HEAD
-      files:
-      - path: manifest/*.yaml
+    - git:
+        repoURL: https://github.com/acelinkio/argocd-homelab.git
+        revision: HEAD
+        files:
+          - path: manifest/*.yaml
   template:
     metadata:
       name: '{{ normalize .path.filename }}'
@@ -44,7 +44,7 @@ spec:
               value: '{{ .path.filename }}'
         targetRevision: HEAD
       destination:
-        server: 'https://kubernetes.default.svc'
+        server: "https://kubernetes.default.svc"
         namespace: '{{ trimSuffix (ext ".yaml") (base .path.filename) }}'
       syncPolicy:
         syncOptions:
