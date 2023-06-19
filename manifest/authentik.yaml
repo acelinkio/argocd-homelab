@@ -17,26 +17,26 @@ spec:
   target:
     creationPolicy: Owner
   data:
-  - secretKey: bootstrap_password
-    remoteRef:
-      key: authentik
-      property: bootstrap_password
-  - secretKey: bootstrap_token
-    remoteRef:
-      key: authentik
-      property: bootstrap_token
-  - secretKey: bootstrap_email
-    remoteRef:
-      key: authentik
-      property: bootstrap_email
-  - secretKey: secret_key
-    remoteRef:
-      key: authentik
-      property: secret_key
-  - secretKey: postgrespassword
-    remoteRef:
-      key: authentik
-      property: postgrespassword
+    - secretKey: bootstrap_password
+      remoteRef:
+        key: authentik
+        property: bootstrap_password
+    - secretKey: bootstrap_token
+      remoteRef:
+        key: authentik
+        property: bootstrap_token
+    - secretKey: bootstrap_email
+      remoteRef:
+        key: authentik
+        property: bootstrap_email
+    - secretKey: secret_key
+      remoteRef:
+        key: authentik
+        property: secret_key
+    - secretKey: postgrespassword
+      remoteRef:
+        key: authentik
+        property: postgrespassword
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -118,10 +118,10 @@ spec:
   target:
     creationPolicy: Owner
   data:
-  - secretKey: token
-    remoteRef:
-      key: authentik
-      property: bootstrap_token
+    - secretKey: token
+      remoteRef:
+        key: authentik
+        property: bootstrap_token
 ---
 apiVersion: tf.upbound.io/v1beta1
 kind: ProviderConfig
@@ -129,31 +129,31 @@ metadata:
   name: authentik-config
 spec:
   credentials:
-  - source: Secret
-    filename: token
-    secretRef:
-      namespace: authentik
-      name: authentik-providerconfig
-      key: token
+    - source: Secret
+      filename: token
+      secretRef:
+        namespace: authentik
+        name: authentik-providerconfig
+        key: token
   configuration: |
-      provider "authentik" {
-        url   = "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>"
-        token = file("${path.module}/token")
-      }
+    provider "authentik" {
+      url   = "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>"
+      token = file("${path.module}/token")
+    }
 
-      terraform {
-        required_providers {
-          authentik = {
-            source = "goauthentik/authentik"
-            version = "2023.5.0"
-          }
-        }
-        backend "kubernetes" {
-          secret_suffix     = "authentik-provider"
-          namespace         = "authentik"
-          in_cluster_config = true
+    terraform {
+      required_providers {
+        authentik = {
+          source = "goauthentik/authentik"
+          version = "2023.5.0"
         }
       }
+      backend "kubernetes" {
+        secret_suffix     = "authentik-provider"
+        namespace         = "authentik"
+        in_cluster_config = true
+      }
+    }
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -174,25 +174,25 @@ spec:
         sso.tfvars: |
           grafana_token = "{{ .grafana_token | toString }}"
   data:
-  - secretKey: grafana_token
-    remoteRef:
-      key: sso-secret
-      property: grafana
+    - secretKey: grafana_token
+      remoteRef:
+        key: sso-secret
+        property: grafana
 ---
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
 metadata:
   name: authentik-grafana
 spec:
-  providerConfigRef: 
+  providerConfigRef:
     name: authentik-config
   forProvider:
     varFiles:
-    - source: SecretKey
-      secretKeyRef:
-        key: sso.tfvars
-        name: sso-secret
-        namespace: authentik
+      - source: SecretKey
+        secretKeyRef:
+          key: sso.tfvars
+          name: sso-secret
+          namespace: authentik
     source: Inline
     module: |
       variable "grafana_token" {}
