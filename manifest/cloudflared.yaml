@@ -17,14 +17,14 @@ spec:
   target:
     creationPolicy: Owner
   data:
-  - secretKey: credentials.json
-    remoteRef:
-      key: cloudflared
-      property: credentials.json
-  - secretKey: TunnelID
-    remoteRef:
-      key: cloudflared
-      property: TunnelID
+    - secretKey: credentials.json
+      remoteRef:
+        key: cloudflared
+        property: credentials.json
+    - secretKey: TunnelID
+      remoteRef:
+        key: cloudflared
+        property: TunnelID
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -55,44 +55,44 @@ spec:
         app: cloudflared
     spec:
       containers:
-      - name: cloudflared
-        image: cloudflare/cloudflared:2023.5.1
-        args:
-          - tunnel
-          - --config
-          - /etc/cloudflared/config/config.yaml
-          - run
-          - $(TunnelID)
-        env:
-          - name: TunnelID
-            valueFrom:
-              secretKeyRef:
-                name: cloudflared
-                key: TunnelID
-        livenessProbe:
-          httpGet:
-            path: /ready
-            port: 2000
-          failureThreshold: 1
-          initialDelaySeconds: 10
-          periodSeconds: 10
-        volumeMounts:
-        - name: config
-          mountPath: /etc/cloudflared/config
-          readOnly: true
-        - name: creds
-          mountPath: /etc/cloudflared/creds
-          readOnly: true
+        - name: cloudflared
+          image: cloudflare/cloudflared:2023.5.1
+          args:
+            - tunnel
+            - --config
+            - /etc/cloudflared/config/config.yaml
+            - run
+            - $(TunnelID)
+          env:
+            - name: TunnelID
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflared
+                  key: TunnelID
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/config
+              readOnly: true
+            - name: creds
+              mountPath: /etc/cloudflared/creds
+              readOnly: true
       volumes:
-      - name: creds
-        secret:
-          secretName: cloudflared
-      - name: config
-        configMap:
-          name: cloudflared
-          items:
-          - key: config.yaml
-            path: config.yaml
+        - name: creds
+          secret:
+            secretName: cloudflared
+        - name: config
+          configMap:
+            name: cloudflared
+            items:
+              - key: config.yaml
+                path: config.yaml
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
