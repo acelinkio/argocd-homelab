@@ -8,5 +8,11 @@
     "fileMatch": [
       "manifest/.+\\.yaml$"
     ]
+  },
+  "kubernetes": {
+    "fileMatch": [
+      "manifest/.+\\.yaml$",
+      "bootstrap/.+\\.yaml$"
+    ]
   }
 }
