@@ -16,7 +16,7 @@ spec:
   source:
     chart: metallb
     repoURL: https://metallb.github.io/metallb
-    targetRevision: 0.13.9
+    targetRevision: 0.13.10
   syncPolicy:
     automated:
       allowEmpty: true
