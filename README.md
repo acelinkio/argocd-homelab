@@ -15,6 +15,11 @@ GitOps driven homelab using ArgoCD
 
 ```
 .
+├── .github/                   # Github workflow & integration settings
+│   └── renovate.json5         # RenovateBot configuration
+├── .vscode/                   # Visual Studio Code editor configurations
+│   ├── extensions.json        # Extension recomendations
+│   └── settings.json          # Editor configuration
 ├── bootstrap/                 # Initialization related resources
 │   ├── argocd-config.yaml     # ArgoCD Custom Resources for deployment
 │   └── argocd-values.yaml     # Values file used for Helm Release
