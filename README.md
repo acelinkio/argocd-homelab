@@ -66,7 +66,7 @@ homelab                        # vault used for containing secrets
 ```
 # Prepare secrets
 kubectl create namespace 1passwordconnect
-kubectl create secret generic 1passwordconnect --from-literal=1password-credentials.json=$(cat 1password-credentials.json | base64) -n 1passwordconnect
+kubectl create secret generic 1passwordconnect --from-literal 1password-credentials.json=$(cat bootstrap/1password-credentials.json | base64 -w 0 ) -n 1passwordconnect
 
 kubectl create namespace external-secrets
 kubectl create secret generic 1passwordconnect --from-file=token=bootstrap/1password-token.secret -n external-secrets
@@ -75,7 +75,7 @@ kubectl create namespace argocd
 kubectl create secret generic avpconfig --from-file=OP_CONNECT_TOKEN=bootstrap/1password-token.secret  --from-literal=AVP_TYPE=1passwordconnect --from-literal=OP_CONNECT_HOST=http://onepassword-connect.1passwordconnect.svc.cluster.local:8080 -n argocd
 
 # Install ArgoCD
-helm upgrade --install --repo https://argoproj.github.io/argo-helm --version 5.36.1 --namespace argocd argocd argo-cd --values bootstrap\argocd-values.yaml
+helm template --repo https://argoproj.github.io/argo-helm --version 5.36.2 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml --set configs.cm.url=http://argocd.acelink.io --set configs.secret.extra."dex\.authentik\.clientSecret"=replacemewithssoclientsecret | kubectl apply -f -
 
 # Configure ArgoCD
 kubectl apply -f bootstrap/argocd-config.yaml
