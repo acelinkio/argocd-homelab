@@ -3,6 +3,28 @@
 configs:
   params:
     server.insecure: true
+  cm:
+    url: "http://argocd.xxxxxxxx.xxxxxxxx"
+    dex.config: |
+      connectors:
+        - type: oidc
+          name: authentik
+          id: authentik
+          config:
+            issuer: http://authentik.xxxxxxxx.xxxxxxxx/application/o/argocd/
+            clientID: argocd
+            clientSecret: $dex.authentik.clientSecret
+            insecureEnableGroups: true
+            scopes:
+              - openid
+              - profile
+              - email
+  secret:
+    extra:
+      dex.authentik.clientSecret: xxxxxxxx
+  rbac:
+    policy.csv: |
+      g, ArgoCD Admin, role:admin
 repoServer:
   rbac:
     - apiGroups: [""]
