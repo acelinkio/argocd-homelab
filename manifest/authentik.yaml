@@ -173,6 +173,7 @@ spec:
       data:
         sso.tfvars: |
           grafana_token = "{{ .grafana_token | toString }}"
+          argocd_token = "{{ .argocd_token | toString }}"
   data:
     - secretKey: grafana_token
       remoteRef:
