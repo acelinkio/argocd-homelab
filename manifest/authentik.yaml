@@ -277,6 +277,7 @@ spec:
         name = authentik_provider_oauth2.argocd_ouath2.name
         slug = authentik_provider_oauth2.argocd_ouath2.name
         protocol_provider = authentik_provider_oauth2.argocd_ouath2.id
+        meta_icon = "https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg"
         meta_launch_url = "http://argocd.<path:vaults/homelab/items/stringreplacesecret#domain>/auth/login"
         policy_engine_mode = "all"
       }
