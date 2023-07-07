@@ -51,7 +51,7 @@ spec:
   source:
     chart: authentik
     repoURL: https://charts.goauthentik.io
-    targetRevision: 2023.6.0
+    targetRevision: 2023.6.1
     helm:
       values: |
         ingress:
