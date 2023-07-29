@@ -77,7 +77,7 @@ kubectl create secret generic avpconfig --from-file=OP_CONNECT_TOKEN=bootstrap/1
 # Install ArgoCD
 ## workarounds until https://github.com/argoproj-labs/argocd-vault-plugin/issues/516
 ## Update url, sso secret, & oidc config
-helm template --repo https://argoproj.github.io/argo-helm --version 5.36.2 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml --set configs.cm.url=http://argocd.acelink.io --set configs.secret.extra."dex\.authentik\.clientSecret"=replacemewithssoclientsecret | kubectl apply -f -
+helm template --repo https://argoproj.github.io/argo-helm --version 5.39.0 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml --set configs.cm.url=http://argocd.acelink.io --set configs.secret.extra."dex\.authentik\.clientSecret"=replacemewithssoclientsecret | kubectl apply -f -
 
 # Configure ArgoCD
 kubectl apply -f bootstrap/argocd-config.yaml
