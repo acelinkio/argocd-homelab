@@ -15,6 +15,8 @@ spec:
   project: homelab
   source:
     chart: olm
+    # generated from community maintained chart
+    # https://gitlab.com/kubitus-project/external-helm-charts/operator-lifecycle-manager
     repoURL: https://gitlab.com/api/v4/projects/29255838/packages/helm/stable
     targetRevision: v0.25.0
   syncPolicy:
