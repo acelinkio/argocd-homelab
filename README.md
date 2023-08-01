@@ -51,15 +51,22 @@ homelab                        # vault used for containing secrets
 
 ## Cloudflare Credentials
 
+### external-dns
 - In the homelab vault, create secret named `external-dns`
 - Follow https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ for generating a token and save into key named `token`
+
+### cloudflared
 - In the homelab vault, create secret named `cloudflared`
 - Follow https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/tunnel-guide/local/ for generating a tunnel and credentials.json. Save the tunnel id into a key named `TunnelID` and save credentials.json contents into a key named `credentials.json`
-
+### cert-manager
+- In the homelab vault, create secret named `cert-manager`
+- Follow https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens for generating a token and save into key named `token`
 ## String Replacement
 
 - In the homelab vault, create secret named `stringreplacesecret`
-- Save your domain mydomain.com into a key named `domain`. Save your static ip address range for MetalLB 192.168.1.x-192.168.1.x into a key named `metallbpooladdress`. Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
+- Save your domain mydomain.com into a key named `domain`. 
+- Save your static ip address range for MetalLB 192.168.1.x-192.168.1.x into a key named `metallbpooladdress`. 
+- Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 # Setup
 
