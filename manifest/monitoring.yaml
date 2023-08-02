@@ -20,7 +20,6 @@ spec:
     helm:
       values: |
         adminUser: admin
-        adminPassword: <path:quicktestsecret#grafanapassword>
         env:
           GF_SERVER_ROOT_URL: "http://grafana.<path:stringreplacesecret#domain>"
           GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
