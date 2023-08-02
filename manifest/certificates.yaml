@@ -13,7 +13,7 @@ spec:
   issuerRef:
     name: letsencrypt-staging
     kind: ClusterIssuer
-  commonName: '<path:vaults/homelab/items/stringreplacesecret#domain>'
+  commonName: '<path:stringreplacesecret#domain>'
   dnsNames:
-  - '<path:vaults/homelab/items/stringreplacesecret#domain>'
-  - '*.<path:vaults/homelab/items/stringreplacesecret#domain>'
+  - '<path:stringreplacesecret#domain>'
+  - '*.<path:stringreplacesecret#domain>'

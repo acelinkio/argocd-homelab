@@ -45,12 +45,12 @@ metadata:
   name: echo
   annotations:
     external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "echo.<path:vaults/homelab/items/stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/hostname: "echo.<path:stringreplacesecret#domain>"
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: echo.<path:vaults/homelab/items/stringreplacesecret#domain>
+    - host: echo.<path:stringreplacesecret#domain>
       http:
         paths:
           - path: /
@@ -101,7 +101,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-external
   rules:
-    - host: helloworld.<path:vaults/homelab/items/stringreplacesecret#domain>
+    - host: helloworld.<path:stringreplacesecret#domain>
       http:
         paths:
           - path: /
@@ -121,7 +121,7 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: helloworld.<path:vaults/homelab/items/stringreplacesecret#domain>
+    - dnsName: helloworld.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - ingress.<path:vaults/homelab/items/stringreplacesecret#domain>
+        - ingress.<path:stringreplacesecret#domain>

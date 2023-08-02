@@ -59,16 +59,16 @@ spec:
             ingressClassName: ingress-nginx-internal
             annotations:
               external-dns.custom/type: private
-              external-dns.alpha.kubernetes.io/hostname: "authentik.<path:vaults/homelab/items/stringreplacesecret#domain>"
+              external-dns.alpha.kubernetes.io/hostname: "authentik.<path:stringreplacesecret#domain>"
               external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
             hosts:
-                - host: authentik.<path:vaults/homelab/items/stringreplacesecret#domain>
+                - host: authentik.<path:stringreplacesecret#domain>
                   paths:
                       - path: "/"
                         pathType: Prefix
         postgresql:
             enabled: true
-            postgresqlPassword: "<path:vaults/homelab/items/authentik#postgrespassword>"
+            postgresqlPassword: "<path:authentik#postgrespassword>"
             persistence:
               size: 4Gi
         redis:
@@ -137,7 +137,7 @@ spec:
         key: token
   configuration: |
     provider "authentik" {
-      url   = "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>"
+      url   = "http://authentik.<path:stringreplacesecret#domain>"
       token = file("${path.module}/token")
     }
 
@@ -235,7 +235,7 @@ spec:
         client_secret = var.grafana_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "http://grafana.<path:vaults/homelab/items/stringreplacesecret#domain>/login/generic_oauth"]
+        redirect_uris = [ "http://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
@@ -249,7 +249,7 @@ spec:
         slug = authentik_provider_oauth2.grafana_ouath2.name
         protocol_provider = authentik_provider_oauth2.grafana_ouath2.id
         meta_icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/768px-Grafana_logo.svg.png"
-        meta_launch_url = "http://grafana.<path:vaults/homelab/items/stringreplacesecret#domain>/login/generic_oauth"
+        meta_launch_url = "http://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
         policy_engine_mode = "all"
       }
 
@@ -264,7 +264,7 @@ spec:
         client_secret = var.argocd_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "http://argocd.<path:vaults/homelab/items/stringreplacesecret#domain>/api/dex/callback","http://localhost:8085/auth/callback"]
+        redirect_uris = [ "http://argocd.<path:stringreplacesecret#domain>/api/dex/callback","http://localhost:8085/auth/callback"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
@@ -278,6 +278,6 @@ spec:
         slug = authentik_provider_oauth2.argocd_ouath2.name
         protocol_provider = authentik_provider_oauth2.argocd_ouath2.id
         meta_icon = "https://cncf-branding.netlify.app/img/projects/argo/icon/color/argo-icon-color.svg"
-        meta_launch_url = "http://argocd.<path:vaults/homelab/items/stringreplacesecret#domain>/auth/login"
+        meta_launch_url = "http://argocd.<path:stringreplacesecret#domain>/auth/login"
         policy_engine_mode = "all"
       }

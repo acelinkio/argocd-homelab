@@ -20,28 +20,28 @@ spec:
     helm:
       values: |
         adminUser: admin
-        adminPassword: <path:vaults/homelab/items/quicktestsecret#grafanapassword>
+        adminPassword: <path:quicktestsecret#grafanapassword>
         env:
-          GF_SERVER_ROOT_URL: "http://grafana.<path:vaults/homelab/items/stringreplacesecret#domain>"
+          GF_SERVER_ROOT_URL: "http://grafana.<path:stringreplacesecret#domain>"
           GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
           GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
           GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "grafana"
-          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "<path:vaults/homelab/items/sso-secret#grafana>"
+          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "<path:sso-secret#grafana>"
           GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email"
-          GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>/application/o/authorize/"
-          GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>/application/o/token/"
-          GF_AUTH_GENERIC_OAUTH_API_URL: "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>/application/o/userinfo/"
-          GF_AUTH_SIGNOUT_REDIRECT_URL: "http://authentik.<path:vaults/homelab/items/stringreplacesecret#domain>/application/o/grafana/end-session/"
+          GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/authorize/"
+          GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/token/"
+          GF_AUTH_GENERIC_OAUTH_API_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/userinfo/"
+          GF_AUTH_SIGNOUT_REDIRECT_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/grafana/end-session/"
           GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(groups[*], 'Grafana Admins') && 'Admin' || contains(groups[*], 'Grafana Editors') && 'Editor' || 'Viewer'"
         ingress:
           enabled: true
           ingressClassName: ingress-nginx-internal
           annotations:
             external-dns.custom/type: private
-            external-dns.alpha.kubernetes.io/hostname: "grafana.<path:vaults/homelab/items/stringreplacesecret#domain>"
+            external-dns.alpha.kubernetes.io/hostname: "grafana.<path:stringreplacesecret#domain>"
             external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
           hosts:
-          - grafana.<path:vaults/homelab/items/stringreplacesecret#domain>
+          - grafana.<path:stringreplacesecret#domain>
   syncPolicy:
     automated:
       allowEmpty: true

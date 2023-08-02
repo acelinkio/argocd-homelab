@@ -103,7 +103,7 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: ingress.<path:vaults/homelab/items/stringreplacesecret#domain>
+    - dnsName: ingress.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - <path:vaults/homelab/items/stringreplacesecret#cloudflaretunnelid>.cfargotunnel.com
+        - <path:stringreplacesecret#cloudflaretunnelid>.cfargotunnel.com

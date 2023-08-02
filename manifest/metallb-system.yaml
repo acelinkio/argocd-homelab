@@ -47,7 +47,7 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   addresses:
-    - <path:vaults/homelab/items/stringreplacesecret#metallbpooladdress>
+    - <path:stringreplacesecret#metallbpooladdress>
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
