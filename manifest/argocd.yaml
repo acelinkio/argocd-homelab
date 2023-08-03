@@ -80,7 +80,7 @@ spec:
                   config:
                     issuer: http://authentik.<path:stringreplacesecret#domain>/application/o/argocd/
                     clientID: argocd
-                    clientSecret: $sso.authentik.clientSecret
+                    clientSecret: $sso:token
                     insecureEnableGroups: true
                     scopes:
                       - openid
