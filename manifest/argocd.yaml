@@ -5,3 +5,47 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: argocd
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: sso-secret
+        property: argocd
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cmp-plugin
+  namespace: "{{ .Release.Namespace }}"
+data:
+  avp-directory-include.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: avp-directory-include
+    spec:
+      allowConcurrency: true
+      discover:
+        find:
+          command:
+            - sh
+            - "-c"
+            - "find . -name '*.yaml' | xargs -I {} grep \"<path\\|avp\\.kubernetes\\.io\" {} | grep ."
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            argocd-vault-plugin generate $ARGOCD_ENV_FILE_NAME
+      lockRepo: false
