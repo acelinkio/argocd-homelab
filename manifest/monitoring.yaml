@@ -52,8 +52,8 @@ spec:
         envValueFrom:
           GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
             secretKeyRef:
-              key: sso
-              name: token
+              key: token
+              name: sso
         ingress:
           enabled: true
           ingressClassName: ingress-nginx-internal
