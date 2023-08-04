@@ -79,12 +79,10 @@ kubectl create namespace external-secrets
 kubectl create secret generic 1passwordconnect --from-file=token=bootstrap/1password-token.secret -n external-secrets
 
 kubectl create namespace argocd
-kubectl create secret generic avpconfig --from-file=OP_CONNECT_TOKEN=bootstrap/1password-token.secret  --from-literal=AVP_TYPE=1passwordconnect --from-literal=OP_CONNECT_HOST=http://onepassword-connect.1passwordconnect.svc.cluster.local:8080 -n argocd
+kubectl create secret generic stringreplacesecret -n argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal metallbpooladdress=$metallbpooladdress
 
 # Install ArgoCD
-## workarounds until https://github.com/argoproj-labs/argocd-vault-plugin/issues/516
-## Update url, sso secret, & oidc config
-helm template --repo https://argoproj.github.io/argo-helm --version 5.39.0 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml --set configs.cm.url=http://argocd.acelink.io --set configs.secret.extra."dex\.authentik\.clientSecret"=replacemewithssoclientsecret | kubectl apply -f -
+helm template --repo https://argoproj.github.io/argo-helm --version 5.42.0 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml | kubectl apply -f -
 
 # Configure ArgoCD
 kubectl apply -f bootstrap/argocd-config.yaml

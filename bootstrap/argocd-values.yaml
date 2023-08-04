@@ -3,28 +3,6 @@
 configs:
   params:
     server.insecure: true
-  cm:
-    url: "http://argocd.xxxxxxxx.xxxxxxxx"
-    dex.config: |
-      connectors:
-        - type: oidc
-          name: authentik
-          id: authentik
-          config:
-            issuer: http://authentik.xxxxxxxx.xxxxxxxx/application/o/argocd/
-            clientID: argocd
-            clientSecret: $dex.authentik.clientSecret
-            insecureEnableGroups: true
-            scopes:
-              - openid
-              - profile
-              - email
-  secret:
-    extra:
-      dex.authentik.clientSecret: xxxxxxxx
-  rbac:
-    policy.csv: |
-      g, ArgoCD Admin, role:admin
 repoServer:
   rbac:
     - apiGroups: [""]
@@ -36,14 +14,12 @@ repoServer:
         name: cmp-plugin
     - name: custom-tools
       emptyDir: {}
-  deploymentAnnotations:
-    reloader.stakater.com/auto: "true"
   initContainers:
     - name: download-tools
       image: registry.access.redhat.com/ubi8
       env:
         - name: AVP_VERSION
-          value: 1.14.0
+          value: 1.16.0
       command: [sh, -c]
       args:
         - >-
@@ -57,6 +33,9 @@ repoServer:
     - name: plugin-avp-directory-include
       command: [/var/run/argocd/argocd-cmp-server]
       image: "{{ default .Values.global.image.repository .Values.server.image.repository }}:{{ default (include \"argo-cd.defaultTag\" .) .Values.server.image.tag }}"
+      env:
+      - name: AVP_TYPE
+        value: kubernetessecret
       securityContext:
         runAsNonRoot: true
         runAsUser: 999
@@ -98,5 +77,5 @@ extraObjects:
               - bash
               - "-c"
               - |
-                argocd-vault-plugin generate $ARGOCD_ENV_FILE_NAME -s argocd:avpconfig
+                argocd-vault-plugin generate $ARGOCD_ENV_FILE_NAME
           lockRepo: false
