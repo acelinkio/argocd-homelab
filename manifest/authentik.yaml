@@ -23,7 +23,7 @@ spec:
         key: authentik
         property: bootstrap_password
     # needed for nested helm chart
-    - secretKey: postgresql-password
+    - secretKey: postgresql-postgres-password
       remoteRef:
         key: authentik
         property: bootstrap_password
