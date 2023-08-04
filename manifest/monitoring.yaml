@@ -3,6 +3,24 @@ apiVersion: v1
 metadata:
   name: monitoring
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: monitoring
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: sso-secret
+        property: grafana
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -25,13 +43,17 @@ spec:
           GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
           GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
           GF_AUTH_GENERIC_OAUTH_CLIENT_ID: "grafana"
-          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET: "<path:sso-secret#grafana>"
           GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email"
           GF_AUTH_GENERIC_OAUTH_AUTH_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/authorize/"
           GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/token/"
           GF_AUTH_GENERIC_OAUTH_API_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/userinfo/"
           GF_AUTH_SIGNOUT_REDIRECT_URL: "http://authentik.<path:stringreplacesecret#domain>/application/o/grafana/end-session/"
           GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(groups[*], 'Grafana Admins') && 'Admin' || contains(groups[*], 'Grafana Editors') && 'Editor' || 'Viewer'"
+        envValueFrom:
+          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
+            secretKeyRef:
+              key: sso
+              name: token
         ingress:
           enabled: true
           ingressClassName: ingress-nginx-internal
