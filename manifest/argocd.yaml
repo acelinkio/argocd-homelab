@@ -11,6 +11,8 @@ kind: ExternalSecret
 metadata:
   name: sso
   namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: argocd
 spec:
   refreshInterval: "5m"
   secretStoreRef:
