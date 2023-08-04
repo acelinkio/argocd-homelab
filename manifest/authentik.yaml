@@ -22,6 +22,11 @@ spec:
       remoteRef:
         key: authentik
         property: bootstrap_password
+    # needed for nested helm chart
+    - secretKey: postgresql-password
+      remoteRef:
+        key: authentik
+        property: bootstrap_password
     - secretKey: bootstrap_token
       remoteRef:
         key: authentik
@@ -69,7 +74,7 @@ spec:
                         pathType: Prefix
         postgresql:
             enabled: true
-            postgresqlPassword: "<path:authentik#postgrespassword>"
+            existingSecret: authentik-configsecrets
             persistence:
               size: 4Gi
         redis:
