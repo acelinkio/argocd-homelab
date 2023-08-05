@@ -59,6 +59,7 @@ spec:
     targetRevision: 12.8.0
     helm:
       values: |
+        fullnameOverride: authentik-postgres
         postgresql:
           auth:
             username: authentik
