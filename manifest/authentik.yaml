@@ -121,7 +121,7 @@ spec:
               name: authentik-configsecrets
           AUTHENTIK_POSTGRESQL__PASSWORD:
             secretKeyRef:
-              key: postgrespassword
+              key: postgresuserpassword
               name: authentik-configsecrets
           AUTHENTIK_BOOTSTRAP_PASSWORD:
             secretKeyRef:
