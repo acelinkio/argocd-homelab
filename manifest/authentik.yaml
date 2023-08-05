@@ -60,15 +60,13 @@ spec:
     helm:
       values: |
         fullnameOverride: authentik-postgres
-        global:
-          postgresql:
-            auth:
-              username: authentik
-              database: authentik
-              existingSecret: authentik-configsecrets
-              secretKeys:
-                adminPasswordKey: postgrespassword
-                userPasswordKey: postgresuserpassword
+        auth:
+          username: authentik
+          database: authentik
+          existingSecret: authentik-configsecrets
+          secretKeys:
+            adminPasswordKey: postgrespassword
+            userPasswordKey: postgresuserpassword
         primary:
           persistence:
             size: 4Gi
