@@ -22,11 +22,6 @@ spec:
       remoteRef:
         key: authentik
         property: bootstrap_password
-    # needed for nested helm chart
-    - secretKey: postgresql-postgres-password
-      remoteRef:
-        key: authentik
-        property: bootstrap_password
     - secretKey: bootstrap_token
       remoteRef:
         key: authentik
@@ -43,6 +38,42 @@ spec:
       remoteRef:
         key: authentik
         property: postgrespassword
+    - secretKey: postgresuserpassword
+      remoteRef:
+        key: authentik
+        property: postgresuserpassword
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: authentik-postgres
+  namespace: argocd
+spec:
+  destination:
+    namespace: authentik
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgresql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 12.8.0
+    helm:
+      values: |
+        postgresql:
+          auth:
+            username: authentik
+            database: authentik
+            existingSecret: authentik-configsecrets
+            secretKeys:
+              adminPasswordKey: postgrespassword
+              userPasswordKey: postgresuserpassword
+          persistence:
+            size: 4Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -73,10 +104,8 @@ spec:
                       - path: "/"
                         pathType: Prefix
         postgresql:
-            enabled: true
-            existingSecret: authentik-configsecrets
-            persistence:
-              size: 4Gi
+          host: "authentik-postgres"
+          name: "authentik"
         redis:
             enabled: true
             master:
