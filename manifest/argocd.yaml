@@ -73,6 +73,8 @@ spec:
           params:
             server.insecure: true
           cm:
+            resource.compareoptions: |
+              ignoreAggregatedRoles: true
             url: "http://argocd.<path:stringreplacesecret#domain>"
             dex.config: |
               connectors:
