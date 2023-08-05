@@ -196,7 +196,7 @@ spec:
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
-  name: sso-secret
+  name: sso
   namespace: authentik
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -215,11 +215,11 @@ spec:
   data:
     - secretKey: grafana_token
       remoteRef:
-        key: sso-secret
+        key: sso
         property: grafana
     - secretKey: argocd_token
       remoteRef:
-        key: sso-secret
+        key: sso
         property: argocd
 ---
 apiVersion: tf.upbound.io/v1beta1
@@ -234,7 +234,7 @@ spec:
       - source: SecretKey
         secretKeyRef:
           key: sso.tfvars
-          name: sso-secret
+          name: sso
           namespace: authentik
     source: Inline
     module: |
