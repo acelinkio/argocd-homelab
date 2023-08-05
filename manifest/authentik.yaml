@@ -104,9 +104,11 @@ spec:
                   paths:
                       - path: "/"
                         pathType: Prefix
-        postgresql:
-          host: "authentik-postgres.authentik"
-          name: "authentik"
+        authentik:
+          postgresql:
+            host: "authentik-postgres.authentik"
+            name: "authentik"
+            user: "authentik"
         redis:
             enabled: true
             master:
