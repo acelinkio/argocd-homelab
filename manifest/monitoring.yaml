@@ -18,7 +18,7 @@ spec:
   data:
     - secretKey: token
       remoteRef:
-        key: sso-secret
+        key: sso
         property: grafana
 ---
 apiVersion: argoproj.io/v1alpha1
