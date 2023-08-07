@@ -52,6 +52,20 @@ data:
           - |
             argocd-vault-plugin generate $ARGOCD_ENV_FILE_NAME
       lockRepo: false
+  kustomize-inline.yaml: |
+    apiVersion: argoproj.io/v1alpha1
+    kind: ConfigManagementPlugin
+    metadata:
+      name: kustomize-inline
+    spec:
+      allowConcurrency: true
+      generate:
+        command:
+          - bash
+          - "-c"
+          - |
+            echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" | kustomize build
+      lockRepo: false
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -104,6 +118,8 @@ spec:
                 name: cmp-plugin
             - name: custom-tools
               emptyDir: {}
+            - name: cmp-tmp
+              emptyDir: {}
           deploymentAnnotations:
             reloader.stakater.com/auto: "true"
           initContainers:
@@ -137,13 +153,29 @@ spec:
                 - mountPath: /home/argocd/cmp-server/plugins
                   name: plugins
                 - mountPath: /tmp
-                  name: tmp
+                  name: cmp-tmp
                 - mountPath: /home/argocd/cmp-server/config/plugin.yaml
                   subPath: avp-directory-include.yaml
                   name: cmp-plugin
                 - name: custom-tools
                   subPath: argocd-vault-plugin
                   mountPath: /usr/local/bin/argocd-vault-plugin
+            - name: plugin-kustomize-inline
+              command: [/var/run/argocd/argocd-cmp-server]
+              image: "{{ default .Values.global.image.repository .Values.server.image.repository }}:{{ default (include \"argo-cd.defaultTag\" .) .Values.server.image.tag }}"
+              securityContext:
+                runAsNonRoot: true
+                runAsUser: 999
+              volumeMounts:
+                - mountPath: /var/run/argocd
+                  name: var-files
+                - mountPath: /home/argocd/cmp-server/plugins
+                  name: plugins
+                - mountPath: /tmp
+                  name: cmp-tmp
+                - mountPath: /home/argocd/cmp-server/config/plugin.yaml
+                  subPath: kustomize-inline.yaml
+                  name: cmp-plugin
   syncPolicy:
     automated:
       allowEmpty: true
