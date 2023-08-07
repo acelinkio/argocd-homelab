@@ -59,7 +59,8 @@ data:
           - -c
           - |
             echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" | tee kustomization.yaml;
-            kustomize build
+            kustomize build;
+            rm kustomization.yaml
       lockRepo: false
 ---
 apiVersion: argoproj.io/v1alpha1
