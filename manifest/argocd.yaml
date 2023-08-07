@@ -64,7 +64,7 @@ data:
           - /bin/sh
           - -c
           - |
-            echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" > kustomization.yaml;
+            echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" | tee kustomization.yaml;
             kustomize build
       lockRepo: false
 ---
