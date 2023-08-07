@@ -61,10 +61,7 @@ data:
       allowConcurrency: true
       generate:
         command:
-          - bash
-          - "-c"
-          - |
-            echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" > kustomization.yaml && kustomize build
+          - echo "$ARGOCD_ENV_KUSTOMIZATION_YAML" > kustomization.yaml && kustomize build
       lockRepo: false
 ---
 apiVersion: argoproj.io/v1alpha1
