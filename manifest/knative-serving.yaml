@@ -14,7 +14,7 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    repoURL: https://github.com/acelinkio/empty.git
+    repoURL: https://github.com/argoproj/argocd-example-apps.git
     path: .
     plugin:
       name: kustomize-inline
