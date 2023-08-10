@@ -6,7 +6,7 @@ metadata:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kustomize-inline
+  name: knative-serving
   namespace: argocd
 spec:
   destination:
