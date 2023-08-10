@@ -14,25 +14,26 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    repoURL: https://github.com/argoproj/argocd-example-apps.git
+    repoURL: https://github.com/acelinkio/empty.git
     path: .
     plugin:
       name: kustomize-inline
       env:
         - name: KUSTOMIZATION_YAML
-          value: |-
+          # $ must be escaped with by $$
+          value: |
             apiVersion: kustomize.config.k8s.io/v1beta1
             kind: Kustomization
             resources:
-            - https://github.com/knative/serving/releases/download/knative-v1.11.0/serving-core.yaml
+              - https://github.com/knative/serving/releases/download/knative-v1.11.0/serving-core.yaml
             patches:
-            - target:
-                kind: Namespace
-              patch: |-
-                $patch: delete
-                kind: Namespace
-                metadata:
-                  name: deletethis
+              - target:
+                  kind: Namespace
+                patch: |
+                  $$patch: delete
+                  kind: Namespace
+                  metadata:
+                    name: deletethis
   syncPolicy:
     automated:
       allowEmpty: true
