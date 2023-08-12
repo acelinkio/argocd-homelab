@@ -34,6 +34,24 @@ spec:
                   kind: Namespace
                   metadata:
                     name: deletethis
+              - target:
+                  kind: MutatingWebhookConfiguration
+                patch: |
+                  - op: replace
+                    path: /webhooks/0/rules/0/apiVersions/0
+                    value: v1alpha1
+              - target:
+                  kind: MutatingWebhookConfiguration
+                patch: |
+                  - op: add
+                    path: /webhooks/0/rules/0/apiVersions/1
+                    value: v1
+              - target:
+                  kind: MutatingWebhookConfiguration
+                patch: |
+                  - op: add
+                    path: /webhooks/0/rules/0/apiVersions/1
+                    value: v1beta1
   syncPolicy:
     automated:
       allowEmpty: true
