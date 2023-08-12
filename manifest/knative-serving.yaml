@@ -37,21 +37,70 @@ spec:
               - target:
                   kind: MutatingWebhookConfiguration
                 patch: |
-                  - op: replace
-                    path: /webhooks/0/rules/0/apiVersions/0
-                    value: v1alpha1
-              - target:
+                  $$patch: merge
                   kind: MutatingWebhookConfiguration
-                patch: |
-                  - op: add
-                    path: /webhooks/0/rules/0/apiVersions/1
-                    value: v1
-              - target:
-                  kind: MutatingWebhookConfiguration
-                patch: |
-                  - op: add
-                    path: /webhooks/0/rules/0/apiVersions/1
-                    value: v1beta1
+                  metadata:
+                    name: webhook.serving.knative.dev
+                  webhooks:
+                  - admissionReviewVersions: ["v1", "v1beta1"]
+                    clientConfig:
+                      service:
+                        name: webhook
+                        namespace: knative-serving
+                    failurePolicy: Fail
+                    sideEffects: None
+                    name: webhook.serving.knative.dev
+                    timeoutSeconds: 10
+                    rules:
+                    - apiGroups:
+                      - serving.knative.dev
+                      apiVersions:
+                      - v1beta1
+                      - v1alpha1
+                      - v1
+                      operations:
+                      - CREATE
+                      - UPDATE
+                      scope: "*"
+                      resources:
+                      - configurations
+                      - configurations/status
+                      - revisions
+                      - revisions/status
+                      - routes
+                      - routes/status
+                      - services
+                      - services/status
+                      - domainmappings
+                      - domainmappings/status
+                    - apiGroups:
+                      - networking.internal.knative.dev
+                      apiVersions:
+                      - v1alpha1
+                      operations:
+                      - CREATE
+                      - UPDATE
+                      scope: "*"
+                      resources:
+                      - certificates
+                      - certificates/status
+                      - ingresses
+                      - ingresses/status
+                      - serverlessservices
+                      - serverlessservices/status
+                    - apiGroups:
+                      - autoscaling.internal.knative.dev
+                      apiVersions:
+                      - v1alpha1
+                      operations:
+                      - CREATE
+                      - UPDATE
+                      scope: "*"
+                      resources:
+                      - metrics
+                      - metrics/status
+                      - podautoscalers
+                      - podautoscalers/status
   syncPolicy:
     automated:
       allowEmpty: true
