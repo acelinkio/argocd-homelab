@@ -82,7 +82,7 @@ kubectl create namespace argocd
 kubectl create secret generic stringreplacesecret -n argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal metallbpooladdress=$metallbpooladdress
 
 # Install ArgoCD
-helm template --repo https://argoproj.github.io/argo-helm --version 5.42.0 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml | kubectl apply -f -
+helm template --repo https://argoproj.github.io/argo-helm --version 5.43.3 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml | kubectl apply -f -
 
 # Configure ArgoCD
 kubectl apply -f bootstrap/argocd-config.yaml
