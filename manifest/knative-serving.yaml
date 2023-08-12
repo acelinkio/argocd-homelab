@@ -40,12 +40,12 @@ spec:
       prune: true
       selfHeal: true
   ignoreDifferences:
-    - group: "admissionregistration.k8s.io/v1"
+    - group: "admissionregistration.k8s.io"
       kind: MutatingWebhookConfiguration
       name: webhook.serving.knative.dev
       jsonPointers:
         - /webhooks/0/rules
-    - group: "admissionregistration.k8s.io/v1"
+    - group: "admissionregistration.k8s.io"
       kind: ValidatingWebhookConfiguration
       name: validation.webhook.serving.knative.dev
       jsonPointers:
