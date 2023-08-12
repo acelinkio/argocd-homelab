@@ -175,6 +175,7 @@ spec:
                         scope: '*'
               - target:
                   kind: ValidatingWebhookConfiguration
+                  name: validation.webhook.serving.knative.dev
                 patch: |
                   $$patch: merge
                   kind: ValidatingWebhookConfiguration
@@ -189,7 +190,9 @@ spec:
                         name: webhook
                         namespace: knative-serving
                     failurePolicy: Fail
+                    sideEffects: None
                     name: validation.webhook.serving.knative.dev
+                    timeoutSeconds: 10
                     rules:
                       - apiGroups:
                           - autoscaling.internal.knative.dev
