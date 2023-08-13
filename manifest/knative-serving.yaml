@@ -38,7 +38,7 @@ spec:
                   kind: ConfigMap
                   name: config-domain
                 patch: |
-                  $patch: merge
+                  $$patch: merge
                   kind: ConfigMap
                   metadata:
                     name: config-domain
@@ -48,7 +48,7 @@ spec:
                   kind: ConfigMap
                   name: config-network
                 patch: |
-                  $patch: merge
+                  $$patch: merge
                   kind: ConfigMap
                   metadata:
                     name: config-network
