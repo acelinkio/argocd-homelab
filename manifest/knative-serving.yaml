@@ -52,4 +52,4 @@ spec:
         - /webhooks/0/rules
   info:
     - name: workaround1
-      value: "https://github.com/knative/serving/issues/12474#issuecomment-1167381877"
+      value: "https://github.com/knative/serving/issues/13449#issuecomment-1676159959"
