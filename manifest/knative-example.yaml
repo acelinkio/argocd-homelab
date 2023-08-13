@@ -1,0 +1,15 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: knative-example
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: knative-echo
+  namespace: knative-example
+spec:
+  template:
+    spec:
+      containers:
+      - image: ealen/echo-server
