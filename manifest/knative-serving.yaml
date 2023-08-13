@@ -34,6 +34,26 @@ spec:
                   kind: Namespace
                   metadata:
                     name: deletethis
+              - target:
+                  kind: ConfigMap
+                  name: config-domain
+                patch: |
+                  $patch: merge
+                  kind: ConfigMap
+                  metadata:
+                    name: config-domain
+                  data:
+                    example.com: |
+              - target:
+                  kind: ConfigMap
+                  name: config-network
+                patch: |
+                  $patch: merge
+                  kind: ConfigMap
+                  metadata:
+                    name: config-network
+                  data:
+                    ingress-class: kourier.ingress.networking.knative.dev
   syncPolicy:
     automated:
       allowEmpty: true
