@@ -39,3 +39,29 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+# NOTE THIS IS FOR MANAGING knative-example RESOURCE
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: knative-echo
+  namespace: kourier-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: '/'
+    nginx.ingress.kubernetes.io/upstream-vhost: 'knative-echo.knative-example.<path:stringreplacesecret#domain>'
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "knative.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: knative.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: kourier-internal
+                port:
+                  number: 80

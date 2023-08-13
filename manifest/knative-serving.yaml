@@ -43,7 +43,7 @@ spec:
                   metadata:
                     name: config-domain
                   data:
-                    example.com: |
+                    <path:stringreplacesecret#domain>: |
               - target:
                   kind: ConfigMap
                   name: config-network

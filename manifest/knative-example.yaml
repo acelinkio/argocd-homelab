@@ -13,3 +13,4 @@ spec:
     spec:
       containers:
       - image: ealen/echo-server
+# NOTE THAT INGRESS IS MANAGED BY KOURIER-SYSTEM
