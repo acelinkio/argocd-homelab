@@ -50,12 +50,12 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: '/'
     nginx.ingress.kubernetes.io/upstream-vhost: 'knative-echo.knative-example.<path:stringreplacesecret#domain>'
     external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "knative.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/hostname: "kecho.<path:stringreplacesecret#domain>"
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: knative.<path:stringreplacesecret#domain>
+    - host: kecho.<path:stringreplacesecret#domain>
       http:
         paths:
           - pathType: Prefix
