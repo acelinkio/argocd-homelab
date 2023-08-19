@@ -6,10 +6,10 @@ GitOps driven homelab using ArgoCD
 
 - 1Password
 - Cloudflare managed domain
-- At least 1 private static ip
 - Kubernetes cluster
 - helm
 - kubectl
+- 1 internal reserved ip address for MetalLB
 
 # Project Structure
 
@@ -17,14 +17,14 @@ GitOps driven homelab using ArgoCD
 .
 ├── .github/                   # Github workflow & integration settings
 │   └── renovate.json5         # RenovateBot configuration
-├── .vscode/                   # Visual Studio Code editor configurations
+├── .vscode/                   # Visual Studio Code configuration
 │   ├── extensions.json        # Extension recomendations
-│   └── settings.json          # Editor configuration
-├── bootstrap/                 # Initialization related resources
+│   └── settings.json          # Editor settings
+├── bootstrap/                 # Initialization of resources
 │   ├── argocd-config.yaml     # ArgoCD Custom Resources for deployment
 │   └── argocd-values.yaml     # Values file used for Helm Release
 ├── manifest/                  # Directory ArgoCD ApplicationSet watches
-│   └── <namespace>.yaml       # App of Apps manifests for used for each namespace
+│   └── <namespace>.yaml       # App of Apps manifests for each namespace
 ├── .gitignore                 # Ignored files list
 └── README.md                  # This file
 ```
@@ -90,10 +90,21 @@ kubectl apply -f bootstrap/argocd-config.yaml
 
 # FAQ
 
-- What is are these objects enclosed in <>?
+- Why use external-secrets and argo-vault-plugin?
+
+  external-secrets is the source of truth and should be used primarily.
+
+  argo-vault-plugin is a convient way to do string replacement.  Primarily used to avoid hardcoding domains in ingresses or ipaddresses in metallb.
+
+- What is this `<>` notation?
 
   That is the format for using ArgoCD Vault Plugin. https://argocd-vault-plugin.readthedocs.io/en/stable/howitworks/#inline-path-placeholders Example: `<path:vaults/homelab/items/stringreplacesecret#domain>`
 
-- Why use argo-vault-plugin and external-secrets?
+- What does your cluster look like?
 
-  Argo-Vault-Plugin provides a quick way to do do basic string replacements. This is useful when prototyping and as many resources cannot quickly consume values from kubernetes secrets or configmaps.
+  Work in progress to definite.  Aim is to create a general compute node group based on arm64 and then add nodes groups for any different hardware.  
+
+  Will be aiming to use kyverno to manage taints and tolartions on nodes/pods instead of directly specifying them.
+
+- nvidia's gpu-operator
+  WIP.  Currently will manage any nvidia labels on nodes.
