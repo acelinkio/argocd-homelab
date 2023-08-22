@@ -91,6 +91,10 @@ kubectl apply -f bootstrap/argocd-config.yaml
 
 # FAQ
 
+- Why is kubernetes not coming back up after going offline?
+
+  Kubernetes API server relies upon Kyverno for validation/mutating.  If Kyverno is unavailable, requests will fail by default.  Update core functions to allow failure.  https://kyverno.io/docs/troubleshooting/#api-server-is-blocked
+
 - Why use external-secrets and argo-vault-plugin?
 
   external-secrets is the source of truth and should be used primarily.
