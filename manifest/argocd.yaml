@@ -199,10 +199,10 @@ spec:
       remoteRef:
         key: stringreplacesecret
         property: cloudflaretunnelid
-    - secretKey: metallbpooladdress
+    - secretKey: ciliumipamcidr
       remoteRef:
         key: stringreplacesecret
-        property: metallbpooladdress
+        property: ciliumipamcidr
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
