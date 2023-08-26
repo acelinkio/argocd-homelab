@@ -9,7 +9,7 @@ GitOps driven homelab using ArgoCD
 - Kubernetes cluster
 - helm
 - kubectl
-- 1 internal reserved ip address for MetalLB
+- reserved cidr block for broadcasting
 
 # Project Structure
 
@@ -66,7 +66,7 @@ homelab                        # vault used for containing secrets
 
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
-- Save your static ip address range for MetalLB 192.168.1.x-192.168.1.x into a key named `metallbpooladdress`. 
+- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. 
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 # Setup
@@ -80,7 +80,11 @@ kubectl create namespace external-secrets
 kubectl create secret generic 1passwordconnect --from-file=token=bootstrap/1password-token.secret -n external-secrets
 
 kubectl create namespace argocd
-kubectl create secret generic stringreplacesecret -n argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal metallbpooladdress=$metallbpooladdress
+export domain=mydomain.tld
+export cloudflaretunnelid=11111111-2222-3333-4444-555555555555
+export ciliumipamcidr=192.168.1.48/29
+
+kubectl create secret generic stringreplacesecret -n argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
 
 # Install ArgoCD
 helm template --repo https://argoproj.github.io/argo-helm --version 5.43.3 --namespace argocd argocd argo-cd --values bootstrap/argocd-values.yaml | kubectl apply -f -
@@ -99,7 +103,7 @@ kubectl apply -f bootstrap/argocd-config.yaml
 
   external-secrets is the source of truth and should be used primarily.
 
-  argo-vault-plugin is a convient way to do string replacement.  Primarily used to avoid hardcoding domains in ingresses or ipaddresses in metallb.
+  argo-vault-plugin is a convient way to do string replacement.  Primarily used to avoid hardcoding domains in ingresses or ipaddresses.
 
 - What is this `<>` notation?
 

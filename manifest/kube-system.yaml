@@ -145,3 +145,18 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: policy
+spec:
+  loadBalancerIPs: true
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool
+spec:
+  cidrs:
+    - cidr: <path:stringreplacesecret#ciliumipamcidr>
