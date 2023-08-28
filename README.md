@@ -34,3 +34,10 @@ GitOps driven homelab using ArgoCD
 ## Fork this repository
 - Update references during setup and in `bootstrap/argocd-config.yaml` of this repository.  Work in progress to simplify.
 
+# TODO
+* Remove bootstrap specific files
+* Use 1password cli during setup
+* Github pages
+* List out all tech used
+* Renovate updates for argovaultplugin & knative
+* Update docs/setup to mention kube-system
