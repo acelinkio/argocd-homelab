@@ -35,6 +35,13 @@ homelab                        # vault used for containing secrets
 - In the homelab vault, create secret named `cert-manager`
 - Follow https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens for generating a token and save into key named `token`
 
+
+### SSO
+- In the homelab vault, create secret named `sso`
+- Each application a unique clientsecret that is between 30-90 characters long.
+  - Create key named `argocd` and save clientsecret value inside.
+  - Create key named `grafana` and save clientsecret value inside.
+
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
