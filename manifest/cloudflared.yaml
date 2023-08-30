@@ -8,8 +8,6 @@ kind: ExternalSecret
 metadata:
   name: cloudflared
   namespace: cloudflared
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   refreshInterval: "5m"
   secretStoreRef:
@@ -100,7 +98,6 @@ kind: DNSEndpoint
 metadata:
   name: ingress
   annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     external-dns.custom/type: public
 spec:
   endpoints:
