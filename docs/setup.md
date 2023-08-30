@@ -60,7 +60,10 @@ Not needed if with an existing cluster.
 ## https://github.com/mikefarah/yq
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_arm64 -O /usr/bin/yq && chmod +x /usr/bin/yq
 ## packages for k3s/longhorn
+apt update
 apt install -y curl open-iscsi
+## helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 
 export SETUP_NODEIP=192.168.1.195
