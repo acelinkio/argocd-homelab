@@ -304,7 +304,8 @@ spec:
           prune: true
           selfHeal: true
           allowEmpty: true
-# ---
+---
+
 ## Private Repository Secret example
 ## https://argo-cd.readthedocs.io/en/stable/user-guide/private-repositories/
 # apiVersion: v1
