@@ -79,7 +79,7 @@ export cilium_namespace=$(echo "$cilium_applicationyaml" | yq eval '.spec.destin
 export cilium_version=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.values' -)
 
-echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply -f -
+echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply -filename -
 
 # INSTALL COREDNS
 export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
@@ -91,7 +91,7 @@ export coredns_version=$(echo "$coredns_applicationyaml" | yq eval '.spec.source
 export coredns_values=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.helm.values' -)
 
 # chart does not put namespace in, need to specify on kubectl apply
-echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply -n $coredns_namespace -f -
+echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply --namespace $coredns_namespace -filename -
 
 
 # JOIN NODES TO CLUSTER
@@ -107,13 +107,13 @@ export ciliumipamcidr=192.168.1.48/29
 
 
 kubectl create namespace 1passwordconnect
-kubectl create secret generic 1passwordconnect --from-literal 1password-credentials.json=$(cat bootstrap/1password-credentials.json | base64 -w 0 ) -n 1passwordconnect
+kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json=$(cat bootstrap/1password-credentials.json | base64 -w 0 )
 
 kubectl create namespace external-secrets
-kubectl create secret generic 1passwordconnect --from-file=token=bootstrap/1password-token.secret -n external-secrets
+kubectl create secret generic 1passwordconnect --namespace external-secrets --from-file=token=bootstrap/1password-token.secret 
 
 kubectl create namespace argocd
-kubectl create secret generic stringreplacesecret -n argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
+kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
 ```
 
 ## argocd
@@ -124,11 +124,13 @@ export argocd_chart=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.cha
 export argocd_repo=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.repoURL' -)
 export argocd_namespace=$(echo "$argocd_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export argocd_version=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.targetRevision' -)
-export argocd_values=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/bootstrap/argocd-values.yaml")
+# removing .configs.cm from bootstrap requires argovaultplugin variables
+export argocd_values=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.helm.values' - | yq eval 'del(.configs.cm)' -)
+export argocd_config=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
 
 # install
-echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_repo --version $argocd_version --namespace $argocd_namespace --values - | kubectl apply -n $argocd_namespace -f -
+echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_repo --version $argocd_version --namespace $argocd_namespace --values - | kubectl apply --namespace $argocd_namespace --filename -
 
 # configure
-kubectl apply -f https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/bootstrap/argocd-config.yaml
+echo "$argocd_config" | kubectl apply --filename -
 ```

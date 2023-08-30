@@ -27,7 +27,7 @@ GitOps driven homelab using ArgoCD
 
 # Docs
 * [faq](docs/faq.md)
-* [Setup](docs/setup.md)
+* [setup](docs/setup.md)
 
 # Getting Started
 
@@ -36,7 +36,12 @@ GitOps driven homelab using ArgoCD
 
 # TODO
 * Remove bootstrap specific files
+* Remove hardcoded values
+  * kube-system.yaml cilium configuration
+  * kube-system.yaml coredns configuration
 * Use 1password cli during setup
+* Add 1password/externalsecrets entries into 1password
+
 * Github pages
 * List out all tech used
 * Renovate updates for argovaultplugin & knative
