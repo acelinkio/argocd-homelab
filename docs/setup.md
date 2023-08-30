@@ -82,7 +82,7 @@ export cilium_namespace=$(echo "$cilium_applicationyaml" | yq eval '.spec.destin
 export cilium_version=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.values' -)
 
-echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply -filename -
+echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
 # INSTALL COREDNS
 export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
@@ -94,7 +94,7 @@ export coredns_version=$(echo "$coredns_applicationyaml" | yq eval '.spec.source
 export coredns_values=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.helm.values' -)
 
 # chart does not put namespace in, need to specify on kubectl apply
-echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply --namespace $coredns_namespace -filename -
+echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply --namespace $coredns_namespace --filename -
 
 
 # JOIN NODES TO CLUSTER
