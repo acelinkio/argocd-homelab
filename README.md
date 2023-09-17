@@ -11,9 +11,6 @@ GitOps driven homelab using ArgoCD
 ├── .vscode/                   # Visual Studio Code configuration
 │   ├── extensions.json        # Extension recomendations
 │   └── settings.json          # Editor settings
-├── bootstrap/                 # Bootstrap related files
-│   ├── argocd-config.yaml     # ArgoCD Custom Resources for deployment
-│   └── argocd-values.yaml     # Values file used for Helm Release
 ├── docs/                      # Documentation
 │   ├── faq.md                 # Frequently Asked Questions
 │   └── setup.md               # Onboarding setup
@@ -46,3 +43,4 @@ GitOps driven homelab using ArgoCD
 * List out all tech used
 * Renovate updates for argovaultplugin & knative
 * Update docs/setup to mention kube-system
+* Investigate dex as standalone

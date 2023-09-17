@@ -1,13 +1,11 @@
 # Preperation
- 
- ## Prerequisites
 - 1Password
 - Cloudflare managed domain
 - reserved cidr block for broadcasting
 
 
 ## 1Password
-
+- Create vault named `homelab`
 ```
 homelab                        # vault used for containing secrets
 ├── sso                        # secret used for configuring sso
@@ -15,11 +13,14 @@ homelab                        # vault used for containing secrets
 └── <namespace>                # secret dedicated for each namespace
 ```
 
+### 1password Credentials
+#### 1passwordconnect
+- In the homelab vault, create secret named `1passwordconnect`
+- Follow https://developer.1password.com/docs/connect/get-started/#step-1-set-up-a-secrets-automation-workflow _1Password.com_ tab for generating save into key named `1password-credentials.json`. WIP
 
-### 1Password Credentials
-- Create vault named `homelab`
-- Follow https://developer.1password.com/docs/connect/get-started/#step-1-set-up-a-secrets-automation-workflow _1Password.com_ tab for generating `1password-credentials.json` and save into bootstrap directory.
-- Follow https://developer.1password.com/docs/connect/get-started/#step-1-set-up-a-secrets-automation-workflow _1Password CLI_ tab for generating a 1password connect token and save as `1password-token.secret` in bootstrap directory.
+#### external-secrets
+- In the homelab vault, create secret named `external-secrets`
+- Follow https://developer.1password.com/docs/connect/get-started/#step-1-set-up-a-secrets-automation-workflow _1Password CLI_ tab for generating a 1password connect token and save into key named `1password-token.secret`.
 
 ### Cloudflare Credentials
 
@@ -57,13 +58,16 @@ Not needed if with an existing cluster.
 
 ```bash
 # REQUIRED PACKAGES
-## https://github.com/mikefarah/yq
+# yq
 wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_arm64 -O /usr/bin/yq && chmod +x /usr/bin/yq
+# helm
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
+
+# NODE
 ## packages for k3s/longhorn
 apt update
 apt install -y curl open-iscsi
-## helm
-curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 
 
 export SETUP_NODEIP=192.168.1.195
@@ -106,19 +110,24 @@ kubectl label nodes mynodename kubernetes.io/role=worker
 
 ## secrets
 ```bash
-export domain=mydomain.tld
-export cloudflaretunnelid=11111111-2222-3333-4444-555555555555
-export ciliumipamcidr=192.168.1.48/29
+# 1password-cli is required
+## https://developer.1password.com/docs/cli/get-started
+# login via `eval $(op signin)`
 
-
-kubectl create namespace 1passwordconnect
-kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json=$(cat bootstrap/1password-credentials.json | base64 -w 0 )
-
-kubectl create namespace external-secrets
-kubectl create secret generic 1passwordconnect --namespace external-secrets --from-file=token=bootstrap/1password-token.secret 
+export domain="$(op read op://homelab/stringreplacesecret/domain)"
+export cloudflaretunnelid="$(op read op://homelab/stringreplacesecret/cloudflaretunnelid)"
+export ciliumipamcidr="$(op read op://homelab/stringreplacesecret/ciliumipamcidr)"
+export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1password-credentials.json | base64)"
+export externalsecrets_token="$(op read op://homelab/external-secrets/token)"
 
 kubectl create namespace argocd
 kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
+
+kubectl create namespace 1passwordconnect
+kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json="$onepasswordconnect_json"
+
+kubectl create namespace external-secrets
+kubectl create secret generic 1passwordconnect --namespace external-secrets --from-literal token=$externalsecrets_token
 ```
 
 ## argocd
