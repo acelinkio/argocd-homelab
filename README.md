@@ -1,21 +1,21 @@
 # Overview
 
-GitOps driven homelab using ArgoCD
+GitOps driven homelab using ArgoCD with a flat repository structure.
 
 # Project Structure
 
 ```
 .
-├── .github/                   # Github workflow & integration settings
+├── .github/                   # Github related files
 │   └── renovate.json5         # RenovateBot configuration
-├── .vscode/                   # Visual Studio Code configuration
+├── .vscode/                   # Visual Studio Code configs
 │   ├── extensions.json        # Extension recomendations
-│   └── settings.json          # Editor settings
+│   └── settings.json          # Project specific settings
 ├── docs/                      # Documentation
 │   ├── faq.md                 # Frequently Asked Questions
-│   └── setup.md               # Onboarding setup
-├── manifest/                  # Directory ArgoCD ApplicationSet watches
-│   └── <namespace>.yaml       # App of Apps manifests for each namespace
+│   └── setup.md               # Installation steps
+├── manifest/                  # Watched by ArgoCD ApplicationSet
+│   └── <namespace>.yaml       # Per namespace, App of Apps
 ├── .gitignore                 # Ignored files list
 └── README.md                  # This file
 ```
@@ -26,18 +26,12 @@ GitOps driven homelab using ArgoCD
 * [faq](docs/faq.md)
 * [setup](docs/setup.md)
 
-# Getting Started
-
-## Fork this repository
-- Update references during setup and in `bootstrap/argocd-config.yaml` of this repository.  Work in progress to simplify.
-
 # TODO
-* Remove bootstrap specific files
 * Remove hardcoded values
   * kube-system.yaml cilium configuration
   * kube-system.yaml coredns configuration
-* Use 1password cli during setup
-* Add 1password/externalsecrets entries into 1password
+* Initial setup secrets are all managed via external-secrets
+* Fix external-dns not updating existing records
 
 * Github pages
 * List out all tech used
