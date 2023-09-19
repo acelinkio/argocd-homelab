@@ -1,0 +1,62 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: test0
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: echo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: echo
+    spec:
+      containers:
+        - image: ealen/echo-server
+          imagePullPolicy: Always
+          name: echo
+          ports:
+            - containerPort: 80
+          env:
+            - name: cpu_architecture
+              value: $(dpkg --print-architecture)
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: echo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: echo
+  annotations:
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "cecho.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: echo.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: echo
+                port:
+                  number: 80
