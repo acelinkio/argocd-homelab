@@ -62,8 +62,6 @@ spec:
           enforceHttps: false
           secretsNamespace:
             name: cilium-secrets
-          service:
-            allocateLoadBalancerNodePorts: false
   syncPolicy:
     automated:
       allowEmpty: true
