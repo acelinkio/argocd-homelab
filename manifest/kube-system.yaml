@@ -56,6 +56,12 @@ spec:
         securityContext:
           privileged: true
         tunnel: disabled
+        ingressController:
+          enabled: true
+          loadbalancerMode: shared
+          enforceHttps: false
+          secretsNamespace:
+            name: cilium-secrets
   syncPolicy:
     automated:
       allowEmpty: true
