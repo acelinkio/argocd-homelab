@@ -50,7 +50,7 @@ metadata:
 spec:
   ingressClassName: cilium
   rules:
-    - host: echo.<path:stringreplacesecret#domain>
+    - host: cecho.<path:stringreplacesecret#domain>
       http:
         paths:
           - path: /
