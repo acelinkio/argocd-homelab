@@ -33,6 +33,7 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 * Initial setup secrets are all managed via external-secrets
 * Fix external-dns not updating existing records
 
+* Setup taints/tolerations for kubernetes control plane
 * Github pages
 * List out all tech used
 * Renovate updates for argovaultplugin & knative
