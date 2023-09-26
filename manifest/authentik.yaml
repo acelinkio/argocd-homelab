@@ -56,7 +56,7 @@ spec:
   source:
     chart: postgresql
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 12.12.7
+    targetRevision: 12.12.9
     helm:
       values: |
         fullnameOverride: authentik-postgres
