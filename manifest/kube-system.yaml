@@ -31,13 +31,35 @@ spec:
         endpointRoutes:
           enabled: true
         hubble:
-          enabled: false
+          enabled: true
+          metrics:
+            enabled:
+              - dns:query
+              - drop
+              - tcp
+              - flow
+              - port-distribution
+              - icmp
+              - http
+            serviceMonitor:
+              enabled: true
+          relay:
+            enabled: true
+            rollOutPods: true
+            prometheus:
+              serviceMonitor:
+                enabled: true
+          ui:
+            enabled: true
+            rollOutPods: true
+            ingress:
+              enabled: false
         ipam:
           mode: kubernetes
         ipv4NativeRoutingCIDR: "10.42.0.0/16"
         k8sServiceHost: "192.168.1.195"
         k8sServicePort: 6443
-        kubeProxyReplacement: strict
+        kubeProxyReplacement: true
         kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
         l2announcements:
           enabled: true
