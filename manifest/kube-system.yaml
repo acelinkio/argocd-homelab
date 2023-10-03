@@ -100,7 +100,7 @@ spec:
   source:
     chart: coredns
     repoURL: https://coredns.github.io/helm
-    targetRevision: 1.26.0
+    targetRevision: 1.27.0
     helm:
       values: |
         fullnameOverride: coredns
