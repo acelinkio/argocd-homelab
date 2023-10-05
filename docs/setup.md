@@ -69,6 +69,17 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 apt update
 apt install -y curl open-iscsi
 
+# workaround for cilium not loading packages, dependent upon OS
+## https://github.com/cilium/cilium/issues/25021
+modprobe iptable_raw
+modprobe xt_socket
+
+cat << 'EOF' > /etc/modules-load.d/cilium.conf
+xt_socket
+iptable_raw
+EOF
+
+
 
 export SETUP_NODEIP=192.168.1.195
 export SETUP_CLUSTERTOKEN=randomtokensecret
