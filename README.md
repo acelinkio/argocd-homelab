@@ -32,6 +32,7 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
   * kube-system.yaml coredns configuration
 * Initial setup secrets are all managed via external-secrets
 * Fix external-dns not updating existing records
+* Determine if annotation-only for external-dns
 
 * Setup taints/tolerations for kubernetes control plane
 * Github pages
