@@ -95,7 +95,8 @@ export cilium_chart=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.cha
 export cilium_repo=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.repoURL' -)
 export cilium_namespace=$(echo "$cilium_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export cilium_version=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.targetRevision' -)
-export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.values' -)
+# removing .gatewayAPI from bootstrap to simplify bootstrapping
+export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.values' - | yq eval 'del(.gatewayAPI)' -)
 
 echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
