@@ -1,3 +1,5 @@
+# sunsetting this approach after reading
+## https://docs.cilium.io/en/latest/network/servicemesh/gateway-api/gateway-api/#prerequisites
 kind: Namespace
 apiVersion: v1
 metadata:
