@@ -22,6 +22,8 @@ spec:
         persistence:
           defaultClass: true
           defaultClassReplicaCount: 1
+        helmPreUpgradeCheckerJob:
+          enabled: false
   syncPolicy:
     automated:
       allowEmpty: true
