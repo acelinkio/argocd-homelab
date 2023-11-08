@@ -36,7 +36,7 @@ spec:
   source:
     chart: external-dns
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 6.28.2
+    targetRevision: 6.28.4
     helm:
       values: |
         fullnameOverride: external-dns
