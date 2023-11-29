@@ -134,7 +134,7 @@ spec:
   source:
     chart: coredns
     repoURL: https://coredns.github.io/helm
-    targetRevision: 1.28.1
+    targetRevision: 1.28.2
     helm:
       values: |
         fullnameOverride: coredns
