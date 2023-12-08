@@ -17,7 +17,7 @@ spec:
   source:
     chart: gpu-operator
     repoURL: https://helm.ngc.nvidia.com/nvidia
-    targetRevision: v23.9.0
+    targetRevision: v23.9.1
     helm:
       values: |
         driver:
