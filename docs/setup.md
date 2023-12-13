@@ -39,7 +39,7 @@ homelab                        # vault used for containing secrets
 
 ### SSO
 - In the homelab vault, create secret named `sso`
-- Each application a unique clientsecret that is between 30-90 characters long.
+- Each application should have a unique clientsecret that is between 30-90 characters long.
   - Create key named `argocd` and save clientsecret value inside.
   - Create key named `grafana` and save clientsecret value inside.
 
@@ -53,7 +53,9 @@ homelab                        # vault used for containing secrets
 # Setup
 
 ## k3s
-Not needed if with an existing cluster.
+This can be used with an existing Kubernetes cluster, however you may not want argocd to manage resources such as kube-system.  Either way I encourage creating your own fork or copy of this project and replacing any references to `acelinkio/argocd-homelab` with the copy/fork.
+
+Details below show what steps are needed for creating a k3s cluster on an Ubuntu based system(s).
 <details>
 
 ```bash
@@ -109,7 +111,6 @@ export coredns_namespace=$(echo "$coredns_applicationyaml" | yq eval '.spec.dest
 export coredns_version=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 export coredns_values=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.helm.values' -)
 
-# chart does not put namespace in, need to specify on kubectl apply
 echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply --namespace $coredns_namespace --filename -
 
 
