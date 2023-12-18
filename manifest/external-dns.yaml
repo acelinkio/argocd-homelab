@@ -38,7 +38,7 @@ spec:
     repoURL: https://charts.bitnami.com/bitnami
     targetRevision: 6.28.6
     helm:
-      values: |
+      valuesObject:
         fullnameOverride: external-dns
         policy: sync
         txtSuffix: .external-dns

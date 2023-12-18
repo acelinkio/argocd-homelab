@@ -18,7 +18,7 @@ spec:
     repoURL: https://charts.longhorn.io
     targetRevision: 1.5.3
     helm:
-      values: |
+      valuesObject:
         persistence:
           defaultClass: true
           defaultClassReplicaCount: 1

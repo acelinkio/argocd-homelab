@@ -36,7 +36,7 @@ spec:
     repoURL: https://grafana.github.io/helm-charts
     targetRevision: 7.0.17
     helm:
-      values: |
+      valuesObject:
         adminUser: admin
         env:
           GF_SERVER_ROOT_URL: "http://grafana.<path:stringreplacesecret#domain>"

@@ -58,7 +58,7 @@ spec:
     repoURL: https://charts.bitnami.com/bitnami
     targetRevision: 13.2.24
     helm:
-      values: |
+      valuesObject:
         fullnameOverride: authentik-postgres
         auth:
           username: authentik
@@ -91,7 +91,7 @@ spec:
     repoURL: https://charts.goauthentik.io
     targetRevision: 2023.10.4
     helm:
-      values: |
+      valuesObject:
         ingress:
             enabled: true
             ingressClassName: ingress-nginx-internal

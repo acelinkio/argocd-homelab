@@ -98,7 +98,7 @@ export cilium_repo=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.repo
 export cilium_namespace=$(echo "$cilium_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export cilium_version=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 # removing .gatewayAPI from bootstrap to simplify bootstrapping
-export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.values' - | yq eval 'del(.gatewayAPI)' -)
+export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.gatewayAPI)' -)
 
 echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
@@ -109,7 +109,7 @@ export coredns_chart=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.c
 export coredns_repo=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.repoURL' -)
 export coredns_namespace=$(echo "$coredns_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export coredns_version=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.targetRevision' -)
-export coredns_values=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.helm.values' -)
+export coredns_values=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.helm.valuesObject' -)
 
 echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $coredns_repo --version $coredns_version --namespace $coredns_namespace --values - | kubectl apply --namespace $coredns_namespace --filename -
 
@@ -152,7 +152,7 @@ export argocd_repo=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.repo
 export argocd_namespace=$(echo "$argocd_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export argocd_version=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 # removing .configs.cm from bootstrap requires argovaultplugin variables
-export argocd_values=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.helm.values' - | yq eval 'del(.configs.cm)' -)
+export argocd_values=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.configs.cm)' -)
 export argocd_config=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
 
 # install

@@ -19,7 +19,7 @@ spec:
     repoURL: https://helm.ngc.nvidia.com/nvidia
     targetRevision: v23.9.1
     helm:
-      values: |
+      valuesObject:
         driver:
           enabled: 'false'
         toolkit:

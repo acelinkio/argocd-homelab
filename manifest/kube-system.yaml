@@ -46,7 +46,7 @@ spec:
     repoURL: https://helm.cilium.io/
     targetRevision: 1.15.0-rc.0
     helm:
-      values: |
+      valuesObject:
         autoDirectNodeRoutes: true
         bpf:
           masquerade: true
@@ -136,7 +136,7 @@ spec:
     repoURL: https://coredns.github.io/helm
     targetRevision: 1.28.2
     helm:
-      values: |
+      valuesObject:
         fullnameOverride: coredns
         replicaCount: 1
         k8sAppLabelOverride: kube-dns
