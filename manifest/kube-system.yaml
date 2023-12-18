@@ -103,10 +103,10 @@ spec:
         securityContext:
           privileged: true
         routingMode: native
-        gatewayAPI:
-          enabled: true
-          secretsNamespace:
-            name: cilium-secrets
+        #gatewayAPI:
+        #  enabled: true
+        #  secretsNamespace:
+        #    name: cilium-secrets
         ingressController:
           enabled: true
           loadbalancerMode: shared
