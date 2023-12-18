@@ -102,7 +102,7 @@ spec:
         rollOutCiliumPods: true
         securityContext:
           privileged: true
-        tunnel: disabled
+        routingMode: native
         gatewayAPI:
           enabled: true
           secretsNamespace:
