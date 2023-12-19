@@ -106,6 +106,7 @@ spec:
         #gatewayAPI:
         #  enabled: true
         #  secretsNamespace:
+        #    create: false
         #    name: cilium-secrets
         # does not support multiple ingress controllers
         ## https://github.com/cilium/cilium/issues/26487
@@ -114,6 +115,7 @@ spec:
           loadbalancerMode: shared
           enforceHttps: false
           secretsNamespace:
+            create: false
             name: cilium-secrets
           service:
             allocateLoadBalancerNodePorts: false
