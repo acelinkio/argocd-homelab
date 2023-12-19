@@ -107,6 +107,8 @@ spec:
         #  enabled: true
         #  secretsNamespace:
         #    name: cilium-secrets
+        # does not support multiple ingress controllers
+        ## https://github.com/cilium/cilium/issues/26487
         ingressController:
           enabled: true
           loadbalancerMode: shared
