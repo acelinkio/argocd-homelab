@@ -2,34 +2,34 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: kube-system
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: gatewaycrds
-  namespace: argocd
-spec:
-  destination:
-    namespace: kube-system
-    server: https://kubernetes.default.svc
-  project: homelab
-  source:
-    repoURL: https://github.com/acelinkio/empty.git
-    path: .
-    plugin:
-      name: kustomize-inline
-      env:
-        - name: KUSTOMIZATION_YAML
-          value: |
-            apiVersion: kustomize.config.k8s.io/v1beta1
-            kind: Kustomization
-            resources:
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_gateways.yaml
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/experimental/gateway.networking.k8s.io_grpcroutes.yaml
-              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: gatewaycrds
+#   namespace: argocd
+# spec:
+#   destination:
+#     namespace: kube-system
+#     server: https://kubernetes.default.svc
+#   project: homelab
+#   source:
+#     repoURL: https://github.com/acelinkio/empty.git
+#     path: .
+#     plugin:
+#       name: kustomize-inline
+#       env:
+#         - name: KUSTOMIZATION_YAML
+#           value: |
+#             apiVersion: kustomize.config.k8s.io/v1beta1
+#             kind: Kustomization
+#             resources:
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_gateways.yaml
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/experimental/gateway.networking.k8s.io_grpcroutes.yaml
+#               - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.0.0/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -44,7 +44,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.15.0-rc.0
+    targetRevision: 1.15.0-pre.1
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
@@ -102,7 +102,8 @@ spec:
         rollOutCiliumPods: true
         securityContext:
           privileged: true
-        routingMode: native
+        #routingMode: native
+        tunnel: disabled
         #gatewayAPI:
         #  enabled: true
         #  secretsNamespace:
