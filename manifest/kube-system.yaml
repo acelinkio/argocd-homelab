@@ -44,7 +44,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.15.0-pre.1
+    targetRevision: 1.15.0-rc.0
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
@@ -102,8 +102,8 @@ spec:
         rollOutCiliumPods: true
         securityContext:
           privileged: true
-        #routingMode: native
-        tunnel: disabled
+        routingMode: native
+        #tunnel: disabled
         #gatewayAPI:
         #  enabled: true
         #  secretsNamespace:
