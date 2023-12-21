@@ -63,7 +63,7 @@ spec:
                   metadata:
                     name: webhook
                   spec:
-                    tempalte:
+                    template:
                       spec:
                         containers:
                           - name: webhook
