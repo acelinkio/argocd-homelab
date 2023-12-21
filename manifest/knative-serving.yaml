@@ -54,11 +54,11 @@ spec:
                     name: config-network
                   data:
                     ingress-class: kourier.ingress.networking.knative.dev
-  syncPolicy:
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+  syncPolicy: {}
+    # automated:
+    #   allowEmpty: true
+    #   prune: true
+    #   selfHeal: true
   # ignoreDifferences:
   #   - group: "admissionregistration.k8s.io"
   #     kind: MutatingWebhookConfiguration
