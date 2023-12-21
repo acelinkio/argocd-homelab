@@ -54,22 +54,22 @@ spec:
                     name: config-network
                   data:
                     ingress-class: kourier.ingress.networking.knative.dev
-  syncPolicy: {}
-    # automated:
-    #   allowEmpty: true
-    #   prune: true
-    #   selfHeal: true
-  # ignoreDifferences:
-  #   - group: "admissionregistration.k8s.io"
-  #     kind: MutatingWebhookConfiguration
-  #     name: webhook.serving.knative.dev
-  #     jsonPointers:
-  #       - /webhooks/0/rules
-  #   - group: "admissionregistration.k8s.io"
-  #     kind: ValidatingWebhookConfiguration
-  #     name: validation.webhook.serving.knative.dev
-  #     jsonPointers:
-  #       - /webhooks/0/rules
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+  ignoreDifferences:
+    - group: "admissionregistration.k8s.io"
+      kind: MutatingWebhookConfiguration
+      name: webhook.serving.knative.dev
+      jsonPointers:
+        - /webhooks/0/rules
+    - group: "admissionregistration.k8s.io"
+      kind: ValidatingWebhookConfiguration
+      name: validation.webhook.serving.knative.dev
+      jsonPointers:
+        - /webhooks/0/rules
   info:
     - name: workaround1
       value: "https://github.com/knative/serving/issues/13449#issuecomment-1676159959"
