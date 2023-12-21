@@ -54,6 +54,21 @@ spec:
                     name: config-network
                   data:
                     ingress-class: kourier.ingress.networking.knative.dev
+              - target:
+                  kind: Deployment
+                  name: webhook
+                patch: |
+                  $$patch: merge
+                  kind: Deployment
+                  metadata:
+                    name: webhook
+                  spec:
+                    tempalte:
+                      spec:
+                        containers:
+                          - name: webhook
+                            livenessProbe:
+                              initialDelaySeconds: 60
   syncPolicy:
     automated:
       allowEmpty: true
