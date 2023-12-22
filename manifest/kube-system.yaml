@@ -103,14 +103,13 @@ spec:
         securityContext:
           privileged: true
         routingMode: native
-        #tunnel: disabled
-        #gatewayAPI:
-        #  enabled: true
-        #  secretsNamespace:
-        #    create: false
-        #    name: cilium-secrets
-        # does not support multiple ingress controllers
+        # does not support multiple ingress or gateway controllers
         ## https://github.com/cilium/cilium/issues/26487
+        gatewayAPI:
+          enabled: true
+          secretsNamespace:
+            create: false
+            name: cilium-secrets
         ingressController:
           enabled: true
           loadbalancerMode: shared
