@@ -44,13 +44,38 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: knative-echo
+  name: echo-knative
   namespace: kourier-system
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: '/'
     nginx.ingress.kubernetes.io/upstream-vhost: 'echo-knative.test-zone.<path:stringreplacesecret#domain>'
     external-dns.custom/type: private
     external-dns.alpha.kubernetes.io/hostname: "kecho.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: kecho.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: kourier-internal
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-knative
+  namespace: kourier-system
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: '/'
+    nginx.ingress.kubernetes.io/upstream-vhost: 'httpbin-knative.test-zone.<path:stringreplacesecret#domain>'
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "khttpbin.<path:stringreplacesecret#domain>"
     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 spec:
   ingressClassName: ingress-nginx-internal

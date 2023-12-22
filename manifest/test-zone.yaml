@@ -93,3 +93,14 @@ spec:
     spec:
       containers:
       - image: ealen/echo-server
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: httpbin-knative
+  namespace: test-zone
+spec:
+  template:
+    spec:
+      containers:
+      - image: kong/httpbin
