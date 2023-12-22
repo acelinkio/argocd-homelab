@@ -80,7 +80,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: kecho.<path:stringreplacesecret#domain>
+    - host: khttpbin.<path:stringreplacesecret#domain>
       http:
         paths:
           - pathType: Prefix
