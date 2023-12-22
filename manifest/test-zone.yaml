@@ -184,3 +184,5 @@ spec:
     spec:
       containers:
       - image: kong/httpbin
+        ports:
+          - containerPort: 80
