@@ -127,7 +127,7 @@ spec:
       targetPort: 80
       protocol: TCP
   selector:
-    app.kubernetes.io/name: echo
+    app.kubernetes.io/name: httpbin
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
