@@ -94,6 +94,86 @@ spec:
       containers:
       - image: ealen/echo-server
 ---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: httpbin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: httpbin
+    spec:
+      containers:
+        - image: kong/httpbin
+          imagePullPolicy: Always
+          name: httpbin
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: echo
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-internalnginx
+  annotations:
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "httpbin.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: httpbin.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: httpbin
+                port:
+                  number: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpbin-cilium
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "chttpbin.<path:stringreplacesecret#domain>"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: cilium
+  rules:
+    - host: chttpbin.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: httpbin
+                port:
+                  number: 80
+---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
