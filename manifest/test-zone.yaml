@@ -174,15 +174,15 @@ spec:
                 port:
                   number: 80
 ---
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: httpbin-knative
-  namespace: test-zone
-spec:
-  template:
-    spec:
-      containers:
-      - image: kong/httpbin
-        ports:
-          - containerPort: 80
+# apiVersion: serving.knative.dev/v1
+# kind: Service
+# metadata:
+#   name: httpbin-knative
+#   namespace: test-zone
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - image: kong/httpbin
+#         ports:
+#           - containerPort: 80
