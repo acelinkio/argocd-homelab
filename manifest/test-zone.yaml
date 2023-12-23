@@ -1,7 +1,7 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: test0
+  name: test-zone
 ---
 apiVersion: apps/v1
 kind: Deployment
