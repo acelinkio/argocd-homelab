@@ -53,7 +53,7 @@ spec:
                   metadata:
                     name: config-network
                   data:
-                    ingress-class: kourier.ingress.networking.knative.dev
+                    ingress-class: gateway-api.ingress.networking.knative.dev
               - target:
                   kind: Deployment
                   name: webhook
