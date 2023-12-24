@@ -174,15 +174,72 @@ spec:
                 port:
                   number: 80
 ---
-# apiVersion: serving.knative.dev/v1
-# kind: Service
-# metadata:
-#   name: httpbin-knative
-#   namespace: test-zone
-# spec:
-#   template:
-#     spec:
-#       containers:
-#       - image: kong/httpbin
-#         ports:
-#           - containerPort: 80
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: httpbin-knative
+  namespace: test-zone
+spec:
+  template:
+    spec:
+      containers:
+      - image: kong/httpbin
+        ports:
+          - containerPort: 80
+---
+### GATEWAY
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: external
+  namespace: test-zone
+spec:
+  gatewayClassName: cilium
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: external-gw
+    allowedRoutes:
+      namespaces:
+        from: All
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: Gateway
+metadata:
+  name: internal
+  namespace: test-zone
+spec:
+  gatewayClassName: cilium
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: internal-gw
+    allowedRoutes:
+      namespaces:
+        from: All
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: echo
+  namespace: test-zone
+spec:
+  parentRefs:
+  - name: internal
+  rules:
+  - backendRefs:
+    - name: echo
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  parentRefs:
+  - name: external
+  rules:
+  - backendRefs:
+    - name: httpbin
+      port: 80
