@@ -224,33 +224,33 @@ spec:
   cidrs:
     - cidr: <path:stringreplacesecret#ciliumipamcidr>
 ---
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: metrics-server
-#   namespace: argocd
-# spec:
-#   destination:
-#     namespace: kube-system
-#     server: https://kubernetes.default.svc
-#   project: homelab
-#   source:
-#     chart: metrics-server
-#     repoURL: https://kubernetes-sigs.github.io/metrics-server/
-#     targetRevision: 3.11.0
-#     helm:
-#       valuesObject:
-#         args:
-#           - --kubelet-insecure-tls
-#           - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
-#           - --kubelet-use-node-status-port
-#           - --metric-resolution=15s
-#         metrics:
-#           enabled: true
-#         serviceMonitor:
-#           enabled: true
-#   syncPolicy:
-#     automated:
-#       allowEmpty: true
-#       prune: true
-#       selfHeal: true
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metrics-server
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: metrics-server
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    targetRevision: 3.11.0
+    helm:
+      valuesObject:
+        args:
+          - --kubelet-insecure-tls
+          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+          - --kubelet-use-node-status-port
+          - --metric-resolution=15s
+        metrics:
+          enabled: true
+        serviceMonitor:
+          enabled: true
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
