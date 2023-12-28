@@ -212,6 +212,7 @@ spec:
         sso.tfvars: |
           grafana_token = "{{ .grafana_token | toString }}"
           argocd_token = "{{ .argocd_token | toString }}"
+          vikunja_token = "{{ .vikunja_token | toString }}"
   data:
     - secretKey: grafana_token
       remoteRef:
@@ -221,6 +222,10 @@ spec:
       remoteRef:
         key: sso
         property: argocd
+    - secretKey: vikunja_token
+      remoteRef:
+        key: sso
+        property: vikunja
 ---
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
@@ -317,5 +322,33 @@ spec:
         protocol_provider = authentik_provider_oauth2.argocd_ouath2.id
         meta_icon = "https://landscape.cncf.io/logos/argo.svg"
         meta_launch_url = "http://argocd.<path:stringreplacesecret#domain>/auth/login"
+        policy_engine_mode = "all"
+      }
+
+      resource "authentik_group" "vikunja_admin" {
+        name         = "Vikunja Admin"
+        is_superuser = false
+      }
+
+      resource "authentik_provider_oauth2" "vikunja_ouath2" {
+        name      = "vikunja"
+        client_id = "vikunja"
+        client_secret = var.vikunja_token
+        authorization_flow = data.authentik_flow.default-authorization-flow.id
+        access_code_validity = "minutes=10"
+        redirect_uris = [ "http://tasks.<path:stringreplacesecret#domain>/auth/openid/"]
+        signing_key = data.authentik_certificate_key_pair.generated.id
+        property_mappings = [
+          data.authentik_scope_mapping.openid.id,
+          data.authentik_scope_mapping.email.id,
+          data.authentik_scope_mapping.profile.id
+        ]
+      }
+
+      resource "authentik_application" "vikunja_application" {
+        name = authentik_provider_oauth2.vikunja_ouath2.name
+        slug = authentik_provider_oauth2.vikunja_ouath2.name
+        protocol_provider = authentik_provider_oauth2.vikunja_ouath2.id
+        meta_launch_url = "http://tasks.<path:stringreplacesecret#domain>/auth/login"
         policy_engine_mode = "all"
       }
