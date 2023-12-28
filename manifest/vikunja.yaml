@@ -1,0 +1,360 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: vikunja
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: vikunja-configsecrets
+  namespace: vikunja
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: jwtsecret
+      remoteRef:
+        key: vikunja
+        property: jwtsecret
+    - secretKey: postgrespassword
+      remoteRef:
+        key: vikunja
+        property: postgrespassword
+    - secretKey: postgresuserpassword
+      remoteRef:
+        key: vikunja
+        property: postgresuserpassword
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: vikunja-postgres
+  namespace: argocd
+spec:
+  destination:
+    namespace: vikunja
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgresql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 13.2.25
+    helm:
+      valuesObject:
+        fullnameOverride: vikunja-postgres
+        auth:
+          username: vikunja
+          database: vikunja
+          existingSecret: vikunja-configsecrets
+          secretKeys:
+            adminPasswordKey: postgrespassword
+            userPasswordKey: postgresuserpassword
+        primary:
+          persistence:
+            size: 4Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vikunja-api-config
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+stringData:
+  config.yaml: |-
+    auth:
+      local:
+        enabled: true
+      openid:
+        enabled: true
+        redirecturl: http://tasks.acelink.io/auth/openid/
+        providers:
+          - name: authentik
+            authurl: http://authentik.acelink.io/application/o/vikunja/
+            logouturl: http://authentik.acelink.io/application/o/vikunja/end-session/
+            clientid: vikunja
+            clientsecret: JJfA7j9P47nWgEBsUzQb
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: vikunja-api-env
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+stringData:
+  VIKUNJA_SERVICE_JWTSECRET: ndPg7GjZWR9vXfjRLAUE
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: vikunja-files
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2Gi"
+  storageClassName: "longhorn"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vikunja-api
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    app.kubernetes.io/service: vikunja-api
+    helm.sh/chart: app-template-2.4.0
+spec:
+  type: ClusterIP
+  ports:
+    - port: 3456
+      targetPort: 3456
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/name: vikunja
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vikunja-frontend
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    app.kubernetes.io/service: vikunja-frontend
+    helm.sh/chart: app-template-2.4.0
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/name: vikunja
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vikunja-api
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/component: api
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: api
+      app.kubernetes.io/name: vikunja
+      app.kubernetes.io/instance: vikunja
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/component: api
+        app.kubernetes.io/instance: vikunja
+        app.kubernetes.io/name: vikunja
+        policy.gabe565.com/egress-ingress: "true"
+        policy.gabe565.com/egress-namespace: "true"
+        policy.gabe565.com/egress-world: "true"
+        policy.gabe565.com/ingress-ingress: "true"
+    spec: 
+      enableServiceLinks: false
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      dnsPolicy: ClusterFirst
+      containers: 
+        - env:
+          - name: VIKUNJA_AUTH_LOCAL
+            value: "false"
+          - name: VIKUNJA_DATABASE_DATABASE
+            value: vikunja
+          - name: VIKUNJA_DATABASE_HOST
+            value: vikunja-postgres.vikunja
+          - name: VIKUNJA_DATABASE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                key: postgresuserpassword
+                name: vikunja-configsecrets
+          - name: VIKUNJA_DATABASE_TYPE
+            value: postgres
+          - name: VIKUNJA_DATABASE_USER
+            value: vikunja
+          # - name: VIKUNJA_DEFAULTSETTINGS_TIMEZONE
+          #   value: America/Chicago
+          # - name: VIKUNJA_KEYVALUE_TYPE
+          #   value: redis
+          # - name: VIKUNJA_REDIS_ENABLED
+          #   value: "true"
+          # - name: VIKUNJA_REDIS_HOST
+          #   value: redis-master:6379
+          # - name: VIKUNJA_REDIS_PASSWORD
+          #   valueFrom:
+          #     secretKeyRef:
+          #       key: redis-password
+          #       name: redis
+          - name: VIKUNJA_SERVICE_FRONTENDURL
+            value: http://tasks.acelink.io/
+          envFrom:
+          - secretRef:
+              name: vikunja-api-env
+          image: vikunja/api:0.22.0
+          name: main
+          volumeMounts:
+          - mountPath: /etc/vikunja/config.yaml
+            name: api-config
+            subPath: config.yaml
+          - mountPath: /app/vikunja/files
+            name: files
+      volumes: 
+        - name: api-config
+          secret:
+            secretName: vikunja-api-config
+        - name: files
+          persistentVolumeClaim:
+            claimName: vikunja-files
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vikunja-frontend
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+spec:
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: frontend
+      app.kubernetes.io/name: vikunja
+      app.kubernetes.io/instance: vikunja
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/instance: vikunja
+        app.kubernetes.io/name: vikunja
+        policy.gabe565.com/ingress-ingress: "true"
+    spec: 
+      enableServiceLinks: true
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      dnsPolicy: ClusterFirst
+      containers: 
+        - image: vikunja/frontend:0.22.0
+          name: main
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vikunja-api
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-body-size: 20M
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/hostname: "tasks.acelink.io"
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: "tasks.acelink.io"
+      http:
+        paths:
+          - path: "/api"
+            pathType: Prefix
+            backend:
+              service:
+                name: vikunja-api
+                port:
+                  number: 3456
+          - path: "/dav"
+            pathType: Prefix
+            backend:
+              service:
+                name: vikunja-api
+                port:
+                  number: 3456
+          - path: "/.well-known"
+            pathType: Prefix
+            backend:
+              service:
+                name: vikunja-api
+                port:
+                  number: 3456
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vikunja-frontend
+  namespace: vikunja
+  labels:
+    app.kubernetes.io/instance: vikunja
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: vikunja
+    helm.sh/chart: app-template-2.4.0
+spec:
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: "tasks.acelink.io"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: vikunja-frontend
+                port:
+                  number: 80

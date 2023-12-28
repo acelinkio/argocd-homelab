@@ -103,8 +103,6 @@ spec:
         securityContext:
           privileged: true
         routingMode: native
-        # does not support multiple ingress or gateway controllers
-        ## https://github.com/cilium/cilium/issues/26487
         gatewayAPI:
           enabled: true
           secretsNamespace:
