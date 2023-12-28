@@ -35,7 +35,7 @@ data:
     metrics: 0.0.0.0:2000
     no-autoupdate: true
     ingress:
-      - service: http://ingress-nginx-external-controller.ingress-nginx-external.svc.cluster.local:80
+      - service: http://cilium-gateway-external.test-zone.svc.cluster.local:80
 ---
 apiVersion: apps/v1
 kind: Deployment
