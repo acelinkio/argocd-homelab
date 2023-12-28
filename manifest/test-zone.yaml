@@ -274,7 +274,7 @@ spec:
           value: "true"
       type: RequestHeaderModifier
 # end of added by me
-    matches:
-    - path:
-        type: PathPrefix
-        value: /
+    # matches:
+    # - path:
+    #     type: PathPrefix
+    #     value: /
