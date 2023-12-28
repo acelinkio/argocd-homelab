@@ -87,7 +87,8 @@ export SETUP_NODEIP=192.168.1.195
 export SETUP_CLUSTERTOKEN=randomtokensecret
 
 # CREATE MASTER NODE
-curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC="--node-ip $SETUP_NODEIP --disable=coredns,flannel,local-storage,metrics-server,servicelb,traefik --flannel-backend='none' --disable-network-policy --disable-cloud-controller --disable-kube-proxy" K3S_TOKEN=$SETUP_CLUSTERTOKEN K3S_KUBECONFIG_MODE=644 sh -s -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.0+k3s1" INSTALL_K3S_EXEC="--node-ip $SETUP_NODEIP --disable=coredns,flannel,local-storage,metrics-server,servicelb,traefik --flannel-backend='none' --disable-network-policy --disable-cloud-controller --disable-kube-proxy" K3S_TOKEN=$SETUP_CLUSTERTOKEN K3S_KUBECONFIG_MODE=644 sh -s -
+kubectl taint nodes soquartz1 node-role.kubernetes.io/control-plane:NoSchedule
 
 
 # INSTALL CILIUM
@@ -98,7 +99,7 @@ export cilium_repo=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.repo
 export cilium_namespace=$(echo "$cilium_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export cilium_version=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 # removing .gatewayAPI from bootstrap to simplify bootstrapping
-export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.gatewayAPI)' -)
+export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.gatewayAPI)' - | yq eval 'del(.ingressController)' -)
 
 echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
