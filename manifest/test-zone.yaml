@@ -249,6 +249,8 @@ metadata:
   name: httpbin
   namespace: test-zone
 spec:
+  parentRefs:
+  - name: external
   rules:
   - backendRefs:
     - filters:
