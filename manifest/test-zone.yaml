@@ -268,13 +268,13 @@ spec:
       kind: Service
       name: httpbin
       port: 80
-# added by me
-    filters:
-    - requestHeaderModifier:
-        set:
-        - name: X-Set-In-Filters
-          value: "true"
-      type: RequestHeaderModifier
+# # added by me
+#     filters:
+#     - requestHeaderModifier:
+#         set:
+#         - name: X-Set-In-Filters
+#           value: "true"
+#       type: RequestHeaderModifier
 # end of added by me
     # matches:
     # - path:
