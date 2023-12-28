@@ -116,7 +116,7 @@ echo "$coredns_values" | helm template $coredns_name $coredns_chart --repo $core
 
 
 # JOIN NODES TO CLUSTER
-curl -sfL https://get.k3s.io | K3S_URL=https://$SETUP_NODEIP:6443 K3S_TOKEN=$SETUP_CLUSTERTOKEN sh -
+curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.0+k3s1" K3S_URL=https://$SETUP_NODEIP:6443 K3S_TOKEN=$SETUP_CLUSTERTOKEN sh -
 # LABEL NODES AS WORKERS
 kubectl label nodes mynodename kubernetes.io/role=worker
 ```
