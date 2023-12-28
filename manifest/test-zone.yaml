@@ -255,8 +255,7 @@ spec:
   - backendRefs:
     - filters:
       - requestHeaderModifier:
-          #set:
-          add:
+          set:
           - name: Knative-Serving-Revision
             value: httpbin-00001
           - name: Knative-Serving-Namespace
