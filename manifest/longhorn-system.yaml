@@ -21,7 +21,7 @@ spec:
       valuesObject:
         persistence:
           defaultClass: true
-          defaultClassReplicaCount: 1
+          defaultClassReplicaCount: 3
         helmPreUpgradeCheckerJob:
           enabled: false
   syncPolicy:
