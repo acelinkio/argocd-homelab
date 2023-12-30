@@ -84,8 +84,8 @@ stringData:
         redirecturl: http://tasks.acelink.io/auth/openid/
         providers:
           - name: authentik
-            authurl: http://authentik.acelink.io/application/o/vikunja/
-            logouturl: http://authentik.acelink.io/application/o/vikunja/end-session/
+            authurl: http://auth.acelink.io/application/o/vikunja/
+            logouturl: http://auth.acelink.io/application/o/vikunja/end-session/
             clientid: vikunja
             clientsecret: JJfA7j9P47nWgEBsUzQb
 ---

@@ -55,7 +55,7 @@ spec:
                   name: authentik
                   id: authentik
                   config:
-                    issuer: http://authentik.<path:stringreplacesecret#domain>/application/o/argocd/
+                    issuer: http://auth.<path:stringreplacesecret#domain>/application/o/argocd/
                     clientID: argocd
                     clientSecret: $sso:token
                     insecureEnableGroups: true

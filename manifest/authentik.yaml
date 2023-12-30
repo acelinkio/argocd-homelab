@@ -97,10 +97,10 @@ spec:
             ingressClassName: ingress-nginx-internal
             annotations:
               external-dns.custom/type: private
-              external-dns.alpha.kubernetes.io/hostname: "authentik.<path:stringreplacesecret#domain>"
+              external-dns.alpha.kubernetes.io/hostname: "auth.<path:stringreplacesecret#domain>"
               external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
             hosts:
-                - host: authentik.<path:stringreplacesecret#domain>
+                - host: auth.<path:stringreplacesecret#domain>
                   paths:
                       - path: "/"
                         pathType: Prefix
@@ -175,7 +175,7 @@ spec:
         key: token
   configuration: |
     provider "authentik" {
-      url   = "http://authentik.<path:stringreplacesecret#domain>"
+      url   = "http://auth.<path:stringreplacesecret#domain>"
       token = file("${path.module}/token")
     }
 
