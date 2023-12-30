@@ -350,6 +350,6 @@ spec:
         name = authentik_provider_oauth2.vikunja_ouath2.name
         slug = authentik_provider_oauth2.vikunja_ouath2.name
         protocol_provider = authentik_provider_oauth2.vikunja_ouath2.id
-        meta_launch_url = "http://tasks.<path:stringreplacesecret#domain>/auth/login"
+        meta_launch_url = "http://tasks.<path:stringreplacesecret#domain>/auth/openid/authentik"
         policy_engine_mode = "all"
       }
