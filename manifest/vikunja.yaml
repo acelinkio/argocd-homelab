@@ -78,7 +78,7 @@ stringData:
   config.yaml: |-
     auth:
       local:
-        enabled: true
+        enabled: false
       openid:
         enabled: true
         redirecturl: http://tasks.acelink.io/auth/openid/
