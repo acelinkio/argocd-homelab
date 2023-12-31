@@ -224,6 +224,7 @@ spec:
       certificateRefs:
       - kind: Secret
         name: wildcard-staging
+        namespace: cilium-secrets
     allowedRoutes:
       namespaces:
         from: All
