@@ -223,7 +223,7 @@ spec:
     tls:
       certificateRefs:
       - kind: Secret
-        name: wildcard-staging
+        name: wildcard-production
         namespace: cilium-secrets
     allowedRoutes:
       namespaces:
