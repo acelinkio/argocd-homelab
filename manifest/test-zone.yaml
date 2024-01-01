@@ -120,6 +120,8 @@ spec:
           value: "setviahttproute"
         - name: mytestheader2
           value: "setviahttproute"
+        - name: host
+          value: "my.test.head"
       type: RequestHeaderModifier
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
