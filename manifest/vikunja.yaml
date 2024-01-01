@@ -90,7 +90,7 @@ spec:
                   authurl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/
                   logouturl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/end-session/
                   clientid: vikunja
-                  clientsecret: vikunja_token
+                  clientsecret: "{{ .vikunja_token | toString }}"
   data:
     - secretKey: vikunja_token
       remoteRef:
