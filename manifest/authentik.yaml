@@ -374,6 +374,7 @@ spec:
         name = authentik_provider_oauth2.vikunja_ouath2.name
         slug = authentik_provider_oauth2.vikunja_ouath2.name
         protocol_provider = authentik_provider_oauth2.vikunja_ouath2.id
+        meta_icon = "https://kolaente.dev/avatars/dd73c49581a6904336c5d40fb66ef950?size=280"
         meta_launch_url = "https://tasks.<path:stringreplacesecret#domain>"
         policy_engine_mode = "all"
       }
