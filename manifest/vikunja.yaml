@@ -97,19 +97,6 @@ spec:
         key: sso
         property: vikunja
 ---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: vikunja-api-env
-  namespace: vikunja
-  labels:
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
-stringData:
-  VIKUNJA_SERVICE_JWTSECRET: ndPg7GjZWR9vXfjRLAUE
----
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
@@ -243,9 +230,11 @@ spec:
           #       name: redis
           - name: VIKUNJA_SERVICE_FRONTENDURL
             value: http://tasks.<path:stringreplacesecret#domain>/
-          envFrom:
-          - secretRef:
-              name: vikunja-api-env
+          - name: VIKUNJA_SERVICE_JWTSECRET
+            valueFrom:
+              secretKeyRef:
+                name: vikunja-configsecrets
+                key: jwtsecret
           image: vikunja/api:0.22.0
           name: main
           volumeMounts:
