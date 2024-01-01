@@ -106,6 +106,7 @@ spec:
   parentRefs:
   - name: internal
     namespace: cilium-gateway
+    sectionName: https
   hostnames:
   - "echo.<path:stringreplacesecret#domain>"
   rules:
@@ -139,6 +140,7 @@ spec:
   parentRefs:
   - name: external
     namespace: cilium-gateway
+    sectionName: https
   hostnames:
   - "httpbin.<path:stringreplacesecret#domain>"
   rules:
@@ -171,6 +173,8 @@ spec:
 # spec:
 #   parentRefs:
 #   - name: external
+#     namespace: cilium-gateway
+#     sectionName: https
 #   rules:
 #   - backendRefs:
 #     - filters:

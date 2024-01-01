@@ -140,6 +140,7 @@ spec:
   parentRefs:
   - name: internal
     namespace: cilium-gateway
+    sectionName: https
   hostnames:
   - "auth.<path:stringreplacesecret#domain>"
   rules:

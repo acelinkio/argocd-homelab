@@ -269,6 +269,7 @@ spec:
   parentRefs:
   - name: internal
     namespace: cilium-gateway
+    sectionName: https
   hostnames:
   - "argocd.<path:stringreplacesecret#domain>"
   rules:
