@@ -289,70 +289,128 @@ spec:
       containers: 
         - image: vikunja/frontend:0.22.0
           name: main
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: vikunja-api
+#   namespace: vikunja
+#   labels:
+#     app.kubernetes.io/instance: vikunja
+#     app.kubernetes.io/managed-by: Helm
+#     app.kubernetes.io/name: vikunja
+#     helm.sh/chart: app-template-2.4.0
+#   annotations:
+#     nginx.ingress.kubernetes.io/proxy-body-size: 20M
+#     external-dns.custom/type: private
+#     external-dns.alpha.kubernetes.io/hostname: "tasks.acelink.io"
+#     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+# spec:
+#   ingressClassName: ingress-nginx-internal
+#   rules:
+#     - host: "tasks.acelink.io"
+#       http:
+#         paths:
+#           - path: "/api"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: vikunja-api
+#                 port:
+#                   number: 3456
+#           - path: "/dav"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: vikunja-api
+#                 port:
+#                   number: 3456
+#           - path: "/.well-known"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: vikunja-api
+#                 port:
+#                   number: 3456
+# ---
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: vikunja-frontend
+#   namespace: vikunja
+#   labels:
+#     app.kubernetes.io/instance: vikunja
+#     app.kubernetes.io/managed-by: Helm
+#     app.kubernetes.io/name: vikunja
+#     helm.sh/chart: app-template-2.4.0
+# spec:
+#   ingressClassName: ingress-nginx-internal
+#   rules:
+#     - host: "tasks.acelink.io"
+#       http:
+#         paths:
+#           - path: "/"
+#             pathType: Prefix
+#             backend:
+#               service:
+#                 name: vikunja-frontend
+#                 port:
+#                   number: 80
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
 metadata:
-  name: vikunja-api
+  name: vikunja
   namespace: vikunja
-  labels:
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
+spec:
+  parentRefs:
+  - name: internal
+    namespace: cilium-gateway
+  hostnames:
+  - "tasks.<path:stringreplacesecret#domain>"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /.well-known
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /dav
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: vikunja-frontend
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: vikunja
+  namespace: vikunja
   annotations:
-    nginx.ingress.kubernetes.io/proxy-body-size: 20M
     external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "tasks.acelink.io"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
 spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: "tasks.acelink.io"
-      http:
-        paths:
-          - path: "/api"
-            pathType: Prefix
-            backend:
-              service:
-                name: vikunja-api
-                port:
-                  number: 3456
-          - path: "/dav"
-            pathType: Prefix
-            backend:
-              service:
-                name: vikunja-api
-                port:
-                  number: 3456
-          - path: "/.well-known"
-            pathType: Prefix
-            backend:
-              service:
-                name: vikunja-api
-                port:
-                  number: 3456
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: vikunja-frontend
-  namespace: vikunja
-  labels:
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: "tasks.acelink.io"
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: vikunja-frontend
-                port:
-                  number: 80
+  endpoints:
+    - dnsName: tasks.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
