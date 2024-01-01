@@ -38,51 +38,6 @@ spec:
   selector:
     app.kubernetes.io/name: echo
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: echo-internalnginx
-  annotations:
-    external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "echo.<path:stringreplacesecret#domain>"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: echo.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: echo
-                port:
-                  number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: echo-cilium
-  namespace: test-zone
-  annotations:
-    external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "cecho.<path:stringreplacesecret#domain>"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-spec:
-  ingressClassName: cilium
-  rules:
-    - host: cecho.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: echo
-                port:
-                  number: 80
----
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -128,51 +83,6 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: httpbin
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: httpbin-internalnginx
-  annotations:
-    external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "httpbin.<path:stringreplacesecret#domain>"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: httpbin.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: httpbin
-                port:
-                  number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: httpbin-cilium
-  namespace: test-zone
-  annotations:
-    external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: "chttpbin.<path:stringreplacesecret#domain>"
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-spec:
-  ingressClassName: cilium
-  rules:
-    - host: chttpbin.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: httpbin
-                port:
-                  number: 80
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
