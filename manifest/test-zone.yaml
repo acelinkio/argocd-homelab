@@ -120,6 +120,7 @@ spec:
           value: "setviahttproute"
         - name: mytestheader2
           value: "setviahttproute"
+        add:
         - name: Host
           value: "my.test.head"
       type: RequestHeaderModifier
