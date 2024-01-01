@@ -204,51 +204,6 @@ spec:
         key: stringreplacesecret
         property: ciliumipamcidr
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-http
-  namespace: argocd
-  annotations:
-    external-dns.custom/type: private
-    external-dns.alpha.kubernetes.io/hostname: argocd.<path:stringreplacesecret#domain>
-    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: argocd.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 80
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: argocd-grpc
-  namespace: argocd
-  annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "GRPC"
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: argocd.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: argocd-server
-                port:
-                  number: 80
----
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
@@ -305,7 +260,55 @@ spec:
           selfHeal: true
           allowEmpty: true
 ---
-
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  parentRefs:
+  - name: internal
+    namespace: cilium-gateway
+  hostnames:
+  - "argocd.<path:stringreplacesecret#domain>"
+  rules:
+  - backendRefs:
+    - name: argocd-server
+      port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: GRPCRoute
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  parentRefs:
+  - name: internal
+    namespace: cilium-gateway
+  hostnames:
+  - "argocd.<path:stringreplacesecret#domain>"
+  rules:
+  - backendRefs:
+    - name: argocd-server
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: argocd
+  namespace: argocd
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: argocd.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
+---
 ## Private Repository Secret example
 ## https://argo-cd.readthedocs.io/en/stable/user-guide/private-repositories/
 # apiVersion: v1
