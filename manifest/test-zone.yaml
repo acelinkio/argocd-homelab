@@ -109,6 +109,11 @@ spec:
   hostnames:
   - "echo.<path:stringreplacesecret#domain>"
   rules:
+  - filters:
+    - type: RequestRedirect
+      requestRedirect:
+        scheme: https
+        statusCode: 301
   - backendRefs:
     - name: echo
       port: 80
@@ -142,11 +147,6 @@ spec:
   hostnames:
   - "httpbin.<path:stringreplacesecret#domain>"
   rules:
-  - filters:
-    - type: RequestRedirect
-      requestRedirect:
-        scheme: https
-        statusCode: 301
   - backendRefs:
     - name: httpbin
       port: 80
