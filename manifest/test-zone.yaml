@@ -196,6 +196,8 @@ spec:
   parentRefs:
   - name: internal
     namespace: cilium-gateway
+  hostnames:
+  - "echo.<path:stringreplacesecret#domain>"
   rules:
   - backendRefs:
     - name: echo
@@ -210,6 +212,8 @@ spec:
   parentRefs:
   - name: external
     namespace: cilium-gateway
+  hostnames:
+  - "httpbin.<path:stringreplacesecret#domain>"
   rules:
   - backendRefs:
     - name: httpbin
