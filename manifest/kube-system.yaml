@@ -109,7 +109,7 @@ spec:
             create: false
             name: cilium-secrets
         ingressController:
-          enabled: true
+          enabled: false
           loadbalancerMode: shared
           enforceHttps: false
           secretsNamespace:
