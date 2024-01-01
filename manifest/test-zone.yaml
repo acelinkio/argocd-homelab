@@ -145,11 +145,6 @@ spec:
   - backendRefs:
     - name: httpbin
       port: 80
-    filters:
-    - type: RequestRedirect
-      requestRedirect:
-        scheme: https
-        statusCode: 301
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
