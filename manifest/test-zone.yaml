@@ -187,48 +187,6 @@ spec:
         ports:
           - containerPort: 80
 ---
-### GATEWAY
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: external
-  namespace: test-zone
-spec:
-  gatewayClassName: cilium
-  listeners:
-  - protocol: HTTP
-    port: 80
-    name: external-gw
-    allowedRoutes:
-      namespaces:
-        from: All
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: internal
-  namespace: test-zone
-spec:
-  gatewayClassName: cilium
-  listeners:
-  - protocol: HTTP
-    port: 80
-    name: internal-gw-http
-    allowedRoutes:
-      namespaces:
-        from: All
-  - protocol: HTTPS
-    port: 443
-    name: internal-gw-https
-    tls:
-      certificateRefs:
-      - kind: Secret
-        name: wildcard-production
-        namespace: cilium-secrets
-    allowedRoutes:
-      namespaces:
-        from: All
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -237,6 +195,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
+    namespace: cilium-gateway
   rules:
   - backendRefs:
     - name: echo
@@ -250,6 +209,7 @@ metadata:
 spec:
   parentRefs:
   - name: external
+    namespace: cilium-gateway
   rules:
   - backendRefs:
     - name: httpbin
