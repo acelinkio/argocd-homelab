@@ -113,12 +113,12 @@ spec:
   - backendRefs:
     - name: echo
       port: 80
-    filters:
-    - requestHeaderModifier:
-        set:
-        - name: mytestheader
-          value: "setviahttproute"
-      type: RequestHeaderModifier
+    # filters:
+    # - requestHeaderModifier:
+    #     set:
+    #     - name: mytestheader
+    #       value: "setviahttproute"
+    #   type: RequestHeaderModifier
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
