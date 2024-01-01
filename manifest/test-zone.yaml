@@ -138,7 +138,7 @@ metadata:
   namespace: test-zone
 spec:
   parentRefs:
-  - name: external
+  - name: internal
     namespace: cilium-gateway
     sectionName: https
   hostnames:
