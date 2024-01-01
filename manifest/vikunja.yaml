@@ -84,11 +84,11 @@ spec:
           auth:
             openid:
               enabled: true
-              redirecturl: http://tasks.<path:stringreplacesecret#domain>/auth/openid/
+              redirecturl: https://tasks.<path:stringreplacesecret#domain>/auth/openid/
               providers:
                 - name: authentik
-                  authurl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/
-                  logouturl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/end-session/
+                  authurl: https://auth.<path:stringreplacesecret#domain>/application/o/vikunja/
+                  logouturl: https://auth.<path:stringreplacesecret#domain>/application/o/vikunja/end-session/
                   clientid: vikunja
                   clientsecret: "{{ .vikunja_token | toString }}"
   data:
@@ -229,7 +229,7 @@ spec:
           #       key: redis-password
           #       name: redis
           - name: VIKUNJA_SERVICE_FRONTENDURL
-            value: http://tasks.<path:stringreplacesecret#domain>/
+            value: https://tasks.<path:stringreplacesecret#domain>/
           - name: VIKUNJA_SERVICE_JWTSECRET
             valueFrom:
               secretKeyRef:

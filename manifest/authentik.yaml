@@ -198,7 +198,7 @@ spec:
         key: token
   configuration: |
     provider "authentik" {
-      url   = "http://auth.<path:stringreplacesecret#domain>"
+      url   = "https://auth.<path:stringreplacesecret#domain>"
       token = file("${path.module}/token")
     }
 
@@ -302,7 +302,7 @@ spec:
         client_secret = var.grafana_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "http://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"]
+        redirect_uris = [ "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
@@ -316,7 +316,7 @@ spec:
         slug = authentik_provider_oauth2.grafana_ouath2.name
         protocol_provider = authentik_provider_oauth2.grafana_ouath2.id
         meta_icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/768px-Grafana_logo.svg.png"
-        meta_launch_url = "http://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
+        meta_launch_url = "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
         policy_engine_mode = "all"
       }
 
@@ -331,7 +331,7 @@ spec:
         client_secret = var.argocd_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "http://argocd.<path:stringreplacesecret#domain>/api/dex/callback","http://localhost:8085/auth/callback"]
+        redirect_uris = [ "https://argocd.<path:stringreplacesecret#domain>/api/dex/callback","http://localhost:8085/auth/callback"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
@@ -345,7 +345,7 @@ spec:
         slug = authentik_provider_oauth2.argocd_ouath2.name
         protocol_provider = authentik_provider_oauth2.argocd_ouath2.id
         meta_icon = "https://landscape.cncf.io/logos/argo.svg"
-        meta_launch_url = "http://argocd.<path:stringreplacesecret#domain>/auth/login"
+        meta_launch_url = "https://argocd.<path:stringreplacesecret#domain>/auth/login"
         policy_engine_mode = "all"
       }
 
@@ -360,7 +360,7 @@ spec:
         client_secret = var.vikunja_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "http://tasks.<path:stringreplacesecret#domain>/auth/openid/authentik"]
+        redirect_uris = [ "https://tasks.<path:stringreplacesecret#domain>/auth/openid/authentik"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
@@ -373,6 +373,6 @@ spec:
         name = authentik_provider_oauth2.vikunja_ouath2.name
         slug = authentik_provider_oauth2.vikunja_ouath2.name
         protocol_provider = authentik_provider_oauth2.vikunja_ouath2.id
-        meta_launch_url = "http://tasks.<path:stringreplacesecret#domain>"
+        meta_launch_url = "https://tasks.<path:stringreplacesecret#domain>"
         policy_engine_mode = "all"
       }

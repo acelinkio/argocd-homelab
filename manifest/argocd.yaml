@@ -48,14 +48,14 @@ spec:
           cm:
             resource.compareoptions: |
               ignoreAggregatedRoles: true
-            url: "http://argocd.<path:stringreplacesecret#domain>"
+            url: "https://argocd.<path:stringreplacesecret#domain>"
             dex.config: |
               connectors:
                 - type: oidc
                   name: authentik
                   id: authentik
                   config:
-                    issuer: http://auth.<path:stringreplacesecret#domain>/application/o/argocd/
+                    issuer: https://auth.<path:stringreplacesecret#domain>/application/o/argocd/
                     clientID: argocd
                     clientSecret: $sso:token
                     insecureEnableGroups: true
