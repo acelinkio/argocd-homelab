@@ -64,28 +64,38 @@ spec:
       prune: true
       selfHeal: true
 ---
-apiVersion: v1
-kind: Secret
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
 metadata:
-  name: vikunja-api-config
+  name: sso
   namespace: vikunja
-  labels:
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
-    app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
-stringData:
-  config.yaml: |-
-    auth:
-      openid:
-        enabled: true
-        redirecturl: http://tasks.acelink.io/auth/openid/
-        providers:
-          - name: authentik
-            authurl: http://auth.acelink.io/application/o/vikunja/
-            logouturl: http://auth.acelink.io/application/o/vikunja/end-session/
-            clientid: vikunja
-            clientsecret: JJfA7j9P47nWgEBsUzQb
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        config.yaml: |
+          auth:
+            openid:
+              enabled: true
+              redirecturl: http://tasks.<path:stringreplacesecret#domain>/auth/openid/
+              providers:
+                - name: authentik
+                  authurl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/
+                  logouturl: http://auth.<path:stringreplacesecret#domain>/application/o/vikunja/end-session/
+                  clientid: vikunja
+                  clientsecret: vikunja_token
+  data:
+    - secretKey: vikunja_token
+      remoteRef:
+        key: sso
+        property: vikunja
 ---
 apiVersion: v1
 kind: Secret
@@ -232,7 +242,7 @@ spec:
           #       key: redis-password
           #       name: redis
           - name: VIKUNJA_SERVICE_FRONTENDURL
-            value: http://tasks.acelink.io/
+            value: http://tasks.<path:stringreplacesecret#domain>/
           envFrom:
           - secretRef:
               name: vikunja-api-env
@@ -247,7 +257,7 @@ spec:
       volumes: 
         - name: api-config
           secret:
-            secretName: vikunja-api-config
+            secretName: sso
         - name: files
           persistentVolumeClaim:
             claimName: vikunja-files
@@ -289,73 +299,6 @@ spec:
       containers: 
         - image: vikunja/frontend:0.22.0
           name: main
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: vikunja-api
-#   namespace: vikunja
-#   labels:
-#     app.kubernetes.io/instance: vikunja
-#     app.kubernetes.io/managed-by: Helm
-#     app.kubernetes.io/name: vikunja
-#     helm.sh/chart: app-template-2.4.0
-#   annotations:
-#     nginx.ingress.kubernetes.io/proxy-body-size: 20M
-#     external-dns.custom/type: private
-#     external-dns.alpha.kubernetes.io/hostname: "tasks.acelink.io"
-#     external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-# spec:
-#   ingressClassName: ingress-nginx-internal
-#   rules:
-#     - host: "tasks.acelink.io"
-#       http:
-#         paths:
-#           - path: "/api"
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: vikunja-api
-#                 port:
-#                   number: 3456
-#           - path: "/dav"
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: vikunja-api
-#                 port:
-#                   number: 3456
-#           - path: "/.well-known"
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: vikunja-api
-#                 port:
-#                   number: 3456
-# ---
-# apiVersion: networking.k8s.io/v1
-# kind: Ingress
-# metadata:
-#   name: vikunja-frontend
-#   namespace: vikunja
-#   labels:
-#     app.kubernetes.io/instance: vikunja
-#     app.kubernetes.io/managed-by: Helm
-#     app.kubernetes.io/name: vikunja
-#     helm.sh/chart: app-template-2.4.0
-# spec:
-#   ingressClassName: ingress-nginx-internal
-#   rules:
-#     - host: "tasks.acelink.io"
-#       http:
-#         paths:
-#           - path: "/"
-#             pathType: Prefix
-#             backend:
-#               service:
-#                 name: vikunja-frontend
-#                 port:
-#                   number: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
