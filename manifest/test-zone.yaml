@@ -116,7 +116,12 @@ spec:
     filters:
     - requestHeaderModifier:
         set:
-        - name: mytestheader
+        - name: mytestheader1
+          value: "setviahttproute"
+      type: RequestHeaderModifier
+    - requestHeaderModifier:
+        set:
+        - name: mytestheader2
           value: "setviahttproute"
       type: RequestHeaderModifier
 ---
