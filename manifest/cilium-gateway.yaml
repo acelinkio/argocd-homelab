@@ -54,3 +54,17 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: internalgateway
+  annotations:
+    external-dns.custom/type: private
+    external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
+spec:
+  endpoints:
+    - dnsName: intgw.<path:stringreplacesecret#domain>
+      recordType: A
+      targets:
+        - 192.168.1.52
