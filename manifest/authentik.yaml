@@ -93,17 +93,7 @@ spec:
     helm:
       valuesObject:
         ingress:
-            enabled: true
-            ingressClassName: ingress-nginx-internal
-            annotations:
-              external-dns.custom/type: private
-              external-dns.alpha.kubernetes.io/hostname: "auth.<path:stringreplacesecret#domain>"
-              external-dns.alpha.kubernetes.io/cloudflare-proxied: "false"
-            hosts:
-                - host: auth.<path:stringreplacesecret#domain>
-                  paths:
-                      - path: "/"
-                        pathType: Prefix
+          enabled: false
         authentik:
           postgresql:
             host: "authentik-postgres.authentik"
@@ -140,6 +130,39 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: authentik
+  namespace: authentik
+spec:
+  parentRefs:
+  - name: internal
+    namespace: cilium-gateway
+  hostnames:
+  - "auth.<path:stringreplacesecret#domain>"
+  rules:
+  - backendRefs:
+    - name: authentik
+      port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: authentik
+  namespace: authentik
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: auth.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
