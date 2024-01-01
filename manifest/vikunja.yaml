@@ -356,47 +356,47 @@ spec:
 #                 name: vikunja-frontend
 #                 port:
 #                   number: 80
-# ---
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: HTTPRoute
-# metadata:
-#   name: vikunja
-#   namespace: vikunja
-# spec:
-#   parentRefs:
-#   - name: internal
-#     namespace: cilium-gateway
-#   hostnames:
-#   - "tasks.<path:stringreplacesecret#domain>"
-#   rules:
-#   - matches:
-#     - path:
-#         type: PathPrefix
-#         value: /.well-known
-#     backendRefs:
-#     - name: vikunja-api
-#       port: 3456
-#   - matches:
-#     - path:
-#         type: PathPrefix
-#         value: /dav
-#     backendRefs:
-#     - name: vikunja-api
-#       port: 3456
-#   - matches:
-#     - path:
-#         type: PathPrefix
-#         value: /api
-#     backendRefs:
-#     - name: vikunja-api
-#       port: 3456
-#   - matches:
-#     - path:
-#         type: PathPrefix
-#         value: /
-#     backendRefs:
-#     - name: vikunja-frontend
-#       port: 80
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: vikunja
+  namespace: vikunja
+spec:
+  parentRefs:
+  - name: internal
+    namespace: cilium-gateway
+  hostnames:
+  - "tasks.<path:stringreplacesecret#domain>"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /.well-known
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /dav
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+    - name: vikunja-api
+      port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: vikunja-frontend
+      port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
