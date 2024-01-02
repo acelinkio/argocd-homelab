@@ -306,17 +306,9 @@ spec:
     - path:
         type: PathPrefix
         value: /.well-known
-    backendRefs:
-    - name: vikunja-api
-      port: 3456
-  - matches:
     - path:
         type: PathPrefix
         value: /dav
-    backendRefs:
-    - name: vikunja-api
-      port: 3456
-  - matches:
     - path:
         type: PathPrefix
         value: /api
