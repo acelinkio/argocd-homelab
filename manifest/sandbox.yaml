@@ -52,30 +52,30 @@ data:
     visibility: |
       ExternalIP:
         class: cilium
-        gateway: test-zone/external
-        service: test-zone/cilium-gateway-external
+        gateway: cilium-gateway/external
+        service: cilium-gateway/cilium-gateway-external
       ClusterLocal:
         class: cilium
-        gateway: test-zone/internal
-        service: test-zone/cilium-gateway-internal
+        gateway: cilium-gateway/internal
+        service: cilium-gateway/cilium-gateway-internal
   acelink.io: |
     ExternalIP:
       class: cilium
-      gateway: test-zone/external
-      service: test-zone/cilium-gateway-external
+      gateway: cilium-gateway/external
+      service: cilium-gateway/cilium-gateway-external
     ClusterLocal:
       class: cilium
-      gateway: test-zone/internal
-      service: test-zone/cilium-gateway-internal
+      gateway: cilium-gateway/internal
+      service: cilium-gateway/cilium-gateway-internal
   visibility: |
     ExternalIP:
       class: cilium
-      gateway: test-zone/external
-      service: test-zone/cilium-gateway-external
+      gateway: cilium-gateway/external
+      service: cilium-gateway/cilium-gateway-external
     ClusterLocal:
       class: cilium
-      gateway: test-zone/internal
-      service: test-zone/cilium-gateway-internal
+      gateway: cilium-gateway/internal
+      service: cilium-gateway/cilium-gateway-internal
 ---
 apiVersion: apps/v1
 kind: Deployment
