@@ -101,9 +101,9 @@ spec:
           rollOutPods: true
           image:
             # image override for using patch that fixes https://github.com/cilium/cilium/issues/29080
-            #override: "quay.io/cilium/operator-generic-ci:a199ad6584be1047dc480e82b87d0e54ad008c24"
+            override: "quay.io/cilium/operator-generic-ci:a199ad6584be1047dc480e82b87d0e54ad008c24"
             # image override for using patch that fixes https://github.com/cilium/cilium/issues/30085
-            override: "quay.io/cilium/operator-generic-ci:bd0f507f2d5f3912c512f2fe728e0b19c974b88d"
+            #override: "quay.io/cilium/operator-generic-ci:bd0f507f2d5f3912c512f2fe728e0b19c974b88d"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
