@@ -99,10 +99,10 @@ spec:
         operator:
           replicas: 1
           rollOutPods: true
-          image:
-            repository: "quay.io/cilium/operator-generic-ci"
-            tag: "a199ad6584be1047dc480e82b87d0e54ad008c24"
-            genericDigest: "sha256:b87278e595e96a7bddeaac2529973c4da3c0d8463d98c2a2d51e13c74f838061"
+          # image:
+          #   repository: "quay.io/cilium/operator-generic-ci"
+          #   tag: "a199ad6584be1047dc480e82b87d0e54ad008c24"
+          #   genericDigest: "sha256:b87278e595e96a7bddeaac2529973c4da3c0d8463d98c2a2d51e13c74f838061"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
