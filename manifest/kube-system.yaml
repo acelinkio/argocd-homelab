@@ -101,7 +101,7 @@ spec:
           rollOutPods: true
           image:
             tag: "a199ad6584be1047dc480e82b87d0e54ad008c24"
-            genericDigest: "sha256:98156e3716a7da2ba7e1d6996d78aa0eb56977a24422dbc523566632b5b5f668"
+            genericDigest: "sha256:8ab397b42bdcfa2468993a67ad6d7c3f09c17ab54df1545b7864daa45eb6a12b"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
