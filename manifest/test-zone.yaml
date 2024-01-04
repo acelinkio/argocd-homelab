@@ -113,12 +113,18 @@ spec:
   - backendRefs:
     - name: echo
       port: 80
+      filters:
+      - requestHeaderModifier:
+          add:
+          - name: mytestheader1backend1
+            value: "setviahttproute"
+        type: RequestHeaderModifier
     filters:
     - requestHeaderModifier:
         set:
-        - name: mytestheader1
+        - name: mytestheader1all
           value: "setviahttproute"
-        - name: mytestheader2
+        - name: mytestheader2all
           value: "setviahttproute"
       type: RequestHeaderModifier
 ---
