@@ -38,17 +38,6 @@ spec:
   selector:
     app.kubernetes.io/name: echo
 ---
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: echo-knative
-  namespace: test-zone
-spec:
-  template:
-    spec:
-      containers:
-      - image: ealen/echo-server
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -83,19 +72,6 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: httpbin
----
-apiVersion: serving.knative.dev/v1
-kind: Service
-metadata:
-  name: httpbin-knative
-  namespace: test-zone
-spec:
-  template:
-    spec:
-      containers:
-      - image: kong/httpbin
-        ports:
-          - containerPort: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

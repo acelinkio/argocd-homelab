@@ -2,3 +2,27 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: sandbox
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: echo-knative
+  namespace: sandbox
+spec:
+  template:
+    spec:
+      containers:
+      - image: ealen/echo-server
+# ---
+# apiVersion: serving.knative.dev/v1
+# kind: Service
+# metadata:
+#   name: httpbin-knative
+#   namespace: sandbox
+# spec:
+#   template:
+#     spec:
+#       containers:
+#       - image: kong/httpbin
+#         ports:
+#           - containerPort: 80
