@@ -47,6 +47,7 @@ spec:
     targetRevision: 1.15.0-rc.0
     helm:
       valuesObject:
+
         autoDirectNodeRoutes: true
         bpf:
           masquerade: true
@@ -99,6 +100,8 @@ spec:
         operator:
           replicas: 1
           rollOutPods: true
+          tag: "a199ad6584be1047dc480e82b87d0e54ad008c24"
+          genericDigest: "sha256:a199ad6584be1047dc480e82b87d0e54ad008c24"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
