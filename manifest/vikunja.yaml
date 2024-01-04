@@ -305,13 +305,6 @@ spec:
   - matches:
     - path:
         type: PathPrefix
-        value: /
-    backendRefs:
-    - name: vikunja-frontend
-      port: 80
-  - matches:
-    - path:
-        type: PathPrefix
         value: /.well-known
     - path:
         type: PathPrefix
@@ -322,6 +315,13 @@ spec:
     backendRefs:
     - name: vikunja-api
       port: 3456
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: vikunja-frontend
+      port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
