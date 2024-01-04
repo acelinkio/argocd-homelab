@@ -144,24 +144,6 @@ data:
         class: cilium
         gateway: cilium-gateway/internal-knative
         service: cilium-gateway/cilium-gateway-internal-knative
-  acelink.io: |
-    ExternalIP:
-      class: cilium
-      gateway: cilium-gateway/external-knative
-      service: cilium-gateway/cilium-gateway-external-knative
-    ClusterLocal:
-      class: cilium
-      gateway: cilium-gateway/internal-knative
-      service: cilium-gateway/cilium-gateway-internal-knative
-  visibility: |
-    ExternalIP:
-      class: cilium
-      gateway: cilium-gateway/external-knative
-      service: cilium-gateway/cilium-gateway-external-knative
-    ClusterLocal:
-      class: cilium
-      gateway: cilium-gateway/internal-knative
-      service: cilium-gateway/cilium-gateway-internal-knative
 ---
 apiVersion: apps/v1
 kind: Deployment
