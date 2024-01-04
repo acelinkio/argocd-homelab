@@ -102,7 +102,7 @@ spec:
           image:
             repository: "quay.io/cilium/operator-generic-ci"
             tag: "a199ad6584be1047dc480e82b87d0e54ad008c24"
-            #genericDigest: "sha256:8ab397b42bdcfa2468993a67ad6d7c3f09c17ab54df1545b7864daa45eb6a12b"
+            genericDigest: "sha256:e36e2a0419217362d628f6c8032cf4109901ff45fb4c8b82df89a034e3e5271b"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
