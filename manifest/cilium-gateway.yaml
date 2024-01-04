@@ -18,7 +18,7 @@ spec:
       kinds:
         - kind: HTTPRoute
       namespaces:
-        from: All
+        from: Same
   - protocol: HTTPS
     port: 443
     name: https
@@ -46,7 +46,7 @@ spec:
       kinds:
         - kind: HTTPRoute
       namespaces:
-        from: All
+        from: Same
   - protocol: HTTPS
     port: 443
     name: https
