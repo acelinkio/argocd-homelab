@@ -164,7 +164,6 @@ spec:
       labels:
         app: net-gateway-api-controller
     spec:
-      # To avoid node becoming SPOF, spread our replicas to different nodes.
       affinity:
         podAntiAffinity:
           preferredDuringSchedulingIgnoredDuringExecution:
@@ -177,8 +176,6 @@ spec:
       serviceAccountName: controller
       containers:
       - name: controller
-        # This is the Go import path for the binary that is containerized
-        # and substituted here.
         image: gcr.io/knative-releases/knative.dev/net-gateway-api/cmd/controller:v1.12.1
         resources:
           requests:
@@ -212,4 +209,3 @@ spec:
             - ALL
           seccompProfile:
             type: RuntimeDefault
-# waiting on resolution for https://github.com/cilium/cilium/issues/29080
