@@ -24,23 +24,23 @@ spec:
     spec:
       containers:
       - image: kong/httpbin
----
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: httpbin-knative
-  namespace: sandbox
-  annotations:
-    external-dns.custom/type: private
-spec:
-  endpoints:
-    - dnsName: httpbin-knative.sandbox.<path:stringreplacesecret#domain>
-      recordType: A
-      targets:
-        - "192.168.1.50"
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
+# ---
+# apiVersion: externaldns.k8s.io/v1alpha1
+# kind: DNSEndpoint
+# metadata:
+#   name: httpbin-knative
+#   namespace: sandbox
+#   annotations:
+#     external-dns.custom/type: private
+# spec:
+#   endpoints:
+#     - dnsName: httpbin-knative.sandbox.<path:stringreplacesecret#domain>
+#       recordType: A
+#       targets:
+#         - "192.168.1.50"
+#       providerSpecific:
+#         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+#           value: "false"
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
