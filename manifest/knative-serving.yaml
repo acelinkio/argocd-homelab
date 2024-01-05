@@ -34,16 +34,16 @@ spec:
                   kind: Namespace
                   metadata:
                     name: deletethis
-              # - target:
-              #     kind: ConfigMap
-              #     name: config-domain
-              #   patch: |
-              #     $$patch: merge
-              #     kind: ConfigMap
-              #     metadata:
-              #       name: config-domain
-              #     data:
-              #       <path:stringreplacesecret#domain>: |
+              - target:
+                  kind: ConfigMap
+                  name: config-domain
+                patch: |
+                  $$patch: merge
+                  kind: ConfigMap
+                  metadata:
+                    name: config-domain
+                  data:
+                    <path:stringreplacesecret#domain>: |
               - target:
                   kind: ConfigMap
                   name: config-network
