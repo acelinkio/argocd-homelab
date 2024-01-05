@@ -43,7 +43,7 @@ spec:
                   metadata:
                     name: config-domain
                   data:
-                    <path:stringreplacesecret#domain>: |
+                    acelink.io: |
               - target:
                   kind: ConfigMap
                   name: config-network
