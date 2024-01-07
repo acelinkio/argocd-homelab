@@ -2,34 +2,34 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: cilium-gateway
-# ---
-# apiVersion: gateway.networking.k8s.io/v1
-# kind: Gateway
-# metadata:
-#   name: internal
-#   namespace: cilium-gateway
-# spec:
-#   gatewayClassName: cilium
-#   listeners:
-#   - protocol: HTTP
-#     port: 80
-#     name: http
-#     allowedRoutes:
-#       kinds:
-#         - kind: HTTPRoute
-#       namespaces:
-#         from: All
-#   - protocol: HTTPS
-#     port: 443
-#     name: https
-#     tls:
-#       certificateRefs:
-#       - kind: Secret
-#         name: wildcard-production
-#         namespace: cilium-secrets
-#     allowedRoutes:
-#       namespaces:
-#         from: All
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal
+  namespace: cilium-gateway
+spec:
+  gatewayClassName: cilium
+  listeners:
+  - protocol: HTTP
+    port: 80
+    name: http
+    allowedRoutes:
+      kinds:
+        - kind: HTTPRoute
+      namespaces:
+        from: All
+  - protocol: HTTPS
+    port: 443
+    name: https
+    tls:
+      certificateRefs:
+      - kind: Secret
+        name: wildcard-production
+        namespace: cilium-secrets
+    allowedRoutes:
+      namespaces:
+        from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
