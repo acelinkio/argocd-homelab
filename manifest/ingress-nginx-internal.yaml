@@ -48,6 +48,8 @@ spec:
           ingressClassResource:
             name: ingress-nginx-internal
             controllerValue: "k8s.io/ingress-nginx-internal"
+          extraArgs:
+            default-ssl-certificate: ingress-nginx-internal/wildcard-production
           admissionWebhooks:
             enabled: false
           service:
