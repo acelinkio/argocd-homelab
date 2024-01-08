@@ -10,6 +10,11 @@ metadata:
 #   namespace: cilium-gateway
 # spec:
 #   gatewayClassName: cilium
+#   # cilium does not honor addresses yet
+#   # https://github.com/cilium/cilium/issues/30123
+#   addresses:
+#     - type: IPAddress
+#       value: "192.168.1.50"
 #   listeners:
 #   - protocol: HTTP
 #     port: 80
@@ -30,11 +35,6 @@ metadata:
 #     allowedRoutes:
 #       namespaces:
 #         from: All
-  # cilium does not honor addresses yet
-  # https://github.com/cilium/cilium/issues/30123
-  # addresses:
-  #   - type: IPAddress
-  #     value: "192.168.1.50"
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
