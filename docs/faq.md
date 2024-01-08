@@ -9,10 +9,6 @@
 - Is there a way to deploy 'core' resources beforehand?
   After installing ArgoCD, individual resources can be installed before applying the ApplicationSet that actively watches the `manifest` directory.  See the setup instructions used for coredns/cilium as an example.
 
-- Why is kubernetes not coming back up after going offline?
-
-  Kubernetes API server relies upon Kyverno for validation/mutating.  If Kyverno is unavailable, requests will fail by default.  Update core functions to allow failure.  https://kyverno.io/docs/troubleshooting/#api-server-is-blocked
-
 - Why use external-secrets and argo-vault-plugin?
 
   external-secrets is the source of truth.
