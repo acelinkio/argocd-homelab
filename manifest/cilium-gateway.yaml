@@ -32,6 +32,9 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
+  addresses:
+    - type: IPAddress
+      value: "192.168.1.50"
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
