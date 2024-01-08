@@ -18,11 +18,11 @@ To handle internal and external traffic, multiple gateways are leveraged.
 Cloudflare Tunnels is an offering by Cloudflare to expose resources to the public through their daemon, cloudflared.  The tunnel is initialized by hosting cloudflared inside your cluster. Traffic is configured to go to external Gateway or Ingress resources.
 
 
-# Address
+# IPAddresses
 
-| API      | Facing        | Controller             | ClassName   | GatewayName  | IPAddress |
-| ------- | -------- | ------------- | ---------------------- | ----------- | ------------ |
-| ingress        | external         | ingress-nginx              | ingress-nginx-external                       | n/a                    | 192.168.1.51             |
-| ingress        | internal         | ingress-nginx              | ingress-nginx-internal                       | n/a                    | 192.168.1.52             |
-| gateway        | external         | cilium                     | cilium                                       | external               | 192.168.1.49             |
-| gateway        | internal         | cilium                     | cilium                                       | internal               | 192.168.1.50             |
+| API           | Controller | Facing                 | ClassName   | GatewayName  | IPAddress |
+| ------- | ------------- | -------- | ---------------------- | ----------- | ------------ |
+| gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.49             |
+| gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.50             |
+| ingress        | ingress-nginx              | external         | ingress-nginx-external                       | n/a                    | 192.168.1.51             |
+| ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.52             |
