@@ -34,3 +34,20 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: echo
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: intin.<path:stringreplacesecret#domain>
+      recordType: A
+      targets:
+        - 192.168.1.52
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
