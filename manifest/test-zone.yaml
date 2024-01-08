@@ -38,40 +38,24 @@ spec:
   selector:
     app.kubernetes.io/name: echo
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: networking.k8s.io/v1
+kind: Ingress
 metadata:
-  name: httpbin
+  name: echo
   namespace: test-zone
 spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: httpbin
-  replicas: 1
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/name: httpbin
-    spec:
-      containers:
-        - image: kong/httpbin
-          imagePullPolicy: Always
-          name: httpbin
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: httpbin
-  namespace: test-zone
-spec:
-  ports:
-    - port: 80
-      targetPort: 80
-      protocol: TCP
-  selector:
-    app.kubernetes.io/name: httpbin
+  ingressClassName: ingress-nginx-internal
+  rules:
+    - host: echo.<path:stringreplacesecret#domain>
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: echo
+                port:
+                  number: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -116,10 +100,45 @@ spec:
     - dnsName: echo.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intin.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: httpbin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: httpbin
+    spec:
+      containers:
+        - image: kong/httpbin
+          imagePullPolicy: Always
+          name: httpbin
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: httpbin
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
