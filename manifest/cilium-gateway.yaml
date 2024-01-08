@@ -8,8 +8,6 @@ kind: Gateway
 metadata:
   name: internal
   namespace: cilium-gateway
-  annotations:
-    mytestannotation: gettoservice
 spec:
   gatewayClassName: cilium
   listeners:
@@ -32,9 +30,11 @@ spec:
     allowedRoutes:
       namespaces:
         from: All
-  addresses:
-    - type: IPAddress
-      value: "192.168.1.50"
+  # cilium does not honor addresses yet
+  # https://github.com/cilium/cilium/issues/30123
+  # addresses:
+  #   - type: IPAddress
+  #     value: "192.168.1.50"
 ---
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
