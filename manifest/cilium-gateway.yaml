@@ -8,6 +8,8 @@ kind: Gateway
 metadata:
   name: internal
   namespace: cilium-gateway
+  annotations:
+    mytestannotation: gettoservice
 spec:
   gatewayClassName: cilium
   listeners:
