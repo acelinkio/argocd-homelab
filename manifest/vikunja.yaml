@@ -44,7 +44,7 @@ spec:
   source:
     chart: postgresql
     repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 13.2.28
+    targetRevision: 13.2.29
     helm:
       valuesObject:
         fullnameOverride: vikunja-postgres
