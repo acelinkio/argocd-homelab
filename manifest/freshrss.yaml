@@ -1,0 +1,61 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: freshrss
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: freshrss-configsecrets
+  namespace: freshrss
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: postgrespassword
+      remoteRef:
+        key: freshrss
+        property: postgrespassword
+    - secretKey: postgresuserpassword
+      remoteRef:
+        key: freshrss
+        property: postgresuserpassword
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: freshrss-postgres
+  namespace: argocd
+spec:
+  destination:
+    namespace: freshrss
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgresql
+    repoURL: https://charts.bitnami.com/bitnami
+    targetRevision: 13.3.1
+    helm:
+      valuesObject:
+        fullnameOverride: authentik-postgres
+        auth:
+          username: freshrss
+          database: freshrss
+          existingSecret: freshrss-configsecrets
+          secretKeys:
+            adminPasswordKey: postgrespassword
+            userPasswordKey: postgresuserpassword
+        primary:
+          persistence:
+            size: 4Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
