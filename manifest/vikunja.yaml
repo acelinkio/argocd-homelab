@@ -235,7 +235,7 @@ spec:
               secretKeyRef:
                 name: vikunja-configsecrets
                 key: jwtsecret
-          image: vikunja/api:0.22.0
+          image: vikunja/api:0.22.1
           name: main
           volumeMounts:
           - mountPath: /etc/vikunja/config.yaml
