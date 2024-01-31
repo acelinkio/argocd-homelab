@@ -100,7 +100,7 @@ spec:
     - dnsName: echo.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intin.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
@@ -188,7 +188,7 @@ spec:
     - dnsName: httpbin.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intin.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
