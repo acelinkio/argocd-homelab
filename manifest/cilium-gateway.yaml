@@ -56,7 +56,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: internalgateway
+  name: intgw
   namespace: cilium-gateway
   annotations:
     external-dns.custom/type: private
