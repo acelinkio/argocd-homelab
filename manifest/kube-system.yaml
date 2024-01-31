@@ -44,7 +44,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.15.0-rc.1
+    targetRevision: 1.15.0
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
