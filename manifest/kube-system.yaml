@@ -96,6 +96,8 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
+        image:
+          override: "quay.io/cilium/cilium-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
         operator:
           replicas: 1
           rollOutPods: true
