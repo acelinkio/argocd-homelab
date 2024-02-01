@@ -96,14 +96,15 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
-        image:
-          override: "quay.io/cilium/cilium-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
+        # image:
+        #   override: "quay.io/cilium/cilium-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
         operator:
           replicas: 1
           rollOutPods: true
-          image:
-            # image override for using patch that fixes https://github.com/cilium/cilium/pull/30543
-            override: "quay.io/cilium/operator-generic-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
+          # image:
+          #   # image override for using patch that fixes https://github.com/cilium/cilium/pull/30543
+          #   override: "quay.io/cilium/operator-generic-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
+          ## older
           #   # image override for using patch that fixes https://github.com/cilium/cilium/issues/29080
           #   override: "quay.io/cilium/operator-generic-ci:a199ad6584be1047dc480e82b87d0e54ad008c24"
           #   # image override for using patch that fixes https://github.com/cilium/cilium/issues/30085
