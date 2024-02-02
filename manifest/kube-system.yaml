@@ -97,18 +97,13 @@ spec:
           mode: dsr
         localRedirectPolicy: true
         image:
-          override: "quay.io/cilium/cilium-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
+          override: "quay.io/cilium/cilium-ci:48cae35ce96112b4c0bb7c51df4e7d71c19bfac9"
         operator:
           replicas: 1
           rollOutPods: true
           image:
-            # image override for using patch that fixes https://github.com/cilium/cilium/pull/30543
-            override: "quay.io/cilium/operator-generic-ci:ac42dc9c3899d5bcc21fda3e72f6687e5b5c128f"
-          ## older
-          #   # image override for using patch that fixes https://github.com/cilium/cilium/issues/29080
-          #   override: "quay.io/cilium/operator-generic-ci:a199ad6584be1047dc480e82b87d0e54ad008c24"
-          #   # image override for using patch that fixes https://github.com/cilium/cilium/issues/30085
-          #   #override: "quay.io/cilium/operator-generic-ci:bd0f507f2d5f3912c512f2fe728e0b19c974b88d"
+            # using main branch image from https://github.com/cilium/cilium/actions/runs/7756969877/job/21155453225
+            override: "quay.io/cilium/operator-generic-ci:48cae35ce96112b4c0bb7c51df4e7d71c19bfac9"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
