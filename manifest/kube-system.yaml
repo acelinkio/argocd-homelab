@@ -50,7 +50,8 @@ spec:
         autoDirectNodeRoutes: true
         bandwidthManager:
           enabled: true
-          bbr: true
+          # rk1's run on 5.10 version of kernel, 5.12 is required
+          bbr: false
         bpf:
           masquerade: true
         cluster:
