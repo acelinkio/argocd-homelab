@@ -48,6 +48,9 @@ spec:
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
+        bandwidthManager:
+          enabled: true
+          bbr: true
         bpf:
           masquerade: true
         cluster:
@@ -56,9 +59,8 @@ spec:
         containerRuntime:
           integration: containerd
           socketPath: /var/run/k3s/containerd/containerd.sock
+        enableRuntimeDeviceDetection: true
         endpointRoutes:
-          enabled: true
-        externalIPs:
           enabled: true
         hubble:
           enabled: true
@@ -88,10 +90,6 @@ spec:
         kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
         l2announcements:
           enabled: true
-          # https://github.com/cilium/cilium/issues/26586
-          leaseDuration: 120s
-          leaseRenewDeadline: 60s
-          leaseRetryPeriod: 1s
         loadBalancer:
           algorithm: maglev
           mode: dsr
