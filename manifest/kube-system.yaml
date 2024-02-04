@@ -279,6 +279,7 @@ spec:
   parentRefs:
   - name: internal
     namespace: cilium-gateway
+    sectionName: https
   hostnames:
   - "hubble.<path:stringreplacesecret#domain>"
   rules:

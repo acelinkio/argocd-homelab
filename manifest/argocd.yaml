@@ -324,6 +324,7 @@ kind: GRPCRoute
 metadata:
   name: argocd
   namespace: argocd
+  sectionName: https
 spec:
   parentRefs:
   - name: internal
