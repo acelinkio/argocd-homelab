@@ -20,8 +20,6 @@ spec:
     port: 80
     name: http
     allowedRoutes:
-      kinds:
-        - kind: HTTPRoute
       namespaces:
         from: All
   - protocol: HTTPS
