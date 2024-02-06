@@ -96,13 +96,13 @@ spec:
           mode: dsr
         localRedirectPolicy: true
         image:
-          override: "quay.io/cilium/cilium-ci:a0fae91ed1abf6f82d25ca8493ca06fb886f3a21"
+          override: "quay.io/cilium/cilium-ci:840cc579b7b5aac24ba00c4d8c8f1d10334882fa"
         operator:
           replicas: 1
           rollOutPods: true
           image:
-            # using main branch image from https://github.com/cilium/cilium/actions/runs/7782193706/job/21218100012
-            override: "quay.io/cilium/operator-generic-ci:a0fae91ed1abf6f82d25ca8493ca06fb886f3a21"
+            # using main branch image from https://github.com/cilium/cilium/actions/runs/7788397285/job/21237711996
+            override: "quay.io/cilium/operator-generic-ci:840cc579b7b5aac24ba00c4d8c8f1d10334882fa"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
