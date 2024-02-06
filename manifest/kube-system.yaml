@@ -121,6 +121,9 @@ spec:
             name: cilium-secrets
           service:
             allocateLoadBalancerNodePorts: false
+        debug:
+          enabled: true
+          verbose: "envoy"
   syncPolicy:
     automated:
       allowEmpty: true
