@@ -1,0 +1,48 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: certificate
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-staging
+  namespace: certificate
+spec:
+  secretName: wildcard-staging
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
+  commonName: '<path:stringreplacesecret#domain>'
+  dnsNames:
+  - '<path:stringreplacesecret#domain>'
+  - '*.<path:stringreplacesecret#domain>'
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-production
+  namespace: certificate
+spec:
+  secretName: wildcard-production
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: '<path:stringreplacesecret#domain>'
+  dnsNames:
+  - '<path:stringreplacesecret#domain>'
+  - '*.<path:stringreplacesecret#domain>'
+---
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allowfromns-gateway
+  namespace: certificate
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    namespace: gateway
+  to:
+  - group: ""
+    kind: Secret
