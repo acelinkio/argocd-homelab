@@ -87,7 +87,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "grafana.<path:stringreplacesecret#domain>"

@@ -158,7 +158,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "auth.<path:stringreplacesecret#domain>"

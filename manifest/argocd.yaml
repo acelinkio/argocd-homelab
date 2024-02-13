@@ -310,7 +310,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "argocd.<path:stringreplacesecret#domain>"
@@ -327,7 +327,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "argocd.<path:stringreplacesecret#domain>"

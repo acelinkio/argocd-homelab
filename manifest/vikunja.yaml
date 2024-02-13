@@ -339,7 +339,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "tasks.<path:stringreplacesecret#domain>"

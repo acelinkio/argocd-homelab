@@ -36,7 +36,7 @@ data:
     metrics: 0.0.0.0:2000
     no-autoupdate: true
     ingress:
-      - service: https://cilium-gateway-external.test-zone.svc.cluster.local:443
+      - service: https://cilium-gateway-external.gateway.svc.cluster.local:443
 ---
 apiVersion: apps/v1
 kind: Deployment

@@ -255,7 +255,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "hubble.<path:stringreplacesecret#domain>"
@@ -272,7 +272,7 @@ metadata:
 spec:
   parentRefs:
   - name: internal
-    namespace: cilium-gateway
+    namespace: gateway
     sectionName: https
   hostnames:
   - "hubble.<path:stringreplacesecret#domain>"
