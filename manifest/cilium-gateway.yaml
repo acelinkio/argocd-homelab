@@ -2,71 +2,71 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: cilium-gateway
----
-apiVersion: gateway.networking.k8s.io/v1
-kind: Gateway
-metadata:
-  name: internal
-  namespace: cilium-gateway
-spec:
-  gatewayClassName: cilium
-  # cilium does not honor addresses yet
-  # https://github.com/cilium/cilium/issues/21926
-  # addresses:
-  #   - type: IPAddress
-  #     value: "192.168.1.50"
-  listeners:
-  - protocol: HTTP
-    port: 80
-    name: http
-    allowedRoutes:
-      namespaces:
-        from: All
-  - protocol: HTTPS
-    port: 443
-    name: https
-    tls:
-      certificateRefs:
-      - kind: Secret
-        name: wildcard-production
-        namespace: cilium-secrets
-    allowedRoutes:
-      namespaces:
-        from: All
----
-apiVersion: gateway.networking.k8s.io/v1beta1
-kind: HTTPRoute
-metadata:
-  name: httpsredirect-internalgw
-  namespace: cilium-gateway
-spec:
-  parentRefs:
-    - name: internal
-      namespace: cilium-gateway
-      sectionName: http
-  rules:
-    - filters:
-        - requestRedirect:
-            scheme: https
-            statusCode: 301
-          type: RequestRedirect
----
-apiVersion: externaldns.k8s.io/v1alpha1
-kind: DNSEndpoint
-metadata:
-  name: intgw
-  namespace: cilium-gateway
-  annotations:
-    external-dns.custom/type: private
-spec:
-  endpoints:
-    - dnsName: intgw.<path:stringreplacesecret#domain>
-      recordType: A
-      targets:
-        - "192.168.1.49"
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
+# ---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: Gateway
+# metadata:
+#   name: internal
+#   namespace: cilium-gateway
+# spec:
+#   gatewayClassName: cilium
+#   # cilium does not honor addresses yet
+#   # https://github.com/cilium/cilium/issues/21926
+#   # addresses:
+#   #   - type: IPAddress
+#   #     value: "192.168.1.50"
+#   listeners:
+#   - protocol: HTTP
+#     port: 80
+#     name: http
+#     allowedRoutes:
+#       namespaces:
+#         from: All
+#   - protocol: HTTPS
+#     port: 443
+#     name: https
+#     tls:
+#       certificateRefs:
+#       - kind: Secret
+#         name: wildcard-production
+#         namespace: cilium-secrets
+#     allowedRoutes:
+#       namespaces:
+#         from: All
+# ---
+# apiVersion: gateway.networking.k8s.io/v1beta1
+# kind: HTTPRoute
+# metadata:
+#   name: httpsredirect-internalgw
+#   namespace: cilium-gateway
+# spec:
+#   parentRefs:
+#     - name: internal
+#       namespace: cilium-gateway
+#       sectionName: http
+#   rules:
+#     - filters:
+#         - requestRedirect:
+#             scheme: https
+#             statusCode: 301
+#           type: RequestRedirect
+# ---
+# apiVersion: externaldns.k8s.io/v1alpha1
+# kind: DNSEndpoint
+# metadata:
+#   name: intgw
+#   namespace: cilium-gateway
+#   annotations:
+#     external-dns.custom/type: private
+# spec:
+#   endpoints:
+#     - dnsName: intgw.<path:stringreplacesecret#domain>
+#       recordType: A
+#       targets:
+#         - "192.168.1.49"
+#       providerSpecific:
+#         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+#           value: "false"
 # ---
 # apiVersion: gateway.networking.k8s.io/v1
 # kind: Gateway
