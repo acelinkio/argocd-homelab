@@ -24,5 +24,5 @@ Cloudflare Tunnels is an offering by Cloudflare to expose resources to the publi
 | ------- | ------------- | -------- | ---------------------- | ----------- | ------------ |
 | gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.49             |
 | gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.50             |
-| ingress        | ingress-nginx              | external         | ingress-nginx-external                       | n/a                    | 192.168.1.51             |
+| gateway        | cilium                     | internal         | cilium                                       | knative                | 192.168.1.51             |
 | ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.52             |
