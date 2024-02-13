@@ -54,6 +54,7 @@ spec:
                     name: config-network
                   data:
                     ingress-class: gateway-api.ingress.networking.knative.dev
+                    domain-template: "{{.Name}}.knative.{{.Domain}}"
               - target:
                   kind: Deployment
                   name: webhook
