@@ -111,10 +111,10 @@ spec:
           enabled: true
           secretsNamespace:
             create: false
-            name: cilium-secrets
-        debug:
-          enabled: true
-          verbose: "envoy"
+            name: certificate
+        # debug:
+        #   enabled: true
+        #   verbose: "envoy"
   syncPolicy:
     automated:
       allowEmpty: true
