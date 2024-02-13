@@ -192,3 +192,27 @@ spec:
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: echo
+  namespace: test-zone
+spec:
+  template:
+    spec:
+      containers:
+      - image: ealen/echo-server
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  template:
+    spec:
+      containers:
+      - image: kong/httpbin
+        ports:
+          - containerPort: 80
