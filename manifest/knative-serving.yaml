@@ -137,12 +137,12 @@ data:
   visibility: |
     ExternalIP:
       class: cilium
-      gateway: gateway/internal
-      service: gateway/cilium-gateway-internal
+      gateway: gateway/knative
+      service: gateway/cilium-gateway-knative
     ClusterLocal:
       class: cilium
-      gateway: gateway/internal
-      service: gateway/cilium-gateway-internal
+      gateway: gateway/knative
+      service: gateway/cilium-gateway-knative
 ---
 apiVersion: apps/v1
 kind: Deployment
