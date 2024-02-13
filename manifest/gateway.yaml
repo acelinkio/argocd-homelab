@@ -174,3 +174,20 @@ spec:
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: wildcard-knative
+  namespace: gateway
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: "*.knative.<path:stringreplacesecret#domain>"
+      recordType: CNAME
+      targets:
+        - knvgw.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "false"
