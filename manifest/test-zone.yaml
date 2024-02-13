@@ -196,7 +196,7 @@ spec:
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: echo
+  name: kecho
   namespace: test-zone
 spec:
   template:
@@ -207,7 +207,7 @@ spec:
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: httpbin
+  name: khttpbin
   namespace: test-zone
 spec:
   template:
