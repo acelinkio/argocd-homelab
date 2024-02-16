@@ -61,8 +61,8 @@ spec:
           integration: containerd
           socketPath: /var/run/k3s/containerd/containerd.sock
         #enableRuntimeDeviceDetection: true
-        endpointRoutes:
-          enabled: true
+        #endpointRoutes:
+        #  enabled: true
         hubble:
           enabled: true
           metrics:
