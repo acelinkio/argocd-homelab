@@ -57,6 +57,19 @@ spec:
                     domain-template: "{{.Name}}.knative.{{.Domain}}"
               - target:
                   kind: Deployment
+                  name: activator
+                patch: |
+                  $$patch: merge
+                  kind: Deployment
+                  metadata:
+                    name: activator
+                  spec:
+                    template:
+                      spec:
+                        tolerations:
+                          - operator: Exists
+              - target:
+                  kind: Deployment
                   name: webhook
                 patch: |
                   $$patch: merge
