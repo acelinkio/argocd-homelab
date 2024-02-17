@@ -80,6 +80,9 @@ spec:
             value: "setviahttproute"
         type: RequestHeaderModifier
     filters:
+    - type: URLRewrite
+      urlRewrite:
+        hostname: why.hello.there
     - requestHeaderModifier:
         set:
         - name: mytestheader1all
