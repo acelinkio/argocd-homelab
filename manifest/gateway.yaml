@@ -40,7 +40,7 @@ metadata:
 spec:
   parentRefs:
     - name: internal
-      namespace: certificate
+      namespace: gateway
       sectionName: http
   rules:
     - filters:
@@ -103,7 +103,7 @@ metadata:
 spec:
   parentRefs:
     - name: external
-      namespace: certificate
+      namespace: gateway
       sectionName: http
   rules:
     - filters:
