@@ -31,7 +31,7 @@ Cloudflare Tunnels is an offering by Cloudflare to expose resources to the publi
 Knative has a highly opinionated approach that aims to simplify everything into a single minimalist manifest.  This is extremely useful for those just getting started, however has several limitations.  One of those limitations is around networking, assuming each has their own domain domain.  There is no way to modify those rules to handle path based management.
 
 <details>
-Attempted Gateway (internal) -> HTTPRoute (URLRewrite) -> Service (ExternalName) -> Gateway (knative) -> HTTPRoute.  Likely failed because ExternalService implemenation.  HTTPRoute to ExternalService is not a best practice and should not be implemented by controllers. https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io%2fv1.BackendObjectReference.
+Attempted Gateway (internal) -> HTTPRoute (URLRewrite) -> Service (ExternalName) -> Gateway (knative) -> HTTPRoute.  Likely failed because ExternalName implemenation.  HTTPRoute to ExternalName is not a best practice and should not be implemented by controllers. https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io%2fv1.BackendObjectReference.
 
 ```yaml
 knative_related:
