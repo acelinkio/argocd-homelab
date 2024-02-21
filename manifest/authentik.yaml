@@ -101,10 +101,10 @@ spec:
             name: "authentik"
             user: "authentik"
         redis:
-            enabled: true
-            master:
-              persistence:
-                enabled: false
+          enabled: true
+          master:
+            persistence:
+              enabled: false
         global:
           env:
             - name: AUTHENTIK_SECRET_KEY
