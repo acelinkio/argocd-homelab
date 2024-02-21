@@ -92,8 +92,9 @@ spec:
     targetRevision: 2024.2.0
     helm:
       valuesObject:
-        ingress:
-          enabled: false
+        server: 
+          ingress:
+            enabled: false
         authentik:
           postgresql:
             host: "authentik-postgres.authentik"
