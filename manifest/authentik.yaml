@@ -107,26 +107,31 @@ spec:
                 enabled: false
         global:
           env:
-            - AUTHENTIK_SECRET_KEY:
-              secretKeyRef:
-                key: secret_key
-                name: authentik-configsecrets
-            - AUTHENTIK_POSTGRESQL__PASSWORD:
-              secretKeyRef:
-                key: postgresuserpassword
-                name: authentik-configsecrets
-            - AUTHENTIK_BOOTSTRAP_PASSWORD:
-              secretKeyRef:
-                key: bootstrap_password
-                name: authentik-configsecrets
-            - AUTHENTIK_BOOTSTRAP_TOKEN:
-              secretKeyRef:
-                key: bootstrap_token
-                name: authentik-configsecrets
-            - AUTHENTIK_BOOTSTRAP_EMAIL:
-              secretKeyRef:
-                key: bootstrap_email
-                name: authentik-configsecrets
+            - name: AUTHENTIK_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: secret_key
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_POSTGRESQL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuserpassword
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_BOOTSTRAP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: bootstrap_password
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_BOOTSTRAP_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: bootstrap_token
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_BOOTSTRAP_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  key: bootstrap_email
+                  name: authentik-configsecrets
   syncPolicy:
     automated:
       allowEmpty: true
