@@ -88,7 +88,7 @@ export SETUP_CLUSTERTOKEN=randomtokensecret
 
 # CREATE MASTER NODE
 curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION="v1.29.2+k3s1" INSTALL_K3S_EXEC="--node-ip $SETUP_NODEIP --disable=coredns,flannel,local-storage,metrics-server,servicelb,traefik --flannel-backend='none' --disable-network-policy --disable-cloud-controller --disable-kube-proxy" K3S_TOKEN=$SETUP_CLUSTERTOKEN K3S_KUBECONFIG_MODE=644 sh -s -
-kubectl taint nodes soquartz1 node-role.kubernetes.io/control-plane:NoSchedule
+kubectl taint nodes rk1-01 node-role.kubernetes.io/control-plane:NoSchedule
 
 
 # INSTALL CILIUM
