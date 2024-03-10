@@ -112,9 +112,6 @@ spec:
           secretsNamespace:
             create: false
             name: certificate
-        # debug:
-        #   enabled: true
-        #   verbose: "envoy"
   syncPolicy:
     automated:
       allowEmpty: true
