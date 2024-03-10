@@ -249,6 +249,8 @@ kind: HTTPRoute
 metadata:
   name: hubble
   namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   parentRefs:
   - name: internal
@@ -266,6 +268,8 @@ kind: GRPCRoute
 metadata:
   name: hubble
   namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   parentRefs:
   - name: internal
