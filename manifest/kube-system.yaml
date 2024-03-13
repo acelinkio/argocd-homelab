@@ -95,14 +95,14 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
-        image:
-          override: "quay.io/cilium/cilium-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
+        #image:
+          #override: "quay.io/cilium/cilium-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
         operator:
           replicas: 1
           rollOutPods: true
-          image:
+          #image:
             # using main branch image from https://github.com/cilium/cilium/actions/runs/7941152929/job/21683197687
-            override: "quay.io/cilium/operator-generic-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
+            #override: "quay.io/cilium/operator-generic-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
