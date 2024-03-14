@@ -113,23 +113,27 @@ spec:
       prune: true
       selfHeal: true
   ignoreDifferences:
-    - kind: ConfigMap
+    - group: "core"
+      kind: ConfigMap
       name: hubble-ca-cert
       jsonPointers:
       - /data/ca.crt
-    - kind: Secret
+    - group: "core"
+      kind: Secret
       name: hubble-relay-client-certs
       jsonPointers:
       - /data/ca.crt
       - /data/tls.crt
       - /data/tls.key
-    - kind: Secret
+    - group: "core"
+      kind: Secret
       name: hubble-server-certs
       jsonPointers:
       - /data/ca.crt
       - /data/tls.crt
       - /data/tls.key
-    - kind: Secret
+    - group: "core"
+      kind: Secret
       name: cilium-ca
       jsonPointers:
       - /data/ca.crt
