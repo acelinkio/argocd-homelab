@@ -95,14 +95,9 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
-        #image:
-          #override: "quay.io/cilium/cilium-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
         operator:
           replicas: 1
           rollOutPods: true
-          #image:
-            # using main branch image from https://github.com/cilium/cilium/actions/runs/7941152929/job/21683197687
-            #override: "quay.io/cilium/operator-generic-ci:48bd2ac9eeabbbde42a35a1552952d72b6108cf0"
         rollOutCiliumPods: true
         securityContext:
           privileged: true
@@ -117,6 +112,28 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+  ignoreDifferences:
+    - kind: ConfigMap
+      name: hubble-ca-cert
+      jsonPointers:
+      - /data/ca.crt
+    - kind: Secret
+      name: hubble-relay-client-certs
+      jsonPointers:
+      - /data/ca.crt
+      - /data/tls.crt
+      - /data/tls.key
+    - kind: Secret
+      name: hubble-server-certs
+      jsonPointers:
+      - /data/ca.crt
+      - /data/tls.crt
+      - /data/tls.key
+    - kind: Secret
+      name: cilium-ca
+      jsonPointers:
+      - /data/ca.crt
+      - /data/ca.key
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
