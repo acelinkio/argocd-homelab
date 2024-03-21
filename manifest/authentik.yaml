@@ -342,7 +342,7 @@ spec:
         name = authentik_provider_oauth2.grafana_ouath2.name
         slug = authentik_provider_oauth2.grafana_ouath2.name
         protocol_provider = authentik_provider_oauth2.grafana_ouath2.id
-        meta_icon = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Grafana_logo.svg/768px-Grafana_logo.svg.png"
+        meta_icon = "https://grafana.com/static/img/menu/grafana2.svg"
         meta_launch_url = "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
         policy_engine_mode = "all"
       }
