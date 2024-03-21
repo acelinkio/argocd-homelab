@@ -371,7 +371,7 @@ spec:
         name = authentik_provider_oauth2.argocd_ouath2.name
         slug = authentik_provider_oauth2.argocd_ouath2.name
         protocol_provider = authentik_provider_oauth2.argocd_ouath2.id
-        meta_icon = "https://landscape.cncf.io/logos/argo.svg"
+        meta_icon = "https://argo-cd.readthedocs.io/en/stable/assets/logo.png"
         meta_launch_url = "https://argocd.<path:stringreplacesecret#domain>/auth/login"
         policy_engine_mode = "all"
       }
