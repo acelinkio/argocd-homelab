@@ -302,7 +302,7 @@ spec:
       }
 
       data "authentik_flow" "default-authorization-flow" {
-        slug = "default-provider-authorization-implicit-consent"
+        slug = "default-provider-authorization-explicit-consent"
       }
 
       data "authentik_scope_mapping" "email" {
