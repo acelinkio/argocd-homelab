@@ -3,3 +3,49 @@ kind: Namespace
 apiVersion: v1
 metadata:
   name: zolando-operator
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zolando-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: zolando-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgres-operator
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+    targetRevision: 1.11.0
+    # helm:
+    #   valuesObject:
+    #     test: 123
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zolando-operator-ui
+  namespace: argocd
+spec:
+  destination:
+    namespace: zolando-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgres-operator-ui
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+    targetRevision: 1.11.0
+    # helm:
+    #   valuesObject:
+    #     test: 123
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
