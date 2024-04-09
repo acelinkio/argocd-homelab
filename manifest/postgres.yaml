@@ -25,3 +25,24 @@ spec:
     bar: {}
   postgresql:
     version: "16"
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: cluster-01
+  namespace: postgres
+spec:
+  teamId: acid
+  volume:
+    size: 1Gi
+  numberOfInstances: 2
+  preparedDatabases:
+    authentik:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
+          defaultRoles: false
+          defaultUsers: false
+  postgresql:
+    version: "16"
