@@ -18,9 +18,11 @@ spec:
     chart: postgres-operator
     repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
     targetRevision: 1.11.0
-    # helm:
-    #   valuesObject:
-    #     test: 123
+    helm:
+      valuesObject:
+        image:
+          registry: ghcr.io
+          repository: zalando/postgres-operator
   syncPolicy:
     automated:
       allowEmpty: true
