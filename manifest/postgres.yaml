@@ -7,28 +7,6 @@ metadata:
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: test00
-  namespace: postgres
-spec:
-  teamId: acid
-  volume:
-    size: 1Gi
-  numberOfInstances: 2
-  users:
-    zalando:  # database owner
-    - superuser
-    - createdb
-    foo_user: []  # role for application foo
-  databases:
-    foo: zalando  # dbname: owner
-  preparedDatabases:
-    bar: {}
-  postgresql:
-    version: "16"
----
-apiVersion: acid.zalan.do/v1
-kind: postgresql
-metadata:
   name: cluster-01
   namespace: postgres
 spec:
@@ -53,3 +31,5 @@ spec:
           defaultUsers: false
   postgresql:
     version: "16"
+    parameters:
+      password_encryption: scram-sha-256
