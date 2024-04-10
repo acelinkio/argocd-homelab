@@ -23,6 +23,7 @@ spec:
         image:
           registry: ghcr.io
           repository: zalando/postgres-operator
+        enable_cross_namespace_secret: true
   syncPolicy:
     automated:
       allowEmpty: true
