@@ -33,3 +33,26 @@ spec:
     version: "16"
     parameters:
       password_encryption: scram-sha-256
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: authentik.owner.cluster-01.postgres
+  namespace: postgres
+spec:
+  refreshInterval: 60s
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: authentik-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: password
