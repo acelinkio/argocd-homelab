@@ -16,7 +16,7 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 │   ├── netowrk.md             # Networking details
 │   └── setup.md               # Installation steps
 ├── manifest/                  # Watched by ArgoCD ApplicationSet
-│   └── <namespace>.yaml       # Per namespace, App of Apps
+│   └── $namespace.yaml        # Per namespace, App of Apps
 ├── .gitignore                 # Ignored files list
 └── README.md                  # This file
 ```

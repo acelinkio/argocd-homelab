@@ -10,7 +10,7 @@
 homelab                        # vault used for containing secrets
 ├── sso                        # secret used for configuring sso
 ├── stringreplacesecret        # secret used for basic string replacement by ArgoCD Vault Plugin
-└── <namespace>                # secret dedicated for each namespace
+└── $namespace                 # secret dedicated for each namespace
 ```
 
 ### 1password Credentials
