@@ -37,45 +37,45 @@ spec:
         property: secret_key
     - secretKey: postgrespassword
       remoteRef:
-        key: authentik
-        property: postgrespassword
-    - secretKey: postgresuserpassword
+        key: cluster-01.postgres.authentik.owner
+        property: password
+    - secretKey: postgresuser
       remoteRef:
-        key: authentik
-        property: postgresuserpassword
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: authentik-postgres
-  namespace: argocd
-spec:
-  destination:
-    namespace: authentik
-    server: https://kubernetes.default.svc
-  project: homelab
-  source:
-    chart: postgresql
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 15.2.5
-    helm:
-      valuesObject:
-        fullnameOverride: authentik-postgres
-        auth:
-          username: authentik
-          database: authentik
-          existingSecret: authentik-configsecrets
-          secretKeys:
-            adminPasswordKey: postgrespassword
-            userPasswordKey: postgresuserpassword
-        primary:
-          persistence:
-            size: 4Gi
-  syncPolicy:
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+        key: cluster-01.postgres.authentik.owner
+        property: username
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: authentik-postgres
+#   namespace: argocd
+# spec:
+#   destination:
+#     namespace: authentik
+#     server: https://kubernetes.default.svc
+#   project: homelab
+#   source:
+#     chart: postgresql
+#     repoURL: https://charts.bitnami.com/bitnami
+#     targetRevision: 15.2.5
+#     helm:
+#       valuesObject:
+#         fullnameOverride: authentik-postgres
+#         auth:
+#           username: authentik
+#           database: authentik
+#           existingSecret: authentik-configsecrets
+#           secretKeys:
+#             adminPasswordKey: postgrespassword
+#             userPasswordKey: postgresuserpassword
+#         primary:
+#           persistence:
+#             size: 4Gi
+#   syncPolicy:
+#     automated:
+#       allowEmpty: true
+#       prune: true
+#       selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -98,9 +98,8 @@ spec:
             enabled: false
         authentik:
           postgresql:
-            host: "authentik-postgres.authentik"
+            host: "cluster-01.postgres"
             name: "authentik"
-            user: "authentik"
         redis:
           enabled: true
           master:
@@ -112,11 +111,6 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: secret_key
-                  name: authentik-configsecrets
-            - name: AUTHENTIK_POSTGRESQL__PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  key: postgresuserpassword
                   name: authentik-configsecrets
             - name: AUTHENTIK_BOOTSTRAP_PASSWORD
               valueFrom:
@@ -132,6 +126,16 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: bootstrap_email
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_POSTGRESQL__USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuser
+                  name: authentik-configsecrets
+            - name: AUTHENTIK_POSTGRESQL__PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgrespassword
                   name: authentik-configsecrets
   syncPolicy:
     automated:
