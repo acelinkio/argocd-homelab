@@ -39,6 +39,8 @@ kind: PushSecret
 metadata:
   name: cluster-01.postgres.authentik.owner
   namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   refreshInterval: 60s
   secretStoreRefs:

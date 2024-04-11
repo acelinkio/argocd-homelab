@@ -53,6 +53,8 @@ kind: PushSecret
 metadata:
   name: wildcard-production.certificate
   namespace: certificate
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   refreshInterval: 60s
   secretStoreRefs:
