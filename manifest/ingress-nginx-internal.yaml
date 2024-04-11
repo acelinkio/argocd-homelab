@@ -21,11 +21,11 @@ spec:
   data:
     - secretKey: tls.crt
       remoteRef:
-        key: wildcard-production
+        key: wildcard-production.certificate
         property: tls.crt
     - secretKey: tls.key
       remoteRef:
-        key: wildcard-production
+        key: wildcard-production.certificate
         property: tls.key
 ---
 apiVersion: argoproj.io/v1alpha1
