@@ -51,8 +51,10 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: username
+          remoteKey: authentik.owner.cluster-01.postgres
+          property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: password
+          remoteKey: authentik.owner.cluster-01.postgres
+          property: password
