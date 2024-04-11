@@ -37,7 +37,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: authentik.owner.cluster-01.postgres
+  name: cluster-01.postgres.authentik.owner
   namespace: postgres
 spec:
   refreshInterval: 60s
@@ -51,10 +51,10 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: authentik.owner.cluster-01.postgres
+          remoteKey: cluster-01.postgres.authentik.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: authentik.owner.cluster-01.postgres
+          remoteKey: cluster-01.postgres.authentik.owner
           property: password
