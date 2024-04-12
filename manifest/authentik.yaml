@@ -43,39 +43,6 @@ spec:
       remoteRef:
         key: cluster-01.postgres.authentik.owner
         property: username
-# ---
-# apiVersion: argoproj.io/v1alpha1
-# kind: Application
-# metadata:
-#   name: authentik-postgres
-#   namespace: argocd
-# spec:
-#   destination:
-#     namespace: authentik
-#     server: https://kubernetes.default.svc
-#   project: homelab
-#   source:
-#     chart: postgresql
-#     repoURL: https://charts.bitnami.com/bitnami
-#     targetRevision: 15.2.5
-#     helm:
-#       valuesObject:
-#         fullnameOverride: authentik-postgres
-#         auth:
-#           username: authentik
-#           database: authentik
-#           existingSecret: authentik-configsecrets
-#           secretKeys:
-#             adminPasswordKey: postgrespassword
-#             userPasswordKey: postgresuserpassword
-#         primary:
-#           persistence:
-#             size: 4Gi
-#   syncPolicy:
-#     automated:
-#       allowEmpty: true
-#       prune: true
-#       selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
