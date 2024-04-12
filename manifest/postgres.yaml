@@ -19,7 +19,9 @@ spec:
       defaultUsers: true
       extensions: {}
       schemas:
-        data:
+        # still uses public schema...
+        # https://github.com/goauthentik/authentik/issues/9212        
+        public:
           defaultRoles: false
           defaultUsers: false
     vikunja:
