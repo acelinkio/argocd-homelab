@@ -62,3 +62,30 @@ spec:
         remoteRef:
           remoteKey: cluster-01.postgres.authentik.owner
           property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster-01.postgres.vikunja.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: 60s
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: vikunja-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: cluster-01.postgres.vikunja.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: cluster-01.postgres.vikunja.owner
+          property: password
