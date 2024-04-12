@@ -23,47 +23,14 @@ spec:
       remoteRef:
         key: vikunja
         property: jwtsecret
+    - secretKey: postgresuser
+      remoteRef:
+        key: cluster-01.postgres.vikunja.owner
+        property: postgresuserpassword
     - secretKey: postgrespassword
       remoteRef:
-        key: vikunja
-        property: postgrespassword
-    - secretKey: postgresuserpassword
-      remoteRef:
-        key: vikunja
+        key: cluster-01.postgres.vikunja.owner
         property: postgresuserpassword
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: vikunja-postgres
-  namespace: argocd
-spec:
-  destination:
-    namespace: vikunja
-    server: https://kubernetes.default.svc
-  project: homelab
-  source:
-    chart: postgresql
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 15.2.5
-    helm:
-      valuesObject:
-        fullnameOverride: vikunja-postgres
-        auth:
-          username: vikunja
-          database: vikunja
-          existingSecret: vikunja-configsecrets
-          secretKeys:
-            adminPasswordKey: postgrespassword
-            userPasswordKey: postgresuserpassword
-        primary:
-          persistence:
-            size: 4Gi
-  syncPolicy:
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -203,19 +170,22 @@ spec:
         - env:
           - name: VIKUNJA_AUTH_LOCAL
             value: "false"
+          - name: VIKUNJA_DATABASE_TYPE
+            value: postgres
+          - name: VIKUNJA_DATABASE_HOST
+            value: cluster-01.postgres
           - name: VIKUNJA_DATABASE_DATABASE
             value: vikunja
-          - name: VIKUNJA_DATABASE_HOST
-            value: vikunja-postgres.vikunja
+          - name: VIKUNJA_DATABASE_USER
+            valueFrom:
+              secretKeyRef:
+                key: postgresuser
+                name: vikunja-configsecrets
           - name: VIKUNJA_DATABASE_PASSWORD
             valueFrom:
               secretKeyRef:
-                key: postgresuserpassword
+                key: postgrespassword
                 name: vikunja-configsecrets
-          - name: VIKUNJA_DATABASE_TYPE
-            value: postgres
-          - name: VIKUNJA_DATABASE_USER
-            value: vikunja
           # - name: VIKUNJA_DEFAULTSETTINGS_TIMEZONE
           #   value: America/Chicago
           # - name: VIKUNJA_KEYVALUE_TYPE
