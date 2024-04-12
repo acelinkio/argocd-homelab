@@ -23,14 +23,14 @@ spec:
       remoteRef:
         key: vikunja
         property: jwtsecret
-    - secretKey: postgresuser
-      remoteRef:
-        key: cluster-01.postgres.vikunja.owner
-        property: postgresuserpassword
     - secretKey: postgrespassword
       remoteRef:
         key: cluster-01.postgres.vikunja.owner
-        property: postgresuserpassword
+        property: password
+    - secretKey: postgresuser
+      remoteRef:
+        key: cluster-01.postgres.vikunja.owner
+        property: username
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
