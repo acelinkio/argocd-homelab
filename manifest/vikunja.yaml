@@ -83,6 +83,7 @@ spec:
       storage: "2Gi"
   storageClassName: "longhorn"
 ---
+# fix deployment/create own helm chart
 apiVersion: v1
 kind: Service
 metadata:

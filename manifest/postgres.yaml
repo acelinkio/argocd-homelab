@@ -28,7 +28,7 @@ spec:
       defaultUsers: true
       extensions: {}
       schemas:
-        data:
+        public:
           defaultRoles: false
           defaultUsers: false
   postgresql:
