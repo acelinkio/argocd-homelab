@@ -72,9 +72,7 @@ metadata:
   namespace: vikunja
   labels:
     app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
 spec:
   accessModes:
     - "ReadWriteOnce"
@@ -90,10 +88,8 @@ metadata:
   namespace: vikunja
   labels:
     app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vikunja
     app.kubernetes.io/service: vikunja-api
-    helm.sh/chart: app-template-2.4.0
 spec:
   type: ClusterIP
   ports:
@@ -113,10 +109,8 @@ metadata:
   namespace: vikunja
   labels:
     app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vikunja
     app.kubernetes.io/service: vikunja-frontend
-    helm.sh/chart: app-template-2.4.0
 spec:
   type: ClusterIP
   ports:
@@ -137,9 +131,7 @@ metadata:
   labels:
     app.kubernetes.io/component: api
     app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
 spec:
   strategy:
     type: Recreate
@@ -154,18 +146,7 @@ spec:
         app.kubernetes.io/component: api
         app.kubernetes.io/instance: vikunja
         app.kubernetes.io/name: vikunja
-        policy.gabe565.com/egress-ingress: "true"
-        policy.gabe565.com/egress-namespace: "true"
-        policy.gabe565.com/egress-world: "true"
-        policy.gabe565.com/ingress-ingress: "true"
-    spec: 
-      enableServiceLinks: false
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      hostIPC: false
-      hostNetwork: false
-      hostPID: false
-      dnsPolicy: ClusterFirst
+    spec:
       containers: 
         - env:
           - name: VIKUNJA_AUTH_LOCAL
@@ -219,12 +200,8 @@ metadata:
   labels:
     app.kubernetes.io/component: frontend
     app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/managed-by: Helm
     app.kubernetes.io/name: vikunja
-    helm.sh/chart: app-template-2.4.0
 spec:
-  strategy:
-    type: RollingUpdate
   selector:
     matchLabels:
       app.kubernetes.io/component: frontend
@@ -236,15 +213,7 @@ spec:
         app.kubernetes.io/component: frontend
         app.kubernetes.io/instance: vikunja
         app.kubernetes.io/name: vikunja
-        policy.gabe565.com/ingress-ingress: "true"
     spec: 
-      enableServiceLinks: true
-      serviceAccountName: default
-      automountServiceAccountToken: true
-      hostIPC: false
-      hostNetwork: false
-      hostPID: false
-      dnsPolicy: ClusterFirst
       containers: 
         - image: vikunja/frontend:0.22.1
           name: main
