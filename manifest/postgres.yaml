@@ -103,14 +103,14 @@ spec:
 #     size: 4Gi
 #   numberOfInstances: 2
 #   preparedDatabases:
-#     freshrss1:
+#     miniflux1:
 #       defaultUsers: true
 #       extensions: {}
 #       schemas:
 #         public:
 #           defaultRoles: false
 #           defaultUsers: false
-#     freshrss2:
+#     miniflux2:
 #       defaultUsers: true
 #       extensions: {}
 #       schemas:
@@ -125,7 +125,7 @@ spec:
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster-02.postgres.freshrss1.owner
+#   name: cluster-02.postgres.miniflux1.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -136,23 +136,23 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: freshrss1-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+#       name: miniflux1-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: cluster-02.postgres.freshrss1.owner
+#           remoteKey: cluster-02.postgres.miniflux1.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: cluster-02.postgres.freshrss1.owner
+#           remoteKey: cluster-02.postgres.miniflux1.owner
 #           property: password
 # ---
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster-02.postgres.freshrss2.owner
+#   name: cluster-02.postgres.miniflux2.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -163,15 +163,15 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: freshrss2-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+#       name: miniflux2-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: cluster-02.postgres.freshrss2.owner
+#           remoteKey: cluster-02.postgres.miniflux2.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: cluster-02.postgres.freshrss2.owner
+#           remoteKey: cluster-02.postgres.miniflux2.owner
 #           property: password
