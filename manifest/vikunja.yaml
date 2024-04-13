@@ -83,7 +83,6 @@ spec:
       storage: "2Gi"
   storageClassName: "longhorn"
 ---
-# fix deployment/create own helm chart
 apiVersion: v1
 kind: Service
 metadata:
@@ -189,19 +188,6 @@ spec:
               secretKeyRef:
                 key: postgrespassword
                 name: vikunja-configsecrets
-          # - name: VIKUNJA_DEFAULTSETTINGS_TIMEZONE
-          #   value: America/Chicago
-          # - name: VIKUNJA_KEYVALUE_TYPE
-          #   value: redis
-          # - name: VIKUNJA_REDIS_ENABLED
-          #   value: "true"
-          # - name: VIKUNJA_REDIS_HOST
-          #   value: redis-master:6379
-          # - name: VIKUNJA_REDIS_PASSWORD
-          #   valueFrom:
-          #     secretKeyRef:
-          #       key: redis-password
-          #       name: redis
           - name: VIKUNJA_SERVICE_FRONTENDURL
             value: https://tasks.<path:stringreplacesecret#domain>/
           - name: VIKUNJA_SERVICE_JWTSECRET
