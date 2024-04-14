@@ -364,7 +364,7 @@ spec:
         client_secret = var.miniflux_token
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "https://miniflux.<path:stringreplacesecret#domain>/oauth2/oidc/callback"]
+        redirect_uris = [ "https://rss.<path:stringreplacesecret#domain>/oauth2/oidc/callback"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
