@@ -104,8 +104,8 @@ spec:
           - name: OAUTH2_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                key: postgresuser
-                name: token
+                key: token
+                name: sso
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
             value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/
           - name: OAUTH2_PROVIDER
