@@ -75,6 +75,33 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
+  name: cluster-01.postgres.miniflux.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: 60s
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: miniflux1-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: cluster-01.postgres.miniflux.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: cluster-01.postgres.miniflux.owner
+          property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
   name: cluster-01.postgres.vikunja.owner
   namespace: postgres
   annotations:
@@ -97,95 +124,4 @@ spec:
         secretKey: password
         remoteRef:
           remoteKey: cluster-01.postgres.vikunja.owner
-          property: password
----
-apiVersion: acid.zalan.do/v1
-kind: postgresql
-metadata:
-  name: cluster-02
-  namespace: postgres
-spec:
-  teamId: acid
-  volume:
-    size: 4Gi
-  numberOfInstances: 2
-  preparedDatabases:
-    miniflux1:
-      defaultUsers: true
-      extensions: {}
-      schemas:
-        public:
-          defaultRoles: false
-          defaultUsers: false
-    miniflux2:
-      defaultUsers: true
-      extensions: {}
-      schemas:
-        data:
-          defaultRoles: false
-          defaultUsers: false
-    test123:
-      defaultUsers: true
-      extensions: {}
-      schemas:
-        data:
-          defaultRoles: false
-          defaultUsers: false
-  postgresql:
-    version: "16"
-    parameters:
-      password_encryption: scram-sha-256
----
-apiVersion: external-secrets.io/v1alpha1
-kind: PushSecret
-metadata:
-  name: cluster-02.postgres.miniflux1.owner
-  namespace: postgres
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  refreshInterval: 60s
-  secretStoreRefs:
-    - name: 1password
-      kind: ClusterSecretStore
-  selector:
-    secret:
-      name: miniflux1-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
-  data:
-    - match:
-        secretKey: username
-        remoteRef:
-          remoteKey: cluster-02.postgres.miniflux1.owner
-          property: username
-    - match:
-        secretKey: password
-        remoteRef:
-          remoteKey: cluster-02.postgres.miniflux1.owner
-          property: password
----
-apiVersion: external-secrets.io/v1alpha1
-kind: PushSecret
-metadata:
-  name: cluster-02.postgres.miniflux2.owner
-  namespace: postgres
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  refreshInterval: 60s
-  secretStoreRefs:
-    - name: 1password
-      kind: ClusterSecretStore
-  selector:
-    secret:
-      name: miniflux2-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
-  data:
-    - match:
-        secretKey: username
-        remoteRef:
-          remoteKey: cluster-02.postgres.miniflux2.owner
-          property: username
-    - match:
-        secretKey: password
-        remoteRef:
-          remoteKey: cluster-02.postgres.miniflux2.owner
           property: password
