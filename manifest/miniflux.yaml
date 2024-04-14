@@ -73,8 +73,8 @@ spec:
         - env:
           - name: BASE_URL
             value: https://rss.<path:stringreplacesecret#domain>
-          - name: CREATE_ADMIN
-            value: "1"
+          #- name: CREATE_ADMIN
+          #  value: "1"
           - name: LOG_DATE_TIME
             value: "1"
           - name: METRICS_ALLOWED_NETWORKS
@@ -84,7 +84,7 @@ spec:
           - name: OAUTH2_CLIENT_ID
             value: miniflux
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
-            value: https://auth.<path:stringreplacesecret#domain>
+            value: https://auth.<path:stringreplacesecret#domain>/o/miniflux/
           - name: OAUTH2_PROVIDER
             value: oidc
           - name: OAUTH2_REDIRECT_URL
