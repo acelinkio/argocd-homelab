@@ -110,7 +110,7 @@ spec:
                 key: postgrespassword
                 name: miniflux-configsecrets
           - name: DATABASE_URL
-            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster-02.postgres/miniflux2"
+            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster-01.postgres/miniflux"
           image: ghcr.io/miniflux/miniflux:2.1.2-distroless
           name: main
 ---
