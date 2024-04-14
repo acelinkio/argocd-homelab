@@ -28,6 +28,24 @@ spec:
         key: cluster-01.postgres.miniflux.owner
         property: username
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: miniflux
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: sso
+        property: miniflux
+---
 apiVersion: v1
 kind: Service
 metadata:
@@ -83,6 +101,11 @@ spec:
             value: "1"
           - name: OAUTH2_CLIENT_ID
             value: miniflux
+          - name: OAUTH2_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: postgresuser
+                name: token
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
             value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/
           - name: OAUTH2_PROVIDER
