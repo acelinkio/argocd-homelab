@@ -42,6 +42,8 @@ homelab                        # vault used for containing secrets
 - Each application should have a unique clientsecret that is between 30-90 characters long.
   - Create key named `argocd` and save clientsecret value inside.
   - Create key named `grafana` and save clientsecret value inside.
+  - Create key named `miniflux` and save clientsecret value inside.
+  - Create key named `vikunja` and save clientsecret value inside.
 
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
