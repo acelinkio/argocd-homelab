@@ -84,7 +84,7 @@ spec:
           - name: OAUTH2_CLIENT_ID
             value: miniflux
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
-            value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/.well-known/openid-configuration
+            value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/
           - name: OAUTH2_PROVIDER
             value: oidc
           - name: OAUTH2_REDIRECT_URL
