@@ -117,6 +117,13 @@ spec:
         data:
           defaultRoles: false
           defaultUsers: false
+    test123:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
+          defaultRoles: false
+          defaultUsers: false
   postgresql:
     version: "16"
     parameters:
