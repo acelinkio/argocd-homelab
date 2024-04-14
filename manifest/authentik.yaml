@@ -353,6 +353,35 @@ spec:
         policy_engine_mode = "all"
       }
 
+      resource "authentik_group" "miniflux_admin" {
+        name         = "Miniflux Admin"
+        is_superuser = false
+      }
+
+      resource "authentik_provider_oauth2" "miniflux_ouath2" {
+        name      = "miniflux"
+        client_id = "miniflux"
+        client_secret = var.miniflux_token
+        authorization_flow = data.authentik_flow.default-authorization-flow.id
+        access_code_validity = "minutes=10"
+        redirect_uris = [ "https://miniflux.<path:stringreplacesecret#domain>/oauth2/oidc/callback"]
+        signing_key = data.authentik_certificate_key_pair.generated.id
+        property_mappings = [
+          data.authentik_scope_mapping.openid.id,
+          data.authentik_scope_mapping.email.id,
+          data.authentik_scope_mapping.profile.id
+        ]
+      }
+
+      resource "authentik_application" "miniflux_application" {
+        name = authentik_provider_oauth2.miniflux_ouath2.name
+        slug = authentik_provider_oauth2.miniflux_ouath2.name
+        protocol_provider = authentik_provider_oauth2.miniflux_ouath2.id
+        meta_icon = "https://raw.githubusercontent.com/miniflux/logo/master/icon.svg"
+        meta_launch_url = "https://miniflux.<path:stringreplacesecret#domain>/oauth2/oidc/redirect"
+        policy_engine_mode = "all"
+      }
+
       resource "authentik_group" "vikunja_admin" {
         name         = "Vikunja Admin"
         is_superuser = false
