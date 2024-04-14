@@ -21,11 +21,11 @@ spec:
   data:
     - secretKey: postgrespassword
       remoteRef:
-        key: cluster-01.postgres.miniflux.owner
+        key: cluster-02.postgres.miniflux1.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: cluster-01.postgres.miniflux.owner
+        key: cluster-02.postgres.miniflux1.owner
         property: username
 ---
 apiVersion: v1
@@ -84,11 +84,11 @@ spec:
           - name: OAUTH2_CLIENT_ID
             value: miniflux
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
-            value: https://auth.devbu.io
+            value: https://auth.<path:stringreplacesecret#domain>
           - name: OAUTH2_PROVIDER
             value: oidc
           - name: OAUTH2_REDIRECT_URL
-            value: https://miniflux.devbu.io/oauth2/oidc/callback
+            value: https://rss.<path:stringreplacesecret#domain>/oauth2/oidc/callback
           - name: OAUTH2_USER_CREATION
             value: "1"
           - name: POLLING_FREQUENCY
@@ -99,37 +99,19 @@ spec:
             value: "80"
           - name: RUN_MIGRATIONS
             value: "1"
-
-
-
-          - name: miniflux_AUTH_LOCAL
-            value: "false"
-          - name: miniflux_DATABASE_TYPE
-            value: postgres
-          - name: miniflux_DATABASE_HOST
-            value: cluster-01.postgres
-          - name: miniflux_DATABASE_DATABASE
-            value: miniflux
-          - name: miniflux_DATABASE_SSLMODE
-            value: require
-          - name: miniflux_DATABASE_USER
-            valueFrom:
-              secretKeyRef:
-                key: postgresuser
-                name: miniflux-configsecrets
-          - name: miniflux_DATABASE_PASSWORD
+          - name: HELPERVAR_POSTGRES_USER
             valueFrom:
               secretKeyRef:
                 key: postgrespassword
                 name: miniflux-configsecrets
-          - name: miniflux_SERVICE_FRONTENDURL
-            value: https://tasks.<path:stringreplacesecret#domain>/
-          - name: miniflux_SERVICE_JWTSECRET
+          - name: HELPERVAR_POSTGRES_PASSWORD
             valueFrom:
               secretKeyRef:
+                key: postgrespassword
                 name: miniflux-configsecrets
-                key: jwtsecret
-          image: miniflux/api:0.22.1
+          - name: DATABASE_URL
+            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster-02.postgres/miniflux1"
+          image: ghcr.io/miniflux/miniflux:2.0.50-distroless
           name: main
 ---
 apiVersion: networking.k8s.io/v1
