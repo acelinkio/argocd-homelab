@@ -232,18 +232,23 @@ spec:
     template:
       data:
         sso.tfvars: |
-          grafana_token = "{{ .grafana_token | toString }}"
           argocd_token = "{{ .argocd_token | toString }}"
+          grafana_token = "{{ .grafana_token | toString }}"
+          miniflux_token = "{{ .miniflux_token | toString }}"
           vikunja_token = "{{ .vikunja_token | toString }}"
   data:
-    - secretKey: grafana_token
-      remoteRef:
-        key: sso
-        property: grafana
     - secretKey: argocd_token
       remoteRef:
         key: sso
         property: argocd
+    - secretKey: grafana_token
+      remoteRef:
+        key: sso
+        property: grafana
+    - secretKey: miniflux_token
+      remoteRef:
+        key: sso
+        property: miniflux
     - secretKey: vikunja_token
       remoteRef:
         key: sso
@@ -267,6 +272,7 @@ spec:
     module: |
       variable "argocd_token" {}
       variable "grafana_token" {}
+      variable "miniflux_token" {}
       variable "vikunja_token" {}
 
       data "authentik_certificate_key_pair" "generated" {
