@@ -378,7 +378,7 @@ spec:
         slug = authentik_provider_oauth2.miniflux_ouath2.name
         protocol_provider = authentik_provider_oauth2.miniflux_ouath2.id
         meta_icon = "https://raw.githubusercontent.com/miniflux/logo/master/icon.svg"
-        meta_launch_url = "https://miniflux.<path:stringreplacesecret#domain>/oauth2/oidc/redirect"
+        meta_launch_url = "https://rss.<path:stringreplacesecret#domain>/oauth2/oidc/redirect"
         policy_engine_mode = "all"
       }
 
