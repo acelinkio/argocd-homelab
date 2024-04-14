@@ -86,7 +86,7 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: miniflux1-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+      name: miniflux-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
