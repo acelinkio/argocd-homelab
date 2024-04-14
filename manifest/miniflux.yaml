@@ -21,11 +21,11 @@ spec:
   data:
     - secretKey: postgrespassword
       remoteRef:
-        key: cluster-02.postgres.miniflux2.owner
+        key: cluster-01.postgres.miniflux.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: cluster-02.postgres.miniflux2.owner
+        key: cluster-01.postgres.miniflux.owner
         property: username
 ---
 apiVersion: v1
