@@ -102,7 +102,7 @@ spec:
           - name: HELPERVAR_POSTGRES_USER
             valueFrom:
               secretKeyRef:
-                key: postgrespassword
+                key: postgresuser
                 name: miniflux-configsecrets
           - name: HELPERVAR_POSTGRES_PASSWORD
             valueFrom:
