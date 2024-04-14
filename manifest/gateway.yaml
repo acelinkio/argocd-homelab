@@ -20,7 +20,7 @@ spec:
     name: http
     allowedRoutes:
       namespaces:
-        from: All
+        from: Same
   - protocol: HTTPS
     port: 443
     name: https
@@ -83,7 +83,7 @@ spec:
     name: http
     allowedRoutes:
       namespaces:
-        from: All
+        from: Same
   - protocol: HTTPS
     port: 443
     name: https
