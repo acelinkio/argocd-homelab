@@ -232,27 +232,57 @@ spec:
     template:
       data:
         sso.tfvars: |
-          argocd_token = "{{ .argocd_token | toString }}"
-          grafana_token = "{{ .grafana_token | toString }}"
-          miniflux_token = "{{ .miniflux_token | toString }}"
-          vikunja_token = "{{ .vikunja_token | toString }}"
+          argocd_client_id = "{{ .argocd_client_id | toString }}"
+          argocd_client_secret = "{{ .argocd_client_secret | toString }}"
+          grafana_client_id = "{{ .grafana_client_id | toString }}"
+          grafana_client_secret = "{{ .grafana_client_secret | toString }}"
+          miniflux_client_id = "{{ .miniflux_client_id | toString }}"
+          miniflux_client_secret = "{{ .miniflux_client_secret | toString }}"
+          vikunja_client_id = "{{ .vikunja_client_id | toString }}"
+          vikunja_client_secret = "{{ .vikunja_client_secret | toString }}"
+          federation_google_client_id = "{{ .federation_google_client_id | toString }}"
+          federation_google_client_secret = "{{ .federation_google_client_secret | toString }}"
   data:
-    - secretKey: argocd_token
+    - secretKey: argocd_client_id
       remoteRef:
         key: sso
-        property: argocd
-    - secretKey: grafana_token
+        property: argocd_client_id
+    - secretKey: argocd_client_secret
       remoteRef:
         key: sso
-        property: grafana
-    - secretKey: miniflux_token
+        property: argocd_client_secret
+    - secretKey: grafana_client_id
       remoteRef:
         key: sso
-        property: miniflux
-    - secretKey: vikunja_token
+        property: grafana_client_id
+    - secretKey: grafana_client_secret
       remoteRef:
         key: sso
-        property: vikunja
+        property: grafana_client_secret
+    - secretKey: miniflux_client_id
+      remoteRef:
+        key: sso
+        property: miniflux_client_id
+    - secretKey: miniflux_client_secret
+      remoteRef:
+        key: sso
+        property: miniflux_client_secret
+    - secretKey: vikunja_client_id
+      remoteRef:
+        key: sso
+        property: vikunja_client_id
+    - secretKey: vikunja_client_secret
+      remoteRef:
+        key: sso
+        property: vikunja_client_secret
+    - secretKey: federation_google_client_id
+      remoteRef:
+        key: sso
+        property: federation_google_client_id
+    - secretKey: federation_google_client_secret
+      remoteRef:
+        key: sso
+        property: federation_google_client_secret
 ---
 apiVersion: tf.upbound.io/v1beta1
 kind: Workspace
@@ -270,10 +300,14 @@ spec:
           namespace: authentik
     source: Inline
     module: |
-      variable "argocd_token" {}
-      variable "grafana_token" {}
-      variable "miniflux_token" {}
-      variable "vikunja_token" {}
+      variable "argocd_client_id" {}
+      variable "argocd_client_secret" {}
+      variable "grafana_client_id" {}
+      variable "grafana_client_secret" {}
+      variable "miniflux_client_id" {}
+      variable "miniflux_client_secret" {}
+      variable "vikunja_client_id" {}
+      variable "vikunja_client_secret" {}
 
       data "authentik_certificate_key_pair" "generated" {
         name = "authentik Self-signed Certificate"
@@ -302,8 +336,8 @@ spec:
 
       resource "authentik_provider_oauth2" "argocd_ouath2" {
         name      = "argocd"
-        client_id = "argocd"
-        client_secret = var.argocd_token
+        client_id = var.argocd_client_id
+        client_secret = var.argocd_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
         redirect_uris = [ "https://argocd.<path:stringreplacesecret#domain>/api/dex/callback","http://localhost:8085/auth/callback"]
@@ -331,8 +365,8 @@ spec:
 
       resource "authentik_provider_oauth2" "grafana_ouath2" {
         name      = "grafana"
-        client_id = "grafana"
-        client_secret = var.grafana_token
+        client_id = var.grafana_client_id
+        client_secret = var.grafana_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
         redirect_uris = [ "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"]
@@ -360,8 +394,8 @@ spec:
 
       resource "authentik_provider_oauth2" "miniflux_ouath2" {
         name      = "miniflux"
-        client_id = "miniflux"
-        client_secret = var.miniflux_token
+        client_id = var.miniflux_client_id
+        client_secret = var.miniflux_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
         redirect_uris = [ "https://rss.<path:stringreplacesecret#domain>/oauth2/oidc/callback"]
@@ -389,8 +423,8 @@ spec:
 
       resource "authentik_provider_oauth2" "vikunja_ouath2" {
         name      = "vikunja"
-        client_id = "vikunja"
-        client_secret = var.vikunja_token
+        client_id = var.vikunja_client_id
+        client_secret = var.vikunja_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
         redirect_uris = [ "https://tasks.<path:stringreplacesecret#domain>/auth/openid/authentik"]
