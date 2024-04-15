@@ -468,6 +468,12 @@ spec:
         user_matching_mode = "email_link"
       }
 
+      import {
+        provider = authentik
+        to = authentik_stage_identification.default
+        id = "default-authentication-identification"
+      }
+
       resource "authentik_stage_identification" "default" {
         name           = "default-authentication-identification"
         user_fields    = ["username","email"]
