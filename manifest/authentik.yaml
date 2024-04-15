@@ -469,7 +469,6 @@ spec:
       }
 
       import {
-        provider = authentik
         to = authentik_stage_identification.default
         id = "default-authentication-identification"
       }
