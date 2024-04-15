@@ -339,6 +339,10 @@ spec:
         managed = "goauthentik.io/providers/oauth2/scope-openid"
       }
 
+      data "authentik_stage_identification" "default" {
+        slug = "default-authentication-identification"
+      }
+
       resource "authentik_group" "argocd_admin" {
         name         = "ArgoCD Admin"
         is_superuser = false
@@ -470,7 +474,7 @@ spec:
 
       import {
         to = authentik_stage_identification.default
-        id = "default-authentication-identification"
+        id = data.authentik_stage_identification.default
       }
 
       resource "authentik_stage_identification" "default" {
