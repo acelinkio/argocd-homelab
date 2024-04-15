@@ -340,7 +340,7 @@ spec:
       }
 
       data "authentik_stage" "default-authentication-identification" {
-        slug = "default-authentication-identification"
+        name = "default-authentication-identification"
       }
 
       resource "authentik_group" "argocd_admin" {
