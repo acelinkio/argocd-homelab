@@ -162,3 +162,17 @@ echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_
 # configure
 echo "$argocd_config" | kubectl apply --filename -
 ```
+# Post Setup
+## Authentik Add Google Auth to Stage
+This is a manual step until either the default authentik resource can be imported or another stage we manage can be used.
+
+Follow: https://docs.goauthentik.io/integrations/sources/general
+
+This is what the terraform code would look like.
+```hcl
+resource "authentik_stage_identification" "default" {
+  name           = "default-authentication-identification"
+  user_fields    = ["username","email"]
+  sources        = [authentik_source_oauth.google.uuid]
+}
+```
