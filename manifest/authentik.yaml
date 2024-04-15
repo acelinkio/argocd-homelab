@@ -474,7 +474,7 @@ spec:
 
       import {
         to = authentik_stage_identification.default
-        id = data.authentik_stage_identification.default
+        id = data.authentik_stage_identification.default.id
       }
 
       resource "authentik_stage_identification" "default" {
