@@ -19,10 +19,14 @@ spec:
   target:
     creationPolicy: Owner
   data:
-    - secretKey: token
+    - secretKey: client_id
       remoteRef:
         key: sso
-        property: argocd
+        property: argocd_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: argocd_client_secret
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -54,8 +58,8 @@ spec:
                   id: authentik
                   config:
                     issuer: https://auth.<path:stringreplacesecret#domain>/application/o/argocd/
-                    clientID: argocd
-                    clientSecret: $sso:token
+                    clientID: $sso:client_id
+                    clientSecret: $sso:client_secret
                     insecureEnableGroups: true
                     scopes:
                       - openid
