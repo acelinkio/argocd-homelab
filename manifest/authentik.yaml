@@ -308,6 +308,8 @@ spec:
       variable "miniflux_client_secret" {}
       variable "vikunja_client_id" {}
       variable "vikunja_client_secret" {}
+      variable "federation_google_client_id" {}
+      variable "federation_google_client_secret" {}
 
       data "authentik_certificate_key_pair" "generated" {
         name = "authentik Self-signed Certificate"
