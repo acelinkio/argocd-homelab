@@ -339,7 +339,7 @@ spec:
         managed = "goauthentik.io/providers/oauth2/scope-openid"
       }
 
-      data "authentik_stage_identification" "default" {
+      data "authentik_stage" "default-authentication-identification" {
         slug = "default-authentication-identification"
       }
 
