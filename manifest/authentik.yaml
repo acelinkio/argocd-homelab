@@ -471,14 +471,3 @@ spec:
         
         user_matching_mode = "email_link"
       }
-
-      import {
-        to = authentik_stage_identification.default
-        id = data.authentik_stage_identification.default.id
-      }
-
-      resource "authentik_stage_identification" "default" {
-        name           = "default-authentication-identification"
-        user_fields    = ["username","email"]
-        sources        = [authentik_source_oauth.google.uuid]
-      }
