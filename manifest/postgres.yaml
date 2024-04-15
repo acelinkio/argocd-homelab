@@ -53,7 +53,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  refreshInterval: 60s
+  refreshInterval: "5m"
   secretStoreRefs:
     - name: 1password
       kind: ClusterSecretStore
@@ -80,7 +80,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  refreshInterval: 60s
+  refreshInterval: "5m"
   secretStoreRefs:
     - name: 1password
       kind: ClusterSecretStore
@@ -107,7 +107,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  refreshInterval: 60s
+  refreshInterval: "5m"
   secretStoreRefs:
     - name: 1password
       kind: ClusterSecretStore
