@@ -1,0 +1,25 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: minio-operator
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: minio-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: minio-operator
+    repoURL: https://operator.min.io
+    targetRevision: 4.3.7
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
