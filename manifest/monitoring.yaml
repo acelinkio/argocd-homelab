@@ -21,10 +21,10 @@ spec:
       remoteRef:
         key: sso
         property: grafana_client_id
-    - secretKey: argocd_client_secret
+    - secretKey: grafana_client_secret
       remoteRef:
         key: sso
-        property: argocd_client_secret
+        property: grafana_client_secret
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
