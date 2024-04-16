@@ -44,11 +44,11 @@ spec:
     - secretKey: client_id
       remoteRef:
         key: sso
-        property: client_id
+        property: miniflux_client_id
     - secretKey: client_secret
       remoteRef:
         key: sso
-        property: client_secret
+        property: miniflux_client_secret
 ---
 apiVersion: v1
 kind: Service
