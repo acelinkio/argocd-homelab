@@ -41,10 +41,14 @@ spec:
   target:
     creationPolicy: Owner
   data:
-    - secretKey: token
+    - secretKey: client_id
       remoteRef:
         key: sso
-        property: miniflux
+        property: client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: client_secret
 ---
 apiVersion: v1
 kind: Service
@@ -100,11 +104,14 @@ spec:
           - name: METRICS_COLLECTOR
             value: "1"
           - name: OAUTH2_CLIENT_ID
-            value: miniflux
+            valueFrom:
+              secretKeyRef:
+                key: client_id
+                name: sso
           - name: OAUTH2_CLIENT_SECRET
             valueFrom:
               secretKeyRef:
-                key: token
+                key: client_secret
                 name: sso
           - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
             value: https://auth.<path:stringreplacesecret#domain>/application/o/miniflux/
