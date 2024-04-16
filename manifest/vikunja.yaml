@@ -57,13 +57,17 @@ spec:
                 - name: authentik
                   authurl: https://auth.<path:stringreplacesecret#domain>/application/o/vikunja/
                   logouturl: https://auth.<path:stringreplacesecret#domain>/application/o/vikunja/end-session/
-                  clientid: vikunja
-                  clientsecret: "{{ .vikunja_token | toString }}"
+                  clientid: "{{ .client_id | toString }}"
+                  clientsecret: "{{ .client_secret | toString }}"
   data:
-    - secretKey: vikunja_token
+    - secretKey: client_id
       remoteRef:
         key: sso
-        property: vikunja
+        property: vikunja_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: vikunja_client_secret
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
