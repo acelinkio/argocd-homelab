@@ -18,6 +18,9 @@ spec:
     chart: minio-operator
     repoURL: https://operator.min.io
     targetRevision: 4.3.7
+    helm:
+      valuesObject:
+        tenants: []
   syncPolicy:
     automated:
       allowEmpty: true
