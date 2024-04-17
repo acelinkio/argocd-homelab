@@ -7,31 +7,31 @@ metadata:
 apiVersion: minio.min.io/v2
 kind: Tenant
 metadata:
-  labels:
-    app: minio
   name: minio1
   namespace: s3
+  labels:
+    app: minio
 spec:
-  credsSecret:
-    name: minio1-secret
   image: minio/minio:RELEASE.2021-10-06T23-36-31Z
   imagePullPolicy: IfNotPresent
-  mountPath: /export
-  podManagementPolicy: Parallel
+  credsSecret:
+    name: minio1-secret
   pools:
-    - servers: 4
+    - servers: 2
+      volumesPerServer: 2
       volumeClaimTemplate:
         metadata:
           name: data
         spec:
+          storageClassName: standard
           accessModes:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 10Gi
-          storageClassName: standard
-      volumesPerServer: 4
+              storage: 5Gi
+  mountPath: /export
+  subPath: /data
   requestAutoCert: true
   s3:
     bucketDNS: false
-  subPath: /data
+  podManagementPolicy: Parallel
