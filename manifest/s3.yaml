@@ -15,7 +15,7 @@ spec:
   image: minio/minio:RELEASE.2021-10-06T23-36-31Z
   imagePullPolicy: IfNotPresent
   credsSecret:
-    name: minio1-secret
+    name: minio1-tls
   pools:
     - servers: 2
       volumesPerServer: 2
