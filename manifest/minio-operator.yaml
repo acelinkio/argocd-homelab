@@ -15,9 +15,9 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    chart: minio-operator
+    chart: operator
     repoURL: https://operator.min.io
-    targetRevision: 4.3.7
+    targetRevision: 5.0.14
     # helm:
     #   valuesObject:
     #     tenants: []
