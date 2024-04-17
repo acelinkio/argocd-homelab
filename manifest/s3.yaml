@@ -17,8 +17,8 @@ spec:
   credsSecret:
     name: minio1-secret
   pools:
-    - servers: 2
-      volumesPerServer: 2
+    - servers: 4
+      volumesPerServer: 4
       volumeClaimTemplate:
         metadata:
           name: data
