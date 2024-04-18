@@ -26,3 +26,6 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+
+##
+## reference.  should create a helm release just for tenant/buckets https://github.com/mcfio/home-cluster/blob/main/.archive/minio/release.yaml
