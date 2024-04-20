@@ -39,11 +39,18 @@ homelab                        # vault used for containing secrets
 
 ### SSO
 - In the homelab vault, create secret named `sso`
-- Each application should have a unique clientsecret that is between 30-90 characters long.
-  - Create key named `argocd` and save clientsecret value inside.
-  - Create key named `grafana` and save clientsecret value inside.
-  - Create key named `miniflux` and save clientsecret value inside.
-  - Create key named `vikunja` and save clientsecret value inside.
+
+- Each application should have a unique clientid that is upto 30 characters long. They will also need a unique clientsecret that is between 30-90 characters long.
+  - create key named `argocd_client_id`
+  - create key named `argocd_client_secret`
+  - create key named `grafana_client_id`
+  - create key named `grafana_client_secret`
+  - create key named `miniflux_client_id`
+  - create key named `miniflux_client_secret`
+  - create key named `vikunja_client_id`
+  - create key named `vikunja_client_secret`
+- Federated authentication via Google.
+  - Follow https://docs.goauthentik.io/integrations/sources/google/ for generating OAuth credentials.  Save clientid into key named `federation_google_client_id` and clientsecret into key named `federation_google_client_secret`
 
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
