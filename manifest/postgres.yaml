@@ -7,7 +7,7 @@ metadata:
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: cluster-01
+  name: cluster01
   namespace: postgres
 spec:
   teamId: acid
@@ -49,7 +49,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-01.authentik.owner
+  name: cluster01.authentik.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -60,23 +60,23 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: authentik-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+      name: authentik-owner-user.cluster01.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster-01.authentik.owner
+          remoteKey: postgres.cluster01.authentik.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster-01.authentik.owner
+          remoteKey: postgres.cluster01.authentik.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-01.miniflux.owner
+  name: cluster01.miniflux.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -87,23 +87,23 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: miniflux-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+      name: miniflux-owner-user.cluster01.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster-01.miniflux.owner
+          remoteKey: postgres.cluster01.miniflux.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster-01.miniflux.owner
+          remoteKey: postgres.cluster01.miniflux.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-01.vikunja.owner
+  name: cluster01.vikunja.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -114,17 +114,17 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: vikunja-owner-user.cluster-01.credentials.postgresql.acid.zalan.do
+      name: vikunja-owner-user.cluster01.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster-01.vikunja.owner
+          remoteKey: postgres.cluster01.vikunja.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster-01.vikunja.owner
+          remoteKey: postgres.cluster01.vikunja.owner
           property: password
 ---
 apiVersion: acid.zalan.do/v1
