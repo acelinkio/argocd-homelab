@@ -2,16 +2,16 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: zalaando-system
+  name: postgres-operator
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zalaando-operator
+  name: postgres-operator
   namespace: argocd
 spec:
   destination:
-    namespace: zalaando-system
+    namespace: postgres-operator
     server: https://kubernetes.default.svc
   project: homelab
   source:
@@ -32,11 +32,11 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zalaando-operator-ui
+  name: postgres-operator-ui
   namespace: argocd
 spec:
   destination:
-    namespace: zalaando-system
+    namespace: postgres-operator
     server: https://kubernetes.default.svc
   project: homelab
   source:
