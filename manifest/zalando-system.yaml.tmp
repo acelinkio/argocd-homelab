@@ -2,16 +2,16 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: zolando-system
+  name: zalaando-system
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zolando-operator
+  name: zalaando-operator
   namespace: argocd
 spec:
   destination:
-    namespace: zolando-system
+    namespace: zalaando-system
     server: https://kubernetes.default.svc
   project: homelab
   source:
@@ -32,11 +32,11 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: zolando-operator-ui
+  name: zalaando-operator-ui
   namespace: argocd
 spec:
   destination:
-    namespace: zolando-system
+    namespace: zalaando-system
     server: https://kubernetes.default.svc
   project: homelab
   source:
