@@ -21,11 +21,11 @@ spec:
   data:
     - secretKey: postgrespassword
       remoteRef:
-        key: cluster-01.postgres.miniflux.owner
+        key: postgres.cluster01.miniflux.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: cluster-01.postgres.miniflux.owner
+        key: postgres.cluster01.miniflux.owner
         property: username
 ---
 apiVersion: external-secrets.io/v1beta1
@@ -140,7 +140,7 @@ spec:
                 key: postgrespassword
                 name: miniflux-configsecrets
           - name: DATABASE_URL
-            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster-01.postgres/miniflux"
+            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/miniflux"
           image: ghcr.io/miniflux/miniflux:2.1.2-distroless
           name: main
 ---
