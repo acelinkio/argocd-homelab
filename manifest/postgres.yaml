@@ -13,6 +13,7 @@ spec:
   teamId: acid
   volume:
     size: 4Gi
+    storageClass: longhorn
   numberOfInstances: 2
   preparedDatabases:
     authentik:
@@ -135,6 +136,7 @@ spec:
   teamId: acid
   volume:
     size: 2Gi
+    storageClass: longhorn
   numberOfInstances: 1
   preparedDatabases:
     tester0:
