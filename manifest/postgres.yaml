@@ -139,14 +139,14 @@ spec:
     storageClass: longhorn
   numberOfInstances: 1
   preparedDatabases:
-    tester0:
+    publictestdb:
       defaultUsers: true
       extensions: {}
       schemas:      
         public:
           defaultRoles: false
           defaultUsers: false
-    tester1:
+    datatestdb:
       defaultUsers: true
       extensions: {}
       schemas:
@@ -161,7 +161,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-02.postgres.tester0.owner
+  name: cluster-02.postgres.publictestdb.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -172,23 +172,23 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: tester0-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+      name: publictestdb-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: cluster-02.postgres.tester0.owner
+          remoteKey: cluster-02.postgres.publictestdb.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: cluster-02.postgres.tester0.owner
+          remoteKey: cluster-02.postgres.publictestdb.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-02.postgres.tester1.owner
+  name: cluster-02.postgres.datatestdb.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -199,15 +199,15 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: tester1-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+      name: datatestdb-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: cluster-02.postgres.tester1.owner
+          remoteKey: cluster-02.postgres.datatestdb.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: cluster-02.postgres.tester1.owner
+          remoteKey: cluster-02.postgres.datatestdb.owner
           property: password
