@@ -1,0 +1,104 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: airflow
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: airflow
+  namespace: argocd
+spec:
+  destination:
+    namespace: airflow
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: airflow
+    repoURL: https://airflow.apache.org/
+    targetRevision: 1.13.1
+    helm:
+      valuesObject:
+        # manual step
+        # kubectl create secret generic webserver-secret --from-literal="webserver-secret-key=$(python3 -c 'import secrets; print(secrets.token_hex(16))')"
+        #webserverSecretKeySecretName: webserver-secret
+        # openssl rand -base64 32
+        #fernetKeySecretName: fernet-secret
+        # deal with later
+        webserverSecretKey: "37bf8baaa7ee53e972b16755eaf91296"
+        fernetKey: "bUd3SHlCWUFiOVBFTTJJMUhVUmR6UFhQaVZwcVVPQzc="
+        # best practice config
+        useStandardNaming: true
+        # argocd specific config
+        createUserJob:
+          useHelmHooks: false
+          applyCustomEnv: false
+        migrateDatabaseJob:
+          useHelmHooks: false
+          applyCustomEnv: false
+          jobAnnotations:
+              "argocd.argoproj.io/hook": Sync
+        # application components
+        scheduler:
+          enabled: true
+        statsd:
+          enabled: true
+        triggerer:
+          enabled: true
+        webserver:
+          enabled: true
+        #workers:
+          #always enabled
+          #enabled: true 
+        # backend components
+        ## redis needs to be restarted manually for worker to connect
+        ## https://github.com/apache/airflow/discussions/34562
+        redis:
+          enabled: true
+        postgresql:
+          enabled: true
+        # main
+        # wtf is this Error: secret "airflow-fernet-key" not found
+        airflowPodAnnotations:
+          reloader.stakater.com/auto: "true"
+        config:
+          core:
+            load_examples: 'True'
+          logging:
+            colored_console_log: 'True'
+        executor: "CeleryExecutor"
+        extraEnv: |
+          - name: AIRFLOW__CORE__LOAD_EXAMPLES
+            value: 'True'
+          - name: AIRFLOW__WEBSERVER__BASE_URL
+            value: 'https://airflow.acelink.io'
+          - name: AIRFLOW__WEBSERVER__DEFAULT_WRAP
+            value: 'True'
+          - name: AIRFLOW__WEBSERVER__EXPOSE_CONFIG
+            value: 'True'
+        flower:
+          enabled: true
+        dags:
+          persistence:
+            enabled: true
+            size: 1Gi
+            accessMode: ReadWriteMany
+            storageClassName: longhorn
+          gitSync:
+            enabled: false
+            # enabled: true
+            # repo: git@github.com:acelinkio/airflow-pipelines.git
+            # branch: "main"
+            # ref: "main"
+            # subPath: ""
+            # sshKeySecret: airflow-git
+        logs:
+          persistence:
+            enabled: true
+            size: 10Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
