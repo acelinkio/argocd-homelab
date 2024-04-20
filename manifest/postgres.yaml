@@ -130,7 +130,7 @@ spec:
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
-  name: cluster-02
+  name: cluster02
   namespace: postgres
 spec:
   teamId: acid
@@ -161,7 +161,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-02.publictestdb.owner
+  name: cluster02.publictestdb.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -172,23 +172,23 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: publictestdb-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+      name: publictestdb-owner-user.cluster02.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster-02.publictestdb.owner
+          remoteKey: postgres.cluster02.publictestdb.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster-02.publictestdb.owner
+          remoteKey: postgres.cluster02.publictestdb.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster-02.datatestdb.owner
+  name: cluster02.datatestdb.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -199,15 +199,15 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: datatestdb-owner-user.cluster-02.credentials.postgresql.acid.zalan.do
+      name: datatestdb-owner-user.cluster02.credentials.postgresql.acid.zalan.do
   data:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster-02.datatestdb.owner
+          remoteKey: postgres.cluster02.datatestdb.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster-02.datatestdb.owner
+          remoteKey: postgres.cluster02.datatestdb.owner
           property: password
