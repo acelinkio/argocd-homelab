@@ -25,11 +25,11 @@ spec:
         property: jwtsecret
     - secretKey: postgrespassword
       remoteRef:
-        key: cluster-01.postgres.vikunja.owner
+        key: postgres.cluster01.vikunja.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: cluster-01.postgres.vikunja.owner
+        key: postgres.cluster01.vikunja.owner
         property: username
 ---
 apiVersion: external-secrets.io/v1beta1
@@ -158,7 +158,7 @@ spec:
           - name: VIKUNJA_DATABASE_TYPE
             value: postgres
           - name: VIKUNJA_DATABASE_HOST
-            value: cluster-01.postgres
+            value: cluster01.postgres
           - name: VIKUNJA_DATABASE_DATABASE
             value: vikunja
           - name: VIKUNJA_DATABASE_SSLMODE
