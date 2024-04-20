@@ -24,6 +24,7 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 
 
 # Docs
+* [application](docs/application.md)
 * [faq](docs/faq.md)
 * [setup](docs/setup.md)
 * [network](docs/network.md)
