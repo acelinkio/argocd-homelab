@@ -65,7 +65,7 @@ spec:
   type: ClusterIP
   ports:
     - port: 80
-      targetPort: 80
+      targetPort: 8000
       protocol: TCP
       name: http
   selector:
@@ -107,8 +107,6 @@ spec:
           #       name: sso
           # - name: SERVER_OIDC_ISSUER_URL
           #   value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
-          - name: PORT
-            value: "80"
           - name: HELPERVAR_POSTGRES_USER
             valueFrom:
               secretKeyRef:
@@ -142,7 +140,7 @@ spec:
               service:
                 name: ryot
                 port:
-                  number: 80
+                  number: 8000
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
