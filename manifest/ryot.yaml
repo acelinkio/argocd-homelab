@@ -122,7 +122,7 @@ spec:
           - name: DATABASE_URL
             #value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
             value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster02.postgres/datatestdb"
-          image: ghcr.io/ignisda/ryot:v5.0.3
+          image: ghcr.io/ignisda/ryot:v5.0.4
           name: main
 ---
 apiVersion: networking.k8s.io/v1
