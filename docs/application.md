@@ -32,6 +32,7 @@ Following those personas, there are will be using these classifications followin
 ### Consideration Criteria
 - [ ] Container Image
 - [ ] Helm Chart
+- [ ] Configuration Ease
 - [ ] Datastore Backend
 - [ ] Supports OIDC
 - [ ] Progressive Web Application
