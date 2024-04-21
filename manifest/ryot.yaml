@@ -21,11 +21,13 @@ spec:
   data:
     - secretKey: postgrespassword
       remoteRef:
-        key: postgres.cluster01.ryot.owner
+        key: postgres.cluster02.datatestdb.owner
+        #key: postgres.cluster01.ryot.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: postgres.cluster01.ryot.owner
+        key: postgres.cluster02.datatestdb.owner
+        #key: postgres.cluster01.ryot.owner
         property: username
 ---
 apiVersion: external-secrets.io/v1beta1
@@ -118,7 +120,8 @@ spec:
                 key: postgrespassword
                 name: ryot-configsecrets
           - name: DATABASE_URL
-            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
+            #value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
+            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster02.postgres/datatestdb"
           image: ghcr.io/ignisda/ryot:v5.0.3
           name: main
 ---
