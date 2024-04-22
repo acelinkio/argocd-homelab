@@ -267,6 +267,14 @@ spec:
       remoteRef:
         key: sso
         property: miniflux_client_secret
+    - secretKey: ryot_client_id
+      remoteRef:
+        key: sso
+        property: ryot_client_id
+    - secretKey: ryot_client_secret
+      remoteRef:
+        key: sso
+        property: ryot_client_secret
     - secretKey: vikunja_client_id
       remoteRef:
         key: sso
@@ -306,6 +314,8 @@ spec:
       variable "grafana_client_secret" {}
       variable "miniflux_client_id" {}
       variable "miniflux_client_secret" {}
+      variable "ryot_client_id" {}
+      variable "ryot_client_secret" {}
       variable "vikunja_client_id" {}
       variable "vikunja_client_secret" {}
       variable "federation_google_client_id" {}
