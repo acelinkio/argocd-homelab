@@ -46,6 +46,8 @@ homelab                        # vault used for containing secrets
   - create key named `grafana_client_secret`
   - create key named `miniflux_client_id`
   - create key named `miniflux_client_secret`
+  - create key named `ryot_client_id`
+  - create key named `ryot_client_secret`
   - create key named `vikunja_client_id`
   - create key named `vikunja_client_secret`
 - Federated authentication via Google.

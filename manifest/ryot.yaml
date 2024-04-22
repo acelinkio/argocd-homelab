@@ -105,18 +105,20 @@ spec:
     spec:
       containers: 
         - env:
-          # - name: SERVER_OIDC_CLIENT_ID
-          #   valueFrom:
-          #     secretKeyRef:
-          #       key: client_id
-          #       name: sso
-          # - name: SERVER_OIDC_CLIENT_SECRET
-          #   valueFrom:
-          #     secretKeyRef:
-          #       key: client_secret
-          #       name: sso
-          # - name: SERVER_OIDC_ISSUER_URL
-          #   value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
+          - name: FRONTEND_URL
+            value: "ryot.<path:stringreplacesecret#domain>"
+          - name: SERVER_OIDC_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: client_id
+                name: sso
+          - name: SERVER_OIDC_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: client_secret
+                name: sso
+          - name: SERVER_OIDC_ISSUER_URL
+            value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
           - name: HELPERVAR_POSTGRES_USER
             valueFrom:
               secretKeyRef:
