@@ -238,6 +238,8 @@ spec:
           grafana_client_secret = "{{ .grafana_client_secret | toString }}"
           miniflux_client_id = "{{ .miniflux_client_id | toString }}"
           miniflux_client_secret = "{{ .miniflux_client_secret | toString }}"
+          ryot_client_id = "{{ .ryot_client_id | toString }}"
+          ryot_client_secret = "{{ .ryot_client_secret | toString }}"
           vikunja_client_id = "{{ .vikunja_client_id | toString }}"
           vikunja_client_secret = "{{ .vikunja_client_secret | toString }}"
           federation_google_client_id = "{{ .federation_google_client_id | toString }}"
