@@ -106,7 +106,7 @@ spec:
       containers: 
         - env:
           - name: FRONTEND_URL
-            value: "ryot.<path:stringreplacesecret#domain>"
+            value: "https://ryot.<path:stringreplacesecret#domain>"
           - name: SERVER_OIDC_CLIENT_ID
             valueFrom:
               secretKeyRef:
