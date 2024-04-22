@@ -36,7 +36,6 @@ homelab                        # vault used for containing secrets
 - In the homelab vault, create secret named `cert-manager`
 - Follow https://cert-manager.io/docs/configuration/acme/dns01/cloudflare/#api-tokens for generating a token and save into key named `token`
 
-
 ### SSO
 - In the homelab vault, create secret named `sso`
 
@@ -58,6 +57,10 @@ homelab                        # vault used for containing secrets
 - Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. 
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
+
+### Ryot Integrations
+- In the homelab vault, create secret named `ryot`
+- Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
 # Setup
 

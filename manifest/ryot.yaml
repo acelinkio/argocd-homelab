@@ -29,6 +29,16 @@ spec:
         key: postgres.cluster02.datatestdb.owner
         #key: postgres.cluster01.ryot.owner
         property: username
+    - secretKey: twitch_client_id
+      remoteRef:
+        key: ryot
+        #key: postgres.cluster01.ryot.owner
+        property: twitch_client_id
+    - secretKey: twitch_client_secret
+      remoteRef:
+        key: ryot
+        #key: postgres.cluster01.ryot.owner
+        property: twitch_client_secret
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
@@ -116,6 +126,16 @@ spec:
             valueFrom:
               secretKeyRef:
                 key: postgrespassword
+                name: ryot-configsecrets
+          - name: VIDEO_GAMES_TWITCH_CLIENT_ID
+            valueFrom:
+              secretKeyRef:
+                key: twitch_client_id
+                name: ryot-configsecrets
+          - name: VIDEO_GAMES_TWITCH_CLIENT_SECRET
+            valueFrom:
+              secretKeyRef:
+                key: twitch_client_secret
                 name: ryot-configsecrets
           - name: DATABASE_URL
             #value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
