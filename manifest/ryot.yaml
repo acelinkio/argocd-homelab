@@ -21,13 +21,11 @@ spec:
   data:
     - secretKey: postgrespassword
       remoteRef:
-        key: postgres.cluster02.datatestdb.owner
-        #key: postgres.cluster01.ryot.owner
+        key: postgres.cluster01.ryot.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: postgres.cluster02.datatestdb.owner
-        #key: postgres.cluster01.ryot.owner
+        key: postgres.cluster01.ryot.owner
         property: username
     - secretKey: twitch_client_id
       remoteRef:
@@ -140,8 +138,7 @@ spec:
                 key: twitch_client_secret
                 name: ryot-configsecrets
           - name: DATABASE_URL
-            #value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
-            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster02.postgres/datatestdb"
+            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
           image: ghcr.io/ignisda/ryot:v5.0.4
           name: main
 ---
