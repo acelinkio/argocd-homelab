@@ -178,6 +178,7 @@ spec:
     targetRevision: 6.3.4
     helm:
       valuesObject:
+        deploymentMode: SingleBinary
         loki:
           commonConfig:
             replication_factor: 1
