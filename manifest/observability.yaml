@@ -186,6 +186,7 @@ spec:
         write:
           replicas: 0
         loki:
+          useTestSchema: true
           commonConfig:
             replication_factor: 1
           storage:
