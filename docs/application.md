@@ -35,6 +35,7 @@ Following those personas, there are will be using these classifications followin
 - [ ] Configuration Ease
 - [ ] Datastore Backend
 - [ ] Supports OIDC
+- [ ] Disable local auth
 - [ ] Progressive Web Application
 
 ### Examples
