@@ -2,13 +2,13 @@
 kind: Namespace
 apiVersion: v1
 metadata:
-  name: monitoring
+  name: observability
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
 metadata:
   name: sso
-  namespace: monitoring
+  namespace: observability
 spec:
   refreshInterval: "5m"
   secretStoreRef:
@@ -33,7 +33,7 @@ metadata:
   namespace: argocd
 spec:
   destination:
-    namespace: monitoring
+    namespace: observability
     server: https://kubernetes.default.svc
   project: homelab
   source:
@@ -72,7 +72,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: observability
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
@@ -91,7 +91,7 @@ apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: observability
 spec:
   parentRefs:
   - name: internal
@@ -108,7 +108,7 @@ apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
   name: grafana
-  namespace: monitoring
+  namespace: observability
   annotations:
     external-dns.custom/type: private
 spec:
