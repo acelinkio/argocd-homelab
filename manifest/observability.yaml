@@ -155,6 +155,8 @@ spec:
           prometheusSpec:
             retention: 1d
   syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
     automated:
       allowEmpty: true
       prune: true
