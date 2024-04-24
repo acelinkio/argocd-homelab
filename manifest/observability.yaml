@@ -186,7 +186,15 @@ spec:
         write:
           replicas: 0
         loki:
-          useTestSchema: true
+          schemaConfig:
+            configs:
+              - from: 2024-04-20
+                store: tsdb
+                object_store: filesystem
+                schema: v13
+                index:
+                  prefix: index_
+                  period: 24h
           commonConfig:
             replication_factor: 1
           storage:
