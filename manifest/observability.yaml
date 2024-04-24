@@ -179,6 +179,12 @@ spec:
     helm:
       valuesObject:
         deploymentMode: SingleBinary
+        backend:
+          replicas: 0
+        read:
+          replicas: 0
+        write:
+          replicas: 0
         loki:
           commonConfig:
             replication_factor: 1
