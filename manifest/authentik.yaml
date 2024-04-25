@@ -343,12 +343,16 @@ spec:
         managed = "goauthentik.io/providers/oauth2/scope-email"
       }
 
-      data "authentik_scope_mapping" "profile" {
-        managed = "goauthentik.io/providers/oauth2/scope-profile"
+      data "authentik_scope_mapping" "offline_access" {
+        managed = "goauthentik.io/providers/oauth2/scope-offline_access"
       }
 
       data "authentik_scope_mapping" "openid" {
         managed = "goauthentik.io/providers/oauth2/scope-openid"
+      }
+
+      data "authentik_scope_mapping" "profile" {
+        managed = "goauthentik.io/providers/oauth2/scope-profile"
       }
 
       data "authentik_stage" "default-authentication-identification" {
@@ -400,7 +404,8 @@ spec:
         property_mappings = [
           data.authentik_scope_mapping.openid.id,
           data.authentik_scope_mapping.email.id,
-          data.authentik_scope_mapping.profile.id
+          data.authentik_scope_mapping.profile.id,
+          data.authentik_scope_mapping.offline_access.id
         ]
       }
 
