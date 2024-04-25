@@ -229,12 +229,12 @@ spec:
         config:
           outputs: |
             [OUTPUT]
-              name                   loki
-              match                  *
-              host                   loki-gateway.observability.svc.cluster.local
-              port                   80
-              labels                 job=fluentbit
-              auto_kubernetes_labels on
+                name                   loki
+                match                  *
+                host                   loki-gateway.observability.svc.cluster.local
+                port                   80
+                labels                 job=fluentbit
+                auto_kubernetes_labels on
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
