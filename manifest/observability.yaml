@@ -209,3 +209,36 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluentbit
+  namespace: argocd
+spec:
+  destination:
+    namespace: observability
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: fluent-bit
+    repoURL: https://fluent.github.io/helm-charts
+    targetRevision: 0.46.2
+    helm:
+      valuesObject:
+        config:
+          outputs: |
+            [OUTPUT]
+              name                   loki
+              match                  *
+              host                   loki-gateway.observability.svc.cluster.local
+              port                   80
+              labels                 job=fluentbit
+              auto_kubernetes_labels on
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
