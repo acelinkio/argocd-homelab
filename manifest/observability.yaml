@@ -43,6 +43,27 @@ spec:
     helm:
       valuesObject:
         adminUser: admin
+        datasources:
+          datasources.yaml:
+            apiVersion: 1
+            deleteDatasources:
+              - { name: Alertmanager, orgId: 1 }
+              - { name: Loki, orgId: 1 }
+              - { name: Prometheus, orgId: 1 }
+            datasources:
+              - name: Prometheus
+                type: prometheus
+                uid: prometheus
+                access: proxy
+                url: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
+                isDefault: true
+              - name: Loki
+                type: loki
+                uid: loki
+                access: proxy
+                url: http://loki-gateway.observability.svc.cluster.local
+                jsonData:
+                  maxLines: 250
         env:
           GF_SERVER_ROOT_URL: "https://grafana.<path:stringreplacesecret#domain>"
           GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
