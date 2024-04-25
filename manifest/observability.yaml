@@ -186,6 +186,7 @@ spec:
         write:
           replicas: 0
         loki:
+          auth_enabled: false
           schemaConfig:
             configs:
               - from: 2024-04-20
