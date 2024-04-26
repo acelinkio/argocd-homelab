@@ -51,7 +51,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: wildcard-production.certificate
+  name: wildcard-production
   namespace: certificate
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -67,10 +67,10 @@ spec:
     - match:
         secretKey: tls.crt
         remoteRef:
-          remoteKey: wildcard-production.certificate
+          remoteKey: certificate.wildcard-production
           property: tls.crt
     - match:
         secretKey: tls.key
         remoteRef:
-          remoteKey: wildcard-production.certificate
+          remoteKey: certificate.wildcard-production
           property: tls.key
