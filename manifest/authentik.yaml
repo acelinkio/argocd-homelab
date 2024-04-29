@@ -158,7 +158,7 @@ spec:
     - dnsName: auth.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intin.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
