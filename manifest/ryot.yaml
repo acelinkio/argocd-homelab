@@ -192,7 +192,7 @@ spec:
     - dnsName: ryot.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - ingress.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
