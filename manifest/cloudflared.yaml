@@ -33,9 +33,6 @@ metadata:
   namespace: cloudflared
 data:
   config.yaml: |
-    credentials-file: /etc/cloudflared/creds/credentials.json
-    metrics: 0.0.0.0:2000
-    no-autoupdate: true
     ingress:
       - service: https://cilium-gateway-external.gateway.svc.cluster.local:443
 ---
@@ -58,7 +55,7 @@ spec:
     spec:
       containers:
         - name: cloudflared
-          image: cloudflare/cloudflared:2024.4.1
+          image: docker.io/cloudflare/cloudflared:2024.4.1
           args:
             - tunnel
             - --config
@@ -66,11 +63,27 @@ spec:
             - run
             - $(TunnelID)
           env:
+            # https://github.com/cloudflare/cloudflared/blob/master/cmd/cloudflared/tunnel/cmd.go
+            # https://github.com/cloudflare/cloudflared/blob/master/cmd/cloudflared/tunnel/subcommands.go
             - name: TunnelID
               valueFrom:
                 secretKeyRef:
                   name: cloudflared
                   key: TunnelID
+            - name: NO_AUTOUPDATE
+              value: "true"
+            - name: TUNNEL_ORIGIN_SERVER_NAME
+              value: cloudflared.<path:stringreplacesecret#domain>
+            - name: TUNNEL_CRED_FILE
+              value: /etc/cloudflared/creds/credentials.json
+            - name: TUNNEL_METRICS
+              value: 0.0.0.0:2000
+            - name: TUNNEL_TRANSPORT_PROTOCOL
+              value: quic
+            - name: TUNNEL_ORIGIN_ENABLE_HTTP2
+              value: "true"
+            - name: TUNNEL_POST_QUANTUM
+              value: "true"
           livenessProbe:
             httpGet:
               path: /ready
