@@ -139,6 +139,9 @@ spec:
   - name: internal
     namespace: gateway
     sectionName: https
+  - name: external
+    namespace: gateway
+    sectionName: https
   hostnames:
   - "auth.<path:stringreplacesecret#domain>"
   rules:
@@ -158,10 +161,12 @@ spec:
     - dnsName: auth.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
+        - ingress.<path:stringreplacesecret#domain>
+      # targets:
+      #   - intgw.<path:stringreplacesecret#domain>
+      # providerSpecific:
+      #   - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+      #     value: "false"
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
