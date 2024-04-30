@@ -274,6 +274,9 @@ spec:
   - name: internal
     namespace: gateway
     sectionName: https
+  - name: external
+    namespace: gateway
+    sectionName: https
   hostnames:
   - "tasks.<path:stringreplacesecret#domain>"
   rules:
