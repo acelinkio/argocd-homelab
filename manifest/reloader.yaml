@@ -17,7 +17,7 @@ spec:
   source:
     chart: reloader
     repoURL: https://stakater.github.io/stakater-charts
-    targetRevision: 1.0.93
+    targetRevision: 1.0.95
   syncPolicy:
     automated:
       allowEmpty: true
