@@ -23,6 +23,10 @@ spec:
         persistence:
           defaultClass: true
           defaultClassReplicaCount: 3
+          reclaimPolicy: Retain
+        defaultSettings:
+          v2DataEngine: false
+          upgradeChecker: false
         helmPreUpgradeCheckerJob:
           enabled: false
   syncPolicy:
