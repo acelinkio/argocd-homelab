@@ -24,11 +24,8 @@ spec:
           defaultClass: true
           defaultClassReplicaCount: 3
           reclaimPolicy: Retain
-        defaultSettings:
-          v2DataEngine: false
-          upgradeChecker: false
-        helmPreUpgradeCheckerJob:
-          enabled: false
+        preUpgradeChecker:
+          jobEnabled: false
   syncPolicy:
     automated:
       allowEmpty: true
