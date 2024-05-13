@@ -185,54 +185,54 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: loki
-  namespace: argocd
-spec:
-  destination:
-    namespace: observability
-    server: https://kubernetes.default.svc
-  project: homelab
-  source:
-    chart: loki
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 6.5.2
-    helm:
-      valuesObject:
-        deploymentMode: SingleBinary
-        backend:
-          replicas: 0
-        read:
-          replicas: 0
-        write:
-          replicas: 0
-        loki:
-          auth_enabled: false
-          schemaConfig:
-            configs:
-              - from: 2024-04-20
-                store: tsdb
-                object_store: filesystem
-                schema: v13
-                index:
-                  prefix: index_
-                  period: 24h
-          commonConfig:
-            replication_factor: 1
-          storage:
-            type: 'filesystem'
-        singleBinary:
-          replicas: 1
-  syncPolicy:
-    syncOptions:
-      - ServerSideApply=true
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+# ---
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: loki
+#   namespace: argocd
+# spec:
+#   destination:
+#     namespace: observability
+#     server: https://kubernetes.default.svc
+#   project: homelab
+#   source:
+#     chart: loki
+#     repoURL: https://grafana.github.io/helm-charts
+#     targetRevision: 6.5.2
+#     helm:
+#       valuesObject:
+#         deploymentMode: SingleBinary
+#         backend:
+#           replicas: 0
+#         read:
+#           replicas: 0
+#         write:
+#           replicas: 0
+#         loki:
+#           auth_enabled: false
+#           schemaConfig:
+#             configs:
+#               - from: 2024-04-20
+#                 store: tsdb
+#                 object_store: filesystem
+#                 schema: v13
+#                 index:
+#                   prefix: index_
+#                   period: 24h
+#           commonConfig:
+#             replication_factor: 1
+#           storage:
+#             type: 'filesystem'
+#         singleBinary:
+#           replicas: 1
+#   syncPolicy:
+#     syncOptions:
+#       - ServerSideApply=true
+#     automated:
+#       allowEmpty: true
+#       prune: true
+#       selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
