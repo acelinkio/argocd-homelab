@@ -24,48 +24,4 @@ Cloudflare Tunnels is an offering by Cloudflare to expose resources to the publi
 | ------- | ------------- | -------- | ---------------------- | ----------- | ------------ |
 | gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.49             |
 | gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.50             |
-| gateway        | cilium                     | internal         | cilium                                       | knative                | 192.168.1.51             |
 | ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.52             |
-
-# Knative
-Knative has a highly opinionated approach that aims to simplify everything into a single minimalist manifest.  This is extremely useful for those just getting started, however has several limitations.  One of those limitations is around networking, assuming each has their own domain domain.  There is no way to modify those rules to handle path based management.
-
-<details>
-Attempted Gateway (internal) -> HTTPRoute (URLRewrite) -> Service (ExternalName) -> Gateway (knative) -> HTTPRoute.  Likely failed because ExternalName implemenation.  HTTPRoute to ExternalName is not a best practice and should not be implemented by controllers. https://gateway-api.sigs.k8s.io/reference/spec/#gateway.networking.k8s.io%2fv1.BackendObjectReference.
-
-```yaml
-knative_related:
-  kservice:
-    name: kecho
-
-  Gateway:
-    name: knative
-    address: 192.168.1.51
-
-  HTTPRoute:
-    name: kecho.knative.acelink.io
-    hostnames: 
-      - kecho.knative.acelink.io
-    backend:
-      kind: Service
-      name: kecho-00001
-    notes: hostnames is generated templating in knative-serving/config-network configmap
-
-  HTTPRoute:
-    name: kecho.test-zone.svc.cluster.local
-    hostnames: 
-      - kecho.test-zone.svc.cluster.local
-      - kecho.test-zone.svc
-      - kecho.test-zone
-    backend:
-      kind: Service
-      name: kecho-00001
-
-  Service:
-    name: kecho-00001
-    selector: null
-    note: they do something behind the scenes selection to knative-serving/activator
-```
-
-
-</details>
