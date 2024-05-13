@@ -14,7 +14,7 @@ spec:
   volume:
     size: 4Gi
     storageClass: longhorn
-  numberOfInstances: 2
+  numberOfInstances: 0
   preparedDatabases:
     authentik:
       defaultUsers: true
