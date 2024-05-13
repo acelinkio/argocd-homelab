@@ -12,9 +12,9 @@ metadata:
 spec:
   teamId: acid
   volume:
-    size: 8Gi
+    size: 4Gi
     storageClass: longhorn
-  numberOfInstances: 0
+  numberOfInstances: 2
   preparedDatabases:
     authentik:
       defaultUsers: true
