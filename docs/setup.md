@@ -83,7 +83,16 @@ curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
 # NODE
 ## packages for k3s/longhorn
 apt update
-apt install -y curl open-iscsi
+apt install -y curl open-iscsi nfs-common
+
+# workaround for multipath automounting Longhorn volumes
+## https://longhorn.io/kb/troubleshooting-volume-with-multipath/
+cat << 'EOF' >> /etc/multipath.conf
+blacklist {
+    devnode "^sd[a-z0-9]+"
+}
+EOF
+systemctl restart multipathd.service
 
 # workaround for cilium not loading packages, dependent upon OS
 ## https://github.com/cilium/cilium/issues/25021
@@ -178,7 +187,7 @@ echo "$argocd_config" | kubectl apply --filename -
 ## Authentik Add Google Auth to Stage
 This is a manual step until either the default authentik resource can be imported or another stage we manage can be used.
 
-Follow: https://docs.goauthentik.io/integrations/sources/general
+Follow: https://docs.goauthentik.io/docs/sources
 
 This is what the terraform code would look like.
 ```hcl
