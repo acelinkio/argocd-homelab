@@ -103,6 +103,8 @@ spec:
         - env:
           - name: FRONTEND_URL
             value: "https://ryot.<path:stringreplacesecret#domain>"
+          - name: USERS_DISABLE_LOCAL_AUTH
+            value: "true"
           - name: SERVER_OIDC_CLIENT_ID
             valueFrom:
               secretKeyRef:
