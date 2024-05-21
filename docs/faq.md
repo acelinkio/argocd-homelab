@@ -1,7 +1,7 @@
 # FAQ
 
 - What is App of Apps?
-  App of Apps is the idea that one ArgoCD application can container other applications.  Each file in the `manifest` directory is an App of Apps.
+  App of Apps is the idea that one ArgoCD application can container other applications.  Each file in the `manifest` directory is an App of Apps and will show up as an application named `$namespace.yaml`
 
 - Where is the dependancy mapping?
   Everything is applied at once and expected to eventually reach the desired state.
