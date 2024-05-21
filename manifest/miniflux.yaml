@@ -99,10 +99,10 @@ spec:
           #  value: "1"
           - name: LOG_DATE_TIME
             value: "1"
-          - name: METRICS_ALLOWED_NETWORKS
-            value: <path:stringreplacesecret#ciliumipamcidr>
-          - name: METRICS_COLLECTOR
-            value: "1"
+          # - name: METRICS_ALLOWED_NETWORKS
+          #   value: 192.168.1.100/32
+          # - name: METRICS_COLLECTOR
+          #   value: "1"
           - name: OAUTH2_CLIENT_ID
             valueFrom:
               secretKeyRef:
