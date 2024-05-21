@@ -5,10 +5,11 @@
 # Preperation
 
 ## Update manifests
-argocd-homelab aims to be as agnostic as possible, however several configurations are implementation specific.  Be sure to review the settings related to any infrastructure applications.
+argocd-homelab aims to be as agnostic as possible, however several configurations are implementation specific.  Be sure to review the settings related to infrastructure.
 - Review `manifest/kube-system.yaml`
 - Review `manifest/longhorn-system.yaml`
 - Review `manifest/gateway.yaml`
+- Update `docs/network.md`
 
 ## 1Password
 - Create vault named `homelab`
