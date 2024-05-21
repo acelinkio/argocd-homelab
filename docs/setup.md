@@ -1,8 +1,14 @@
-# Preperation
+# Required Purchases
 - 1Password
 - Cloudflare managed domain
-- reserved cidr block for broadcasting
 
+# Preperation
+
+## Update manifests
+argocd-homelab aims to be as agnostic as possible, however several configurations are implementation specific.  Be sure to review the settings related to any infrastructure applications.
+- Review `manifest/kube-system.yaml`
+- Review `manifest/longhorn-system.yaml`
+- Review `manifest/gateway.yaml`
 
 ## 1Password
 - Create vault named `homelab`
@@ -56,11 +62,11 @@ homelab                        # vault used for containing secrets
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
-- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. 
+- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. #will be sunsetting this soon
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 
-### Ryot Integrations
+### Ryot
 - In the homelab vault, create secret named `ryot`
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
@@ -183,8 +189,8 @@ echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_
 # configure
 echo "$argocd_config" | kubectl apply --filename -
 ```
-# Post Setup
-## Authentik Add Google Auth to Stage
+## Post Setup
+### Authentik Add Google Auth to Stage
 This is a manual step until either the default authentik resource can be imported or another stage we manage can be used.
 
 Follow: https://docs.goauthentik.io/docs/sources
@@ -197,3 +203,7 @@ resource "authentik_stage_identification" "default" {
   sources        = [authentik_source_oauth.google.uuid]
 }
 ```
+
+# Additional Comments
+* If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
+* Bootstrapping can be a very resource intensive process.  On a lower powered cluster, consider reducing the number of applications deployed and gradually adding them.
