@@ -1,4 +1,3 @@
----
 kind: Namespace
 apiVersion: v1
 metadata:
@@ -35,25 +34,26 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    chart: external-dns
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: 7.5.2
+    chart: external-dns 
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.14.4 
     helm:
-      valuesObject:
-        fullnameOverride: external-dns
-        policy: sync
-        txtSuffix: .external-dns
-        txtOwnerId: kubernetes
-        crd:
-          create: true
-        sources:
-          - service
-          - ingress
-          - crd
-        provider: cloudflare
-        cloudflare:
-          secretName: external-dns
-        annotationFilter: "external-dns.custom/type in (public, private)"
+      values: |  
+        external-dns:
+          fullnameOverride: external-dns
+          policy: sync
+          txtSuffix: ".external-dns"
+          txtOwnerId: kubernetes
+          crd:
+            create: true
+          sources:
+            - service
+            - ingress
+            - crd
+          provider: cloudflare
+          cloudflare:
+            secretName: external-dns
+          annotationFilter: "external-dns.custom/type in (public, private)"
   syncPolicy:
     automated:
       allowEmpty: true
