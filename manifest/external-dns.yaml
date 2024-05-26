@@ -9,8 +9,6 @@ kind: ExternalSecret
 metadata:
   name: external-dns
   namespace: external-dns
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   refreshInterval: "5m"
   secretStoreRef:
@@ -19,7 +17,7 @@ spec:
   target:
     creationPolicy: Owner
   data:
-    - secretKey: cloudflare_api_token
+    - secretKey: cloudflare-api-key
       remoteRef:
         key: external-dns
         property: token
@@ -39,22 +37,16 @@ spec:
     repoURL: https://kubernetes-sigs.github.io/external-dns/
     targetRevision: 1.14.4 
     helm:
-      values: |  
-        external-dns:
-          fullnameOverride: external-dns
-          policy: sync
-          txtSuffix: ".external-dns"
-          txtOwnerId: kubernetes
-          crd:
-            create: true
-          sources:
-            - service
-            - ingress
-            - crd
-          provider: cloudflare
-          cloudflare:
-            secretName: external-dns
-          annotationFilter: "external-dns.custom/type in (public, private)"
+      values: |-
+              provider:
+                name: cloudflare
+              env:
+                - name: CF_API_TOKEN
+                  valueFrom:
+                    secretKeyRef:
+                      name: external-dns
+                      key: cloudflare-api-key
+
   syncPolicy:
     automated:
       allowEmpty: true
