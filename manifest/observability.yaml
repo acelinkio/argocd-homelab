@@ -199,7 +199,7 @@ spec:
   source:
     chart: loki
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 6.5.2
+    targetRevision: 6.6.2
     helm:
       valuesObject:
         deploymentMode: SingleBinary
