@@ -42,7 +42,7 @@ spec:
   source:
     chart: postgres-operator-ui
     repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
-    targetRevision: 1.11.0
+    targetRevision: 1.12.0
     helm:
       valuesObject:
         image:
