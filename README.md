@@ -24,11 +24,34 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 # ArgoCD Structure
 An ApplicationSet dynamically generates an Applications for each yaml file inside of the manifest directory.  That Application is AppOfApps, mirroring the filename that it was generated from for example `kube-system.yaml`.  That AppOfApps may contain child Application resources for deploying Helm charts like `coredns`, `cilium`, `metrics-server`.
 
+<table>
+<tr>
+<th>Logical</th>
+<th>Rendered</th>
+</tr>
+<tr>
+<td>
+  
 ```mermaid
 erDiagram
     ApplicationSet ||--|{ AppOfApps : "each manifest/*.yaml generates"
     AppOfApps ||--o{ Application : "may contain additional"
 ```
+  
+</td>
+<td>
+
+```mermaid
+flowchart TD
+    A[ApplicationSet] --> B(kube-system.yaml)
+    B --> D[coredns]
+    B --> E[cilium]
+    B --> F[metrics-server]
+```
+
+</td>
+</tr>
+</table>
 
 # Docs
 * [application](docs/application.md)
