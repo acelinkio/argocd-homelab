@@ -43,10 +43,10 @@ erDiagram
 
 ```mermaid
 flowchart TD
-    A[ApplicationSet] ----> B(kube-system.yaml)
-    B ----> D[coredns]
-    B ----> E[cilium]
-    B ----> F[metrics-server]
+    A[ApplicationSet] -----> B(kube-system.yaml)
+    B -----> D[coredns]
+    B -----> E[cilium]
+    B -----> F[metrics-server]
 ```
 
 </td>
