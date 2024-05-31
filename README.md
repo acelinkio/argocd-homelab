@@ -2,6 +2,13 @@
 
 GitOps driven homelab using ArgoCD with a flat repository structure.
 
+# ArgoCD Structure
+```mermaid
+erDiagram
+    ApplicationSet ||--|{ AppOfApps : "each manifest/*.yaml generates"
+    AppOfApps ||--o{ Application : "may contain additional"
+```
+
 # Project Structure
 
 ```
