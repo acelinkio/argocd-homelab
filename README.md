@@ -27,7 +27,7 @@ An ApplicationSet dynamically generates an Applications for each yaml file insid
 <table>
 <tr>
 <th>Logical</th>
-<th>Rendered</th>
+<th>Rendered Example</th>
 </tr>
 <tr>
 <td>
@@ -43,10 +43,10 @@ erDiagram
 
 ```mermaid
 flowchart TD
-    A[ApplicationSet] --> B(kube-system.yaml)
-    B --> D[coredns]
-    B --> E[cilium]
-    B --> F[metrics-server]
+    A[ApplicationSet] ----> B(kube-system.yaml)
+    B ----> D[coredns]
+    B ----> E[cilium]
+    B ----> F[metrics-server]
 ```
 
 </td>
