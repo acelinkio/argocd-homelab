@@ -37,16 +37,17 @@ spec:
     repoURL: https://kubernetes-sigs.github.io/external-dns/
     targetRevision: 1.14.4 
     helm:
-      values: |-
-              provider:
-                name: cloudflare
-              env:
-                - name: CF_API_TOKEN
-                  valueFrom:
-                    secretKeyRef:
-                      name: external-dns
-                      key: cloudflare-api-key
-              annotationFilter: "external-dns.custom/type in (public, private)" 
+      valuesObject:
+        provider:
+          name: cloudflare
+        env:
+          - name: CF_API_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: external-dns
+                key: cloudflare-api-key
+        annotationFilter: "external-dns.custom/type in (public, private)"
+
   syncPolicy:
     automated:
       allowEmpty: true
