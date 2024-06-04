@@ -1,4 +1,3 @@
----
 kind: Namespace
 apiVersion: v1
 metadata:
@@ -40,6 +39,14 @@ spec:
       valuesObject:
         provider:
           name: cloudflare
+        fullnameOverride: external-dns
+        policy: sync
+        registry: txt
+        txtOwnerId: kubernetes
+        sources:
+          - service
+          - ingress
+          - crd
         env:
           - name: CF_API_TOKEN
             valueFrom:
