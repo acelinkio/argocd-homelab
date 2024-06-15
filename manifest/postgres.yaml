@@ -21,7 +21,7 @@ spec:
       extensions: {}
       schemas:
         # still uses public schema...
-        # https://github.com/goauthentik/authentik/issues/9212        
+        # https://github.com/goauthentik/authentik/issues/9212
         public:
           defaultRoles: false
           defaultUsers: false
@@ -173,6 +173,15 @@ spec:
     storageClass: longhorn
   numberOfInstances: 1
   preparedDatabases:
+    kyoo:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        # still uses public schema...
+        # https://github.com/zoriya/Kyoo/issues/536
+        public:
+          defaultRoles: false
+          defaultUsers: false
     publictestdb:
       defaultUsers: true
       extensions: {}
@@ -244,4 +253,31 @@ spec:
         secretKey: password
         remoteRef:
           remoteKey: postgres.cluster02.datatestdb.owner
+          property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster02.kyoo.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: kyoo-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster02.kyoo.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster02.kyoo.owner
           property: password
