@@ -56,5 +56,6 @@ flowchart TD
 # Docs
 * [application](docs/application.md)
 * [faq](docs/faq.md)
-* [setup](docs/setup.md)
 * [network](docs/network.md)
+* [secret](docs/secret.md)
+* [setup](docs/setup.md)
