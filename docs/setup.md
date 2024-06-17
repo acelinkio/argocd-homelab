@@ -71,6 +71,10 @@ homelab                        # vault used for containing secrets
 - In the homelab vault, create secret named `ryot`
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
+### Blank
+- In the homelab vault, create secret named `blank`
+- Create a key named `blank` with value `""`.  This is needed to template external-secrets with a known value.
+
 # Setup
 
 ## k3s
