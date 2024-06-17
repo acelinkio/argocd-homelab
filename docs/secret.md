@@ -1,5 +1,5 @@
 # Secrets
-Secret management can be tricky to manage. Several tools have their own opinionation on what a secret is and that may differ from our own views. This project will aims to closely follow the Kubernetes opinionation with some minor modifications.
+Secret management can be tricky to manage. Several tools have their own opinionation on what a secret is and that may differ from our own views. This project aims to closely follow the Kubernetes opinionation.
 
 # Goals
 ## No checked in secrets
