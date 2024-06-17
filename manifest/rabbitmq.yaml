@@ -35,3 +35,19 @@ spec:
     - administrator
   rabbitmqClusterReference:
     name: cluster01
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: cluster01-user0-permission0
+  namespace: rabbitmq
+spec:
+  vhost: "/"
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  userReference:
+    name: cluster01-user0
+  rabbitmqClusterReference:
+    name: cluster01
