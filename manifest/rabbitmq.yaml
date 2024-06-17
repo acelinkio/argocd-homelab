@@ -18,10 +18,10 @@ spec:
 apiVersion: rabbitmq.com/v1beta1
 kind: Vhost
 metadata:
-  name: cluster01-test
+  name: cluster01-kyoo
   namespace: rabbitmq
 spec:
-  name: test
+  name: kyoo
   rabbitmqClusterReference:
     name: cluster01
 ---
@@ -32,6 +32,6 @@ metadata:
   namespace: rabbitmq
 spec:
   tags:
-    - management
+    - administrator
   rabbitmqClusterReference:
     name: cluster01
