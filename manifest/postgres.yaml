@@ -270,6 +270,11 @@ spec:
   selector:
     secret:
       name: kyoo-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+  template:
+    data:
+      _metadata_origin: "push"
+      username: "{{ .username | toString }}"
+      password: "{{ .password | toString }}"
   data:
     - match:
         secretKey: username
