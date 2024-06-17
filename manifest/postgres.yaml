@@ -273,6 +273,7 @@ spec:
   template:
     data:
       _metadata_origin: "push"
+      test123: "{{ .username | toString }}"
       username: "{{ .username | toString }}"
       password: "{{ .password | toString }}"
   data:
