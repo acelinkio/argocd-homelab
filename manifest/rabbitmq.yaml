@@ -176,3 +176,79 @@ spec:
     name: cluster01-kyoo-matcher
   rabbitmqClusterReference:
     name: cluster01
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: cluster01-kyoo-scanner
+  namespace: rabbitmq
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        _note: "Limitation of operator.  Needed for generating a secret with desired username."
+        username: "kyoo-scanner"
+  data:
+    - secretKey: blank
+      remoteRef:
+        key: blank
+        property: blank
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: User
+metadata:
+  name: cluster01-kyoo-scanner
+  namespace: rabbitmq
+spec:
+  tags:
+    - administrator
+  rabbitmqClusterReference:
+    name: cluster01
+  importCredentialsSecret:
+    name: cluster01-kyoo-scanner
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster01.kyoo-scanner
+  namespace: rabbitmq
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: cluster01-kyoo-scanner-user-credentials
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: rabbitmq.cluster01.kyoo-scanner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: rabbitmq.cluster01.kyoo-scanner
+          property: password
+---
+apiVersion: rabbitmq.com/v1beta1
+kind: Permission
+metadata:
+  name: cluster01-kyoo-scanner-permission0
+  namespace: rabbitmq
+spec:
+  vhost: "/"
+  permissions:
+    write: ".*"
+    configure: ".*"
+    read: ".*"
+  userReference:
+    name: cluster01-kyoo-scanner
+  rabbitmqClusterReference:
+    name: cluster01
