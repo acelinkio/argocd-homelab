@@ -71,6 +71,19 @@ spec:
   hostnames:
   - "echo.<path:stringreplacesecret#domain>"
   rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+    - name: echo
+      port: 80
+    filters:
+      - type: URLRewrite
+        urlRewrite:
+          path:
+            type: ReplacePrefixMatch
+            replacePrefixMatch: /
   - backendRefs:
     - name: echo
       port: 80
