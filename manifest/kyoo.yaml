@@ -617,16 +617,6 @@ spec:
               memory: 100Mi
             requests:
               cpu: 5m
-          volumeMounts:
-            - mountPath: /data
-              name: media
-              readOnly: true
-              subPath: media
-      # does this really need a mount?
-      volumes:
-        - name: media
-          persistentVolumeClaim:
-            claimName: media
 ---
 apiVersion: apps/v1
 kind: Deployment
