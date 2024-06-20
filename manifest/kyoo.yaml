@@ -430,15 +430,6 @@ spec:
             requests:
               cpu: 10m
               memory: 500Mi
-          volumeMounts:
-            - mountPath: /data
-              name: media
-              readOnly: true
-              subPath: media
-      volumes:
-        - name: media
-          persistentVolumeClaim:
-            claimName: media
 ---
 apiVersion: external-secrets.io/v1beta1
 kind: ExternalSecret
