@@ -448,10 +448,6 @@ spec:
       remoteRef:
         key: kyoo
         property: backend_apikeys
-    - secretKey: tmdb_apikey
-      remoteRef:
-        key: kyoo
-        property: tmdb_apikey
     - secretKey: rabbitmqpassword
       remoteRef:
         key: rabbitmq.cluster01.kyoo-scanner
@@ -501,11 +497,6 @@ spec:
               value: http://backend.kyoo:5000
             - name: LIBRARY_LANGUAGES
               value: en
-            - name: THEMOVIEDB_APIKEY
-              valueFrom:
-                secretKeyRef:
-                  key: tmdb_apikey
-                  name: kyoo-scanner
             - name: RABBITMQ_DEFAULT_USER
               valueFrom:
                 secretKeyRef:
