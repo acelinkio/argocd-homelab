@@ -212,6 +212,10 @@ resource "authentik_stage_identification" "default" {
   sources        = [authentik_source_oauth.google.uuid]
 }
 ```
+### Authentik Update Consent Duration
+This is a manual step until either the default authentik resource can be imported or another stage we manage can be used.
+
+Update stage default-provider-authoerization-consent to use 26 weeks instead of 4.  
 
 ### Login to Kyoo
 Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
