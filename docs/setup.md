@@ -51,6 +51,7 @@ homelab                        # vault used for containing secrets
   - create key named `argocd_client_secret`
   - create key named `grafana_client_id`
   - create key named `grafana_client_secret`
+  - create key named `mealie_client_id`
   - create key named `miniflux_client_id`
   - create key named `miniflux_client_secret`
   - create key named `ryot_client_id`
