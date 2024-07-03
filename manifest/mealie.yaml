@@ -107,7 +107,7 @@ spec:
                   key: postgrespassword
                   name: mealie-configsecrets
             - name: POSTGRES_SERVER
-              value: "cluster02.postgres"
+              value: "cluster01.postgres"
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_DB
