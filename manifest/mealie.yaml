@@ -111,7 +111,7 @@ spec:
             - name: POSTGRES_PORT
               value: "5432"
             - name: POSTGRES_DB
-              value: "datatestdb"
+              value: "mealie"
             - name: TZ
               value: "America/Los_Angeles"
             - name: BASE_URL
