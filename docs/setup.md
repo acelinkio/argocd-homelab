@@ -221,6 +221,9 @@ Update stage default-provider-authoerization-consent to use 26 weeks instead of 
 ### Login to Kyoo
 Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
 
+### Login to Mealie
+Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
+
 # Additional Comments
 * If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
 * Bootstrapping can be a very resource intensive process.  On a lower powered cluster, consider reducing the number of applications deployed and gradually adding them.
