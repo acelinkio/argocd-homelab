@@ -241,6 +241,7 @@ spec:
           argocd_client_secret = "{{ .argocd_client_secret | toString }}"
           grafana_client_id = "{{ .grafana_client_id | toString }}"
           grafana_client_secret = "{{ .grafana_client_secret | toString }}"
+          mealie_client_id = "{{ .mealie_client_id | toString }}"
           miniflux_client_id = "{{ .miniflux_client_id | toString }}"
           miniflux_client_secret = "{{ .miniflux_client_secret | toString }}"
           ryot_client_id = "{{ .ryot_client_id | toString }}"
@@ -266,6 +267,10 @@ spec:
       remoteRef:
         key: sso
         property: grafana_client_secret
+    - secretKey: mealie_client_id
+      remoteRef:
+        key: sso
+        property: mealie_client_id
     - secretKey: miniflux_client_id
       remoteRef:
         key: sso
@@ -320,6 +325,7 @@ spec:
       variable "grafana_client_id" {}
       variable "grafana_client_secret" {}
       variable "miniflux_client_id" {}
+      variable "mealie_client_id" {}
       variable "miniflux_client_secret" {}
       variable "ryot_client_id" {}
       variable "ryot_client_secret" {}
@@ -420,6 +426,40 @@ spec:
         protocol_provider = authentik_provider_oauth2.grafana_ouath2.id
         meta_icon = "https://grafana.com/static/img/menu/grafana2.svg"
         meta_launch_url = "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
+        policy_engine_mode = "all"
+      }
+
+      resource "authentik_group" "mealie_admin" {
+        name         = "mealie Admin"
+        is_superuser = false
+      }
+
+      resource "authentik_group" "mealie_user" {
+        name         = "mealie User"
+        is_superuser = false
+      }
+
+      resource "authentik_provider_oauth2" "mealie_ouath2" {
+        name      = "mealie"
+        client_id = var.mealie_client_id
+        client_type = "public"
+        authorization_flow = data.authentik_flow.default-authorization-flow.id
+        access_code_validity = "minutes=10"
+        redirect_uris = [ "https://mealie.<path:stringreplacesecret#domain>/login"]
+        signing_key = data.authentik_certificate_key_pair.generated.id
+        property_mappings = [
+          data.authentik_scope_mapping.openid.id,
+          data.authentik_scope_mapping.email.id,
+          data.authentik_scope_mapping.profile.id
+        ]
+      }
+
+      resource "authentik_application" "mealie_application" {
+        name = authentik_provider_oauth2.mealie_ouath2.name
+        slug = authentik_provider_oauth2.mealie_ouath2.name
+        protocol_provider = authentik_provider_oauth2.mealie_ouath2.id
+        meta_icon = "https://avatars.githubusercontent.com/u/92342333?s=48&v=4"
+        meta_launch_url = "https://mealie.<path:stringreplacesecret#domain>/?redirectToProvider=true"
         policy_engine_mode = "all"
       }
 
