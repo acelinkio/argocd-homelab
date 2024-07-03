@@ -222,7 +222,7 @@ Update stage default-provider-authoerization-consent to use 26 weeks instead of 
 Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
 
 ### Login to Mealie
-Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
+Login to Authentik.  Add your user to `mealie Admin` and `mealie User` groups.  Login to mealie via OIDC.  Delete the default user.
 
 # Additional Comments
 * If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
