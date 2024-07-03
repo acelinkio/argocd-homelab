@@ -117,11 +117,11 @@ spec:
             - name: TZ
               value: "America/Los_Angeles"
             - name: BASE_URL
-              value: "https://mealie.acelink.io"
+              value: "https://mealie.<path:stringreplacesecret#domain>"
             - name: OIDC_AUTH_ENABLED
               value: "True"
             - name: OIDC_CONFIGURATION_URL
-              value: "https://auth.acelink.io/application/o/mealie/.well-known/openid-configuration"
+              value: "https://auth.<path:stringreplacesecret#domain>/application/o/mealie/.well-known/openid-configuration"
             - name: OIDC_CLIENT_ID
               valueFrom:
                 secretKeyRef:
@@ -132,7 +132,7 @@ spec:
             - name: OIDC_USER_GROUP
               value: "mealie User"
             - name: OIDC_PROVIDER_NAME
-              value: "auth"
+              value: "Authentik"
             - name: OIDC_REMEMBER_ME
               value: "true"
           image: ghcr.io/mealie-recipes/mealie:v1.9.0
@@ -181,7 +181,7 @@ spec:
     namespace: gateway
     sectionName: https
   hostnames:
-  - "mealie.acelink.io"
+  - "mealie.<path:stringreplacesecret#domain>"
   rules:
   - matches:
     - path:
@@ -200,10 +200,10 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: mealie.acelink.io
+    - dnsName: mealie.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - ingress.acelink.io
+        - ingress.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"
