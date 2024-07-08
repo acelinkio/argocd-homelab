@@ -139,7 +139,7 @@ spec:
                 name: ryot-configsecrets
           - name: DATABASE_URL
             value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
-          image: ghcr.io/ignisda/ryot:v6.5.1
+          image: ghcr.io/ignisda/ryot:v6.5.2
           name: main
 ---
 apiVersion: networking.k8s.io/v1
