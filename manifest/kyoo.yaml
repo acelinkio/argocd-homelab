@@ -101,9 +101,9 @@ spec:
   - name: internal
     namespace: gateway
     sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+  # - name: external
+  #   namespace: gateway
+  #   sectionName: https
   hostnames:
   - "kyoo.<path:stringreplacesecret#domain>"
   rules:
