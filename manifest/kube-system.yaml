@@ -50,7 +50,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.15.6
+    targetRevision: 1.15.7
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
@@ -102,13 +102,13 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
-        image:
-          #testing https://github.com/cilium/cilium/issues/20942
-          override: "quay.io/cilium/cilium-ci:e14988e02ce8d0f3451b177a4f97a3833df65ab3"
-        operator:
-          #testing https://github.com/cilium/cilium/issues/20942
-          image:
-            override: "quay.io/cilium/operator-generic-ci:e14988e02ce8d0f3451b177a4f97a3833df65ab3"
+        # image:
+        #   #testing https://github.com/cilium/cilium/issues/20942
+        #   override: "quay.io/cilium/cilium-ci:e14988e02ce8d0f3451b177a4f97a3833df65ab3"
+        # operator:
+        #   #testing https://github.com/cilium/cilium/issues/20942
+        #   image:
+        #     override: "quay.io/cilium/operator-generic-ci:e14988e02ce8d0f3451b177a4f97a3833df65ab3"
           replicas: 1
           rollOutPods: true
         rollOutCiliumPods: true
