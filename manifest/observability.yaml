@@ -39,7 +39,7 @@ spec:
   source:
     chart: grafana
     repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 8.3.2
+    targetRevision: 8.3.3
     helm:
       valuesObject:
         adminUser: admin
