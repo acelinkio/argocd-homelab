@@ -550,7 +550,7 @@ spec:
         name                = "google"
         slug                = "google"
         authentication_flow = data.authentik_flow.default-source-authentication.id
-        enrollment_flow     = data.authentik_flow.no_enrollment.id
+        enrollment_flow     = authentik_flow.no_enrollment.id
 
         provider_type   = "google"
         consumer_key    = var.federation_google_client_id
