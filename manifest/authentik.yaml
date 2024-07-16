@@ -346,10 +346,6 @@ spec:
         slug = "default-source-authentication"
       }
 
-      data "authentik_flow" "default-source-enrollment" {
-        slug = "default-source-enrollment"
-      }
-
       data "authentik_scope_mapping" "email" {
         managed = "goauthentik.io/providers/oauth2/scope-email"
       }
@@ -554,11 +550,18 @@ spec:
         name                = "google"
         slug                = "google"
         authentication_flow = data.authentik_flow.default-source-authentication.id
-        enrollment_flow     = data.authentik_flow.default-source-enrollment.id
+        enrollment_flow     = data.authentik_flow.no_enrollment.id
 
         provider_type   = "google"
         consumer_key    = var.federation_google_client_id
         consumer_secret = var.federation_google_client_secret
         
         user_matching_mode = "email_link"
+      }
+
+      resource "authentik_flow" "no_enrollment" {
+        name        = "disable-enrollment"
+        title       = "Disable enrollment"
+        slug        = "disable-enrollment"
+        designation = "enrollment"
       }
