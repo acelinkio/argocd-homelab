@@ -1,0 +1,35 @@
+{
+    "title": "cloudflared",
+    "category": "API_CREDENTIAL",
+    "sections": [
+      { "id": "external-dns" },
+      { "id": "cloudflared" },
+      { "id": "cert-manager" }
+    ],
+    "fields": [
+      {
+        "section": { "id": "external-dns" },
+        "type": "CONCEALED",
+        "label": "token",
+        "value": ""
+      },
+      {
+        "section": { "id": "cloudflared" },
+        "type": "STRING",
+        "label": "TunnelID",
+        "value": ""
+      },
+      {
+        "section": { "id": "cloudflared" },
+        "type": "FILE",
+        "label": "credentials.json",
+        "value": ""
+      },
+      {
+        "section": { "id": "cert-manager" },
+        "type": "CONCEALED",
+        "label": "token",
+        "value": ""
+      }
+    ]
+  }
