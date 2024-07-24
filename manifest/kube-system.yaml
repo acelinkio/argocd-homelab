@@ -67,7 +67,6 @@ spec:
         containerRuntime:
           integration: containerd
           socketPath: /var/run/k3s/containerd/containerd.sock
-        #enableRuntimeDeviceDetection: true
         endpointRoutes:
           enabled: true
         hubble:
@@ -345,7 +344,7 @@ kind: CiliumLoadBalancerIPPool
 metadata:
   name: pool
 spec:
-  cidrs:
+  blocks:
     - cidr: <path:stringreplacesecret#ciliumipamcidr>
 ---
 apiVersion: argoproj.io/v1alpha1
