@@ -300,25 +300,25 @@ spec:
     - name: hubble-ui
       port: 80
 ---
-apiVersion: gateway.networking.k8s.io/v1
-kind: GRPCRoute
-metadata:
-  name: hubble
-  namespace: kube-system
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  hostnames:
-  - "hubble.<path:stringreplacesecret#domain>"
-  rules:
-  - backendRefs:
-    - name: hubble-ui
-      port: 80
----
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: GRPCRoute
+# metadata:
+#   name: hubble
+#   namespace: kube-system
+#   annotations:
+#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+# spec:
+#   parentRefs:
+#   - name: internal
+#     namespace: gateway
+#     sectionName: https
+#   hostnames:
+#   - "hubble.<path:stringreplacesecret#domain>"
+#   rules:
+#   - backendRefs:
+#     - name: hubble-ui
+#       port: 80
+# ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
