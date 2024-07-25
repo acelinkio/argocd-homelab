@@ -60,7 +60,7 @@ spec:
           bbr: false
         bpf:
           masquerade: true
-          hostLegacyRouting: true
+          #hostLegacyRouting: true
         envoy:
           enabled: false
         cluster:
