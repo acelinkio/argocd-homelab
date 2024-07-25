@@ -61,8 +61,8 @@ spec:
         bpf:
           masquerade: true
           #hostLegacyRouting: true
-        envoy:
-          enabled: false
+        # envoy:
+        #   enabled: false
         cluster:
           name: home-cluster
           id: 1
