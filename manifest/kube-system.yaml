@@ -121,8 +121,8 @@ spec:
           secretsNamespace:
             create: false
             name: certificate
-          gatewayClass:
-            create: true
+          # gatewayClass:
+          #   create: "true"
   syncPolicy:
     automated:
       allowEmpty: true
