@@ -111,6 +111,7 @@ EOF
 systemctl restart multipathd.service
 
 # workaround for cilium not loading packages, dependent upon OS
+## https://docs.cilium.io/en/stable/operations/system_requirements/#linux-kernel
 ## https://github.com/cilium/cilium/issues/25021
 modprobe iptable_raw
 modprobe xt_socket

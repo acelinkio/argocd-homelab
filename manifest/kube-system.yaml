@@ -118,6 +118,7 @@ spec:
         routingMode: native
         gatewayAPI:
           enabled: true
+          externalTrafficPolicy: Local
           secretsNamespace:
             create: false
             name: certificate
