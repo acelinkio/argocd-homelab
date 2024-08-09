@@ -17,7 +17,7 @@ spec:
   source:
     chart: bitnamicharts/rabbitmq-cluster-operator
     repoURL: registry-1.docker.io
-    targetRevision: 4.3.16
+    targetRevision: 4.3.18
     helm:
       valuesObject:
         msgTopologyOperator:
