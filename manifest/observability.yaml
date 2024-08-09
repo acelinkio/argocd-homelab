@@ -66,8 +66,8 @@ spec:
                   maxLines: 250
         env:
           GF_SERVER_ROOT_URL: "https://grafana.<path:stringreplacesecret#domain>"
-          GF_AUTH_BASIC_ENABLED: "false"
           GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+          GF_AUTH_DISABLE_LOGIN_FORM: "true"
           GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
           GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email offline_access"
           GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://auth.<path:stringreplacesecret#domain>/application/o/authorize/"
