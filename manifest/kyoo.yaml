@@ -38,7 +38,7 @@ spec:
               kyoo_apikeys: yHXWGsjfjE6sy6UxavqmTUYxgCFYek
               tmdb_apikey: ""
               MEILI_MASTER_KEY: barkLike8SuperDucks
-              postgres_user: kyoo_back
+              postgres_user: kyoo_all
               postgres_password: watchSomething4me
               rabbitmq_user: kyoo_all
               rabbitmq_password: youAreAmazing2
