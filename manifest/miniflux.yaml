@@ -141,7 +141,7 @@ spec:
                 name: miniflux-configsecrets
           - name: DATABASE_URL
             value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/miniflux"
-          image: ghcr.io/miniflux/miniflux:2.1.4-distroless
+          image: ghcr.io/miniflux/miniflux:2.2.0-distroless
           name: main
 ---
 apiVersion: networking.k8s.io/v1
