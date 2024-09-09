@@ -173,8 +173,8 @@ spec:
               secretKeyRef:
                 key: postgrespassword
                 name: vikunja-configsecrets
-          - name: VIKUNJA_SERVICE_FRONTENDURL
-            value: https://tasks.<path:stringreplacesecret#domain>/
+          - name: VIKUNJA_SERVICE_PUBLICURL
+            value: https://tasks.<path:stringreplacesecret#domain>
           - name: VIKUNJA_SERVICE_JWTSECRET
             valueFrom:
               secretKeyRef:
