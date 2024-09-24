@@ -20,9 +20,6 @@ spec:
     targetRevision: feature/helmchart
     helm:
       valuesObject:
-        global:
-          image:
-            tag: edge@sha256:a316cd4d2ab3e6b3e30b1fff5ba6eccc93fc2bbe1932188e8794be89d28ee10e
         kyoo:
           address: https://kyoo.<path:stringreplacesecret#domain>
         meilisearch:
