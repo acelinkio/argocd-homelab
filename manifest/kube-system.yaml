@@ -50,7 +50,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.16.1
+    targetRevision: 1.16.2
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
@@ -66,9 +66,6 @@ spec:
         cluster:
           name: home-cluster
           id: 1
-        containerRuntime:
-          integration: containerd
-          socketPath: /var/run/k3s/containerd/containerd.sock
         endpointRoutes:
           enabled: true
         hubble:
