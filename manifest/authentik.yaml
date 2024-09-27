@@ -319,6 +319,8 @@ spec:
           name: sso
           namespace: authentik
     source: Inline
+    initArgs:
+      - -upgrade=true
     module: |
       variable "argocd_client_id" {}
       variable "argocd_client_secret" {}
