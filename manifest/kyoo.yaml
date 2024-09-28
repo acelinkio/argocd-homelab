@@ -28,6 +28,25 @@ spec:
           enabled: true
         rabbitmq:
           enabled: true
+        back:
+          kyoo_back:
+            extraEnv:
+              - name: OIDC_SERVICE_NAME
+                value: authentik
+              - name: OIDC_SERVICE_LOGO
+                value: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
+              - name: OIDC_SERVICE_CLIENTID
+                value: kyoo
+              - name: OIDC_SERVICE_SECRET
+                value: mysupersecretsecret
+              - name: OIDC_SERVICE_AUTHORIZATION
+                value: https://auth.acelink.io/application/o/authorize/
+              - name: OIDC_SERVICE_TOKEN
+                value: https://auth.acelink.io/application/o/token/
+              - name: OIDC_SERVICE_PROFILE
+                value: https://auth.acelink.io/application/o/userinfo/
+              - name: OIDC_SERVICE_SCOPE
+                value: "email openid profile"
         extraObjects:
           - apiVersion: v1
             kind: Secret
