@@ -556,7 +556,7 @@ spec:
         name = authentik_provider_oauth2.ryot_ouath2.name
         slug = authentik_provider_oauth2.ryot_ouath2.name
         protocol_provider = authentik_provider_oauth2.ryot_ouath2.id
-        meta_icon = "https://github.com/IgnisDa/ryot/blob/main/docs/logo.png?raw=true"
+        meta_icon = "https://github.com/IgnisDa/ryot/blob/main/apps/frontend/public/logo-light.png?raw=true"
         meta_launch_url = "https://ryot.<path:stringreplacesecret#domain>/?redirectToProvider=true"
         policy_engine_mode = "all"
       }
