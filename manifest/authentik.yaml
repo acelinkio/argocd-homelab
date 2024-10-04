@@ -241,6 +241,8 @@ spec:
           argocd_client_secret = "{{ .argocd_client_secret | toString }}"
           grafana_client_id = "{{ .grafana_client_id | toString }}"
           grafana_client_secret = "{{ .grafana_client_secret | toString }}"
+          kyoo_client_id = "{{ .kyoo_client_id | toString }}"
+          kyoo_client_secret = "{{ .kyoo_client_secret | toString }}"
           mealie_client_id = "{{ .mealie_client_id | toString }}"
           miniflux_client_id = "{{ .miniflux_client_id | toString }}"
           miniflux_client_secret = "{{ .miniflux_client_secret | toString }}"
@@ -267,6 +269,14 @@ spec:
       remoteRef:
         key: sso
         property: grafana_client_secret
+    - secretKey: kyoo_client_id
+      remoteRef:
+        key: sso
+        property: kyoo_client_id
+    - secretKey: kyoo_client_secret
+      remoteRef:
+        key: sso
+        property: kyoo_client_secret
     - secretKey: mealie_client_id
       remoteRef:
         key: sso
@@ -326,6 +336,8 @@ spec:
       variable "argocd_client_secret" {}
       variable "grafana_client_id" {}
       variable "grafana_client_secret" {}
+      variable "kyoo_client_id" {}
+      variable "kyoo_client_secret" {}
       variable "miniflux_client_id" {}
       variable "mealie_client_id" {}
       variable "miniflux_client_secret" {}
@@ -424,6 +436,36 @@ spec:
         protocol_provider = authentik_provider_oauth2.grafana_ouath2.id
         meta_icon = "https://grafana.com/static/img/menu/grafana2.svg"
         meta_launch_url = "https://grafana.<path:stringreplacesecret#domain>/login/generic_oauth"
+        policy_engine_mode = "all"
+      }
+
+      resource "authentik_group" "kyoo_admin" {
+        name         = "kyoo Admin"
+        is_superuser = false
+      }
+
+      resource "authentik_provider_oauth2" "kyoo_ouath2" {
+        name      = "kyoo"
+        client_id = var.kyoo_client_id
+        client_secret = var.kyoo_client_secret
+        authorization_flow = data.authentik_flow.default-authorization-flow.id
+        access_code_validity = "minutes=10"
+        redirect_uris = [ "https://kyoo.<path:stringreplacesecret#domain>/api/auth/login/service"]
+        signing_key = data.authentik_certificate_key_pair.generated.id
+        property_mappings = [
+          data.authentik_property_mapping_provider_scope.openid.id,
+          data.authentik_property_mapping_provider_scope.email.id,
+          data.authentik_property_mapping_provider_scope.profile.id,
+          data.authentik_property_mapping_provider_scope.offline_access.id
+        ]
+      }
+
+      resource "authentik_application" "kyoo_application" {
+        name = authentik_provider_oauth2.kyoo_ouath2.name
+        slug = authentik_provider_oauth2.kyoo_ouath2.name
+        protocol_provider = authentik_provider_oauth2.kyoo_ouath2.id
+        meta_icon = "https://github.com/zoriya/Kyoo/raw/master/icons/icon-256x256.png"
+        meta_launch_url = "https://kyoo.<path:stringreplacesecret#domain>/api/auth/login/service"
         policy_engine_mode = "all"
       }
 
