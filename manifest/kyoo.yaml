@@ -16,8 +16,8 @@ spec:
   project: homelab
   source:
     path: chart/
-    repoURL: https://github.com/acelinkio/Kyoo.git
-    targetRevision: feature/helmchart
+    repoURL: https://github.com/zoriya/Kyoo.git
+    targetRevision: master
     helm:
       valuesObject:
         kyoo:
