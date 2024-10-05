@@ -299,7 +299,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster02.kyoo.owner
+  name: cluster02.kyoo_back.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -310,7 +310,40 @@ spec:
       kind: ClusterSecretStore
   selector:
     secret:
-      name: kyoo-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+      name: kyoo-back-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+  template:
+    data:
+      _metadata_origin: "push"
+      test123: "{{ .username | toString }}"
+      username: "{{ .username | toString }}"
+      password: "{{ .password | toString }}"
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster02.kyoo.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster02.kyoo.owner
+          property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster02.kyoo_transcoder.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: kyoo-transcoder-owner-user.cluster02.credentials.postgresql.acid.zalan.do
   template:
     data:
       _metadata_origin: "push"
