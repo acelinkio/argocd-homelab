@@ -207,13 +207,20 @@ spec:
     storageClass: longhorn
   numberOfInstances: 1
   preparedDatabases:
-    kyoo:
+    kyoo_back:
       defaultUsers: true
       extensions: {}
       schemas:
         # still uses public schema...
         # https://github.com/zoriya/Kyoo/issues/536
         public:
+          defaultRoles: false
+          defaultUsers: false
+    kyoo_transcoder:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
           defaultRoles: false
           defaultUsers: false
     publictestdb:
