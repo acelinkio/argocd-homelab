@@ -40,7 +40,7 @@ spec:
     template:
       data:
         _note: "Limitation of operator.  Needed for generating a secret with desired username."
-        username: "kyoo-backend"
+        username: "kyoo_backend"
   data:
     - secretKey: blank
       remoteRef:
@@ -77,12 +77,12 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-backend
+          remoteKey: rabbitmq.cluster01.kyoo_backend
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-backend
+          remoteKey: rabbitmq.cluster01.kyoo_backend
           property: password
 ---
 apiVersion: rabbitmq.com/v1beta1
@@ -116,7 +116,7 @@ spec:
     template:
       data:
         _note: "Limitation of operator.  Needed for generating a secret with desired username."
-        username: "kyoo-matcher"
+        username: "kyoo_matcher"
   data:
     - secretKey: blank
       remoteRef:
@@ -153,12 +153,12 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-matcher
+          remoteKey: rabbitmq.cluster01.kyoo_matcher
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-matcher
+          remoteKey: rabbitmq.cluster01.kyoo_matcher
           property: password
 ---
 apiVersion: rabbitmq.com/v1beta1
@@ -192,7 +192,7 @@ spec:
     template:
       data:
         _note: "Limitation of operator.  Needed for generating a secret with desired username."
-        username: "kyoo-scanner"
+        username: "kyoo_scanner"
   data:
     - secretKey: blank
       remoteRef:
@@ -229,12 +229,12 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-scanner
+          remoteKey: rabbitmq.cluster01.kyoo_scanner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-scanner
+          remoteKey: rabbitmq.cluster01.kyoo_scanner
           property: password
 ---
 apiVersion: rabbitmq.com/v1beta1
@@ -268,7 +268,7 @@ spec:
     template:
       data:
         _note: "Limitation of operator.  Needed for generating a secret with desired username."
-        username: "kyoo-autosync"
+        username: "kyoo_autosync"
   data:
     - secretKey: blank
       remoteRef:
@@ -305,12 +305,12 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-autosync
+          remoteKey: rabbitmq.cluster01.kyoo_autosync
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: rabbitmq.cluster01.kyoo-autosync
+          remoteKey: rabbitmq.cluster01.kyoo_autosync
           property: password
 ---
 apiVersion: rabbitmq.com/v1beta1
