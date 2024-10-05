@@ -299,7 +299,7 @@ spec:
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster02.kyoo_back.owner
+  name: cluster02.kyoo-back.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -321,18 +321,18 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster02.kyoo.owner
+          remoteKey: postgres.cluster02.kyoo_back.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster02.kyoo.owner
+          remoteKey: postgres.cluster02.kyoo_back.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
 metadata:
-  name: cluster02.kyoo_transcoder.owner
+  name: cluster02.kyoo-transcoder.owner
   namespace: postgres
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -354,10 +354,10 @@ spec:
     - match:
         secretKey: username
         remoteRef:
-          remoteKey: postgres.cluster02.kyoo.owner
+          remoteKey: postgres.cluster02.kyoo_transcoder.owner
           property: username
     - match:
         secretKey: password
         remoteRef:
-          remoteKey: postgres.cluster02.kyoo.owner
+          remoteKey: postgres.cluster02.kyoo_transcoder.owner
           property: password
