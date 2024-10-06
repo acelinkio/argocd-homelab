@@ -26,6 +26,207 @@ spec:
         key: sso
         property: kyoo_client_secret
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: misc
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: kyoo_apikeys
+      remoteRef:
+        key: kyoo
+        property: kyoo_apikeys
+    - secretKey: tmdb_apikey
+      remoteRef:
+        key: kyoo
+        property: tmdb_apikey
+    - secretKey: tvdb_apikey
+      remoteRef:
+        key: kyoo
+        property: tvdb_apikey
+    - secretKey: tvdb_pin
+      remoteRef:
+        key: kyoo
+        property: tvdb_pin
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: kyoo-autosync
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_autosync
+        property: username
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_autosync
+        property: password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: kyoo-back
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: MEILI_MASTER_KEY
+      remoteRef:
+        key: kyoo.meilisearch
+        property: masterkey
+    - secretKey: postgres_user
+      remoteRef:
+        key: postgres.cluster01.kyoo_back.owner
+        property: username
+    - secretKey: postgres_password
+      remoteRef:
+        key: postgres.cluster01.kyoo_back.owner
+        property: password
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_backend
+        property: username
+    - secretKey: rabbitmq_password
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_backend
+        property: password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: kyoo-matcher
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_matcher
+        property: username
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_matcher
+        property: password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: kyoo-scanner
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_scanner
+        property: username
+    - secretKey: rabbitmq_user
+      remoteRef:
+        key: rabbitmq.cluster01.kyoo_scanner
+        property: password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: kyoo-transcoder
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: postgres_user
+      remoteRef:
+        key: postgres.cluster01.kyoo_transcoder.owner
+        property: username
+    - secretKey: postgres_password
+      remoteRef:
+        key: postgres.cluster01.kyoo_transcoder.owner
+        property: password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: meilisearch-masterkey
+  namespace: kyoo
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: MEILI_MASTER_KEY
+      remoteRef:
+        key: kyoo.meilisearch
+        property: masterkey
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyoo-meilisearch
+  namespace: argocd
+spec:
+  destination:
+    namespace: kyoo
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: meilisearch
+    repoURL: https://meilisearch.github.io/meilisearch-kubernetes
+    targetRevision: 0.10.1
+    helm:
+      valuesObject:
+        environment:
+          MEILI_ENV: production
+        auth:
+          existingMasterKeySecret: meilisearch-masterkey
+        persistence:
+          enabled: true
+          size: 3Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -42,8 +243,40 @@ spec:
     targetRevision: master
     helm:
       valuesObject:
+        global:
+          meilisearch:
+            kyoo_back:
+              existingSecret: kyoo-back
+          postgres:
+            kyoo_back:
+              host: cluster01.postgres
+              kyoo_migrations:
+                existingSecret: kyoo-back
+              kyoo_back:
+                existingSecret: kyoo-back
+            kyoo_transcoder:
+              host: cluster01.postgres
+              kyoo_transcoder:
+                existingSecret: kyoo-transcoder
+          rabbitmq:
+            host: cluster01.rabbitmq
+            kyoo_autosync:
+              existingSecret: kyoo-autosync
+            kyoo_back:
+              existingSecret: kyoo-back
+            kyoo_matcher:
+              existingSecret: kyoo-matcher
+            kyoo_scanner:
+              existingSecret: kyoo-scanner
+        contentdatabase:
+          tmdb:
+            existingSecret: misc
+          tvdb:
+            existingSecret: misc
         kyoo:
           address: https://kyoo.<path:stringreplacesecret#domain>
+          apikey:
+            existingSecret: misc
           oidc:
             enabled: true
             existingSecret: sso
@@ -52,31 +285,7 @@ spec:
             authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
             tokenAddress: https://auth.<path:stringreplacesecret#domain>/application/o/token/
             profileAddress: https://auth.<path:stringreplacesecret#domain>/application/o/userinfo/
-        meilisearch:
-          enabled: true
-        postgresql:
-          enabled: true
-        rabbitmq:
-          enabled: true
         extraObjects:
-          - apiVersion: v1
-            kind: Secret
-            metadata:
-              name: bigsecret
-            type: Opaque
-            stringData:
-              kyoo_apikeys: yHXWGsjfjE6sy6UxavqmTUYxgCFYek
-              clientId: kyoo
-              clientSecret: examplesecret
-              tmdb_apikey: ""
-              tvdb_apikey: ""
-              tvdb_pin: ""
-              MEILI_MASTER_KEY: barkLike8SuperDucks
-              postgres_user: kyoo_all
-              postgres_password: watchSomething4me
-              rabbitmq_user: kyoo_all
-              rabbitmq_password: youAreAmazing2
-              rabbitmq_cookie: mmmGoodCookie
           - kind: PersistentVolumeClaim
             apiVersion: v1
             metadata:
