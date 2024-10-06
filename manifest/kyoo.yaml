@@ -255,7 +255,7 @@ spec:
               kyoo_back:
                 existingSecret: kyoo-back
             kyoo_transcoder:
-              host: cluster01.postgres
+              host: cluster01.postgres.svc.cluster.local
               kyoo_transcoder:
                 existingSecret: kyoo-transcoder
           rabbitmq:
