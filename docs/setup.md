@@ -51,6 +51,8 @@ homelab                        # vault used for containing secrets
   - create key named `argocd_client_secret`
   - create key named `grafana_client_id`
   - create key named `grafana_client_secret`
+  - create key named `kyoo_client_id`
+  - create key named `kyoo_client_secret`
   - create key named `mealie_client_id`
   - create key named `miniflux_client_id`
   - create key named `miniflux_client_secret`
@@ -73,7 +75,8 @@ homelab                        # vault used for containing secrets
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
 ### Kyoo
-- In the homelab vault, create secret named `ryot`
+- In the homelab vault, create secret named `kyoo`
+- Generate random 30 character string to be used as an internal apikey for kyoo microservices.  Save apikey into key named `kyoo_apikeys`
 - Media tracking requires access to TVDB.  Follow docs to generate api key.  https://developer.themoviedb.org/docs/getting-started.  Save apikey into key named `tmdb_apikey`
 
 ### Blank
