@@ -77,7 +77,8 @@ homelab                        # vault used for containing secrets
 ### Kyoo
 - In the homelab vault, create secret named `kyoo`
 - Generate random 30 character string to be used as an internal apikey for kyoo microservices.  Save apikey into key named `kyoo_apikeys`
-- Media tracking requires access to TVDB.  Follow docs to generate api key.  https://developer.themoviedb.org/docs/getting-started.  Save apikey into key named `tmdb_apikey`
+- Media tracking access to TheMovieDB.  Follow docs to generate api key.  https://developer.themoviedb.org/docs/getting-started.  Save apikey into key named `tmdb_apikey`
+- Media tracking access to TheTVDB.  Follow docs to generate api key & pin.  https://thetvdb.com/api-information/signup.  Save apikey into key named `tvdb_apikey`.  Save pin into key named `tvdb_pin`
 
 ### Blank
 - In the homelab vault, create secret named `blank`
