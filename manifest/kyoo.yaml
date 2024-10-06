@@ -4,6 +4,28 @@ apiVersion: v1
 metadata:
   name: kyoo
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: kyoo
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: clientId
+      remoteRef:
+        key: sso
+        property: kyoo_client_id
+    - secretKey: clientSecret
+      remoteRef:
+        key: sso
+        property: kyoo_client_secret
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -24,9 +46,7 @@ spec:
           address: https://kyoo.<path:stringreplacesecret#domain>
           oidc:
             enabled: true
-            existingSecret: bigsecret
-            clientIdKey: clientId
-            clientSecretKey: clientSecret
+            existingSecret: sso
             name: Authentik
             logo: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
             authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
