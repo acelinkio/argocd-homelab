@@ -73,7 +73,7 @@ spec:
       remoteRef:
         key: rabbitmq.cluster01.kyoo_autosync
         property: username
-    - secretKey: rabbitmq_user
+    - secretKey: rabbitmq_password
       remoteRef:
         key: rabbitmq.cluster01.kyoo_autosync
         property: password
@@ -129,7 +129,7 @@ spec:
       remoteRef:
         key: rabbitmq.cluster01.kyoo_matcher
         property: username
-    - secretKey: rabbitmq_user
+    - secretKey: rabbitmq_password
       remoteRef:
         key: rabbitmq.cluster01.kyoo_matcher
         property: password
@@ -151,7 +151,7 @@ spec:
       remoteRef:
         key: rabbitmq.cluster01.kyoo_scanner
         property: username
-    - secretKey: rabbitmq_user
+    - secretKey: rabbitmq_password
       remoteRef:
         key: rabbitmq.cluster01.kyoo_scanner
         property: password
