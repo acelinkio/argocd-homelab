@@ -450,7 +450,7 @@ spec:
         client_secret = var.kyoo_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
-        redirect_uris = [ "https://kyoo.<path:stringreplacesecret#domain>/api/auth/login/service?redirectUrl=https://kyoo.<path:stringreplacesecret#domain>/login/callback"]
+        redirect_uris = [ "https://kyoo.<path:stringreplacesecret#domain>/api/auth/logged/service"]
         signing_key = data.authentik_certificate_key_pair.generated.id
         property_mappings = [
           data.authentik_property_mapping_provider_scope.openid.id,
@@ -465,7 +465,7 @@ spec:
         slug = authentik_provider_oauth2.kyoo_ouath2.name
         protocol_provider = authentik_provider_oauth2.kyoo_ouath2.id
         meta_icon = "https://github.com/zoriya/Kyoo/raw/master/icons/icon-256x256.png"
-        meta_launch_url = "https://kyoo.<path:stringreplacesecret#domain>/api/auth/login/service?redirectUrl=https://kyoo.<path:stringreplacesecret#domain>/login/callback"
+        meta_launch_url = "https://kyoo.<path:stringreplacesecret#domain>/api/auth/logged/service"
         policy_engine_mode = "all"
       }
 
