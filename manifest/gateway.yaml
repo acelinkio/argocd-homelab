@@ -13,7 +13,7 @@ spec:
   gatewayClassName: cilium
   infrastructure:
     annotations:
-      io.cilium/lb-ipam-ips: 192.168.1.50
+      io.cilium/lb-ipam-ips: 192.168.1.11
   listeners:
   - protocol: HTTP
     port: 80
@@ -62,7 +62,7 @@ spec:
     - dnsName: intgw.<path:stringreplacesecret#domain>
       recordType: A
       targets:
-        - "192.168.1.50"
+        - "192.168.1.11"
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"
@@ -76,7 +76,7 @@ spec:
   gatewayClassName: cilium
   infrastructure:
     annotations:
-      io.cilium/lb-ipam-ips: 192.168.1.49
+      io.cilium/lb-ipam-ips: 192.168.1.10
   listeners:
   - protocol: HTTP
     port: 80
@@ -125,7 +125,7 @@ spec:
     - dnsName: extgw.<path:stringreplacesecret#domain>
       recordType: A
       targets:
-        - "192.168.1.49"
+        - "192.168.1.10"
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"

@@ -55,7 +55,7 @@ spec:
             enabled: false
           service:
             annotations:
-              io.cilium/lb-ipam-ips: 192.168.1.52
+              io.cilium/lb-ipam-ips: 192.168.1.12
   syncPolicy:
     automated:
       allowEmpty: true
@@ -74,7 +74,7 @@ spec:
     - dnsName: intin.<path:stringreplacesecret#domain>
       recordType: A
       targets:
-        - 192.168.1.52
+        - 192.168.1.12
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "false"

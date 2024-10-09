@@ -29,6 +29,6 @@ Cilium does not allocate the first and last IP addresses of a CIDR block.  https
 ## Allocated IP Addresses
 | API           | Controller | Facing                 | ClassName   | GatewayName  | IPAddress |
 | ------- | ------------- | -------- | ---------------------- | ----------- | ------------ |
-| gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.49             |
-| gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.50             |
-| ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.52             |
+| gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.10             |
+| gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.11             |
+| ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.12             |
