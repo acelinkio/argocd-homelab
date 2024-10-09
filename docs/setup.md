@@ -66,7 +66,6 @@ homelab                        # vault used for containing secrets
 ### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
-- Save your cidr block for Cilium IPAM to manage into a key named `ciliumipamcidr`. #will be sunsetting this soon
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 
@@ -173,12 +172,11 @@ kubectl label nodes mynodename kubernetes.io/role=worker
 
 export domain="$(op read op://homelab/stringreplacesecret/domain)"
 export cloudflaretunnelid="$(op read op://homelab/stringreplacesecret/cloudflaretunnelid)"
-export ciliumipamcidr="$(op read op://homelab/stringreplacesecret/ciliumipamcidr)"
 export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1password-credentials.json | base64)"
 export externalsecrets_token="$(op read op://homelab/external-secrets/token)"
 
 kubectl create namespace argocd
-kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid --from-literal ciliumipamcidr=$ciliumipamcidr
+kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid
 
 kubectl create namespace 1passwordconnect
 kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json="$onepasswordconnect_json"

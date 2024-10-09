@@ -201,10 +201,6 @@ spec:
       remoteRef:
         key: stringreplacesecret
         property: cloudflaretunnelid
-    - secretKey: ciliumipamcidr
-      remoteRef:
-        key: stringreplacesecret
-        property: ciliumipamcidr
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
