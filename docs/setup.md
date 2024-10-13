@@ -9,6 +9,7 @@ argocd-homelab aims to be as agnostic as possible, however several configuration
 - Review `manifest/kube-system.yaml`
 - Review `manifest/longhorn-system.yaml`
 - Review `manifest/gateway.yaml`
+- Review `manifest/kyoo.yaml`
 - Update `docs/network.md`
 
 ## 1Password

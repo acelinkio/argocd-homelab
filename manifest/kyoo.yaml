@@ -285,6 +285,16 @@ spec:
             authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
             tokenAddress: https://auth.<path:stringreplacesecret#domain>/application/o/token/
             profileAddress: https://auth.<path:stringreplacesecret#domain>/application/o/userinfo/
+        media:
+          volumes:
+            - name: media
+              nfs:
+                server: nassy.localdomain
+                path: /spin0/media
+          volumeMounts:
+            - name: media
+              mountPath: /data
+              readOnly: true
         extraObjects:
           - kind: PersistentVolumeClaim
             apiVersion: v1
@@ -292,17 +302,7 @@ spec:
               name: back-storage
             spec:
               accessModes:
-                - "ReadWriteMany"
-              resources:
-                requests:
-                  storage: "3Gi"
-          - kind: PersistentVolumeClaim
-            apiVersion: v1
-            metadata:
-              name: media
-            spec:
-              accessModes:
-                - "ReadWriteMany"
+                - "ReadWriteOnce"
               resources:
                 requests:
                   storage: "3Gi"
@@ -312,7 +312,7 @@ spec:
               name: transcoder-storage
             spec:
               accessModes:
-                - "ReadWriteMany"
+                - "ReadWriteOnce"
               resources:
                 requests:
                   storage: "3Gi"
