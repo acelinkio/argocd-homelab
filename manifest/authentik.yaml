@@ -244,6 +244,7 @@ spec:
           kyoo_client_id = "{{ .kyoo_client_id | toString }}"
           kyoo_client_secret = "{{ .kyoo_client_secret | toString }}"
           mealie_client_id = "{{ .mealie_client_id | toString }}"
+          mealie_client_secret = "{{ .mealie_client_secret | toString }}"
           miniflux_client_id = "{{ .miniflux_client_id | toString }}"
           miniflux_client_secret = "{{ .miniflux_client_secret | toString }}"
           ryot_client_id = "{{ .ryot_client_id | toString }}"
@@ -281,6 +282,10 @@ spec:
       remoteRef:
         key: sso
         property: mealie_client_id
+    - secretKey: mealie_client_secret
+      remoteRef:
+        key: sso
+        property: mealie_client_secret
     - secretKey: miniflux_client_id
       remoteRef:
         key: sso
@@ -340,6 +345,7 @@ spec:
       variable "kyoo_client_secret" {}
       variable "miniflux_client_id" {}
       variable "mealie_client_id" {}
+      variable "mealie_client_secret" {}
       variable "miniflux_client_secret" {}
       variable "ryot_client_id" {}
       variable "ryot_client_secret" {}
@@ -482,7 +488,7 @@ spec:
       resource "authentik_provider_oauth2" "mealie_ouath2" {
         name      = "mealie"
         client_id = var.mealie_client_id
-        client_type = "public"
+        client_secret = var.mealie_client_secret
         authorization_flow = data.authentik_flow.default-authorization-flow.id
         access_code_validity = "minutes=10"
         redirect_uris = [ "https://mealie.<path:stringreplacesecret#domain>/login"]

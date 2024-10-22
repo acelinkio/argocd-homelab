@@ -43,6 +43,10 @@ spec:
       remoteRef:
         key: sso
         property: mealie_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: mealie_client_secret
 ---
 apiVersion: v1
 kind: Service
@@ -127,6 +131,11 @@ spec:
                 secretKeyRef:
                   key: client_id
                   name: sso
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: sso
             - name: OIDC_ADMIN_GROUP
               value: "mealie Admin"
             - name: OIDC_USER_GROUP
@@ -135,7 +144,7 @@ spec:
               value: "Authentik"
             - name: OIDC_REMEMBER_ME
               value: "true"
-          image: ghcr.io/mealie-recipes/mealie:v1.12.0
+          image: ghcr.io/mealie-recipes/mealie:v2.0.0
           name: app
           resources:
             limits:
