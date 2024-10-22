@@ -330,6 +330,9 @@ spec:
       recordType: CNAME
       targets:
         - ingress.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
