@@ -1,5 +1,6 @@
 {
   "recommendations": [
+    "m4ns0ur.base64",
     "ms-kubernetes-tools.vscode-kubernetes-tools",
     "redhat.vscode-yaml",
     "smoore.yaml-path"
