@@ -330,4 +330,4 @@ spec:
     - dnsName: tasks.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - ingress.<path:stringreplacesecret#domain>
+        - intgw.<path:stringreplacesecret#domain>
