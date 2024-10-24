@@ -19,7 +19,15 @@ spec:
     - secretKey: cloudflare-api-key
       remoteRef:
         key: external-dns
-        property: token
+        property: cloudflare-token
+    - secretKey: unifi-user
+      remoteRef:
+        key: external-dns
+        property: unifi-user
+    - secretKey: unifi-password
+      remoteRef:
+        key: external-dns
+        property: unifi-password
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -53,7 +61,70 @@ spec:
               secretKeyRef:
                 name: external-dns
                 key: cloudflare-api-key
-        annotationFilter: "external-dns.custom/type in (public, private)"
+        annotationFilter: "external-dns.custom/type in (public)"
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-dns-unifi
+  namespace: argocd
+spec:
+  destination:
+    namespace: external-dns
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: external-dns
+    repoURL: https://kubernetes-sigs.github.io/external-dns/
+    targetRevision: 1.15.0
+    helm:
+      skipCrds: true
+      valuesObject:
+        provider:
+          name: webhook
+          webhook:
+            image:
+              repository: ghcr.io/kashalls/external-dns-unifi-webhook
+              tag: v0.3.0
+            env:
+              - name: UNIFI_HOST
+                value: https://192.168.1.1
+              - name: UNIFI_USER
+                valueFrom:
+                  secretKeyRef:
+                    name: external-dns
+                    key: unifi-user
+              - name: UNIFI_PASS
+                valueFrom:
+                  secretKeyRef:
+                    name: external-dns
+                    key: unifi-password
+            livenessProbe:
+              httpGet:
+                path: /healthz
+                port: http-webhook
+              initialDelaySeconds: 10
+              timeoutSeconds: 5
+            readinessProbe:
+              httpGet:
+                path: /readyz
+                port: http-webhook
+              initialDelaySeconds: 10
+              timeoutSeconds: 5
+        annotationFilter: "external-dns.custom/type in (private)"
+        fullnameOverride: external-dns-unifi
+        policy: sync
+        registry: txt
+        txtOwnerId: kubernetes
+        sources:
+          - service
+          - ingress
+          - crd
   syncPolicy:
     automated:
       allowEmpty: true
