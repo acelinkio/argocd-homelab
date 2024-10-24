@@ -315,7 +315,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: hubble
+  name: hubble-private
   namespace: kube-system
   annotations:
     external-dns.custom/type: private
@@ -325,9 +325,6 @@ spec:
       recordType: CNAME
       targets:
         - intgw.<path:stringreplacesecret#domain>
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
 ---
 apiVersion: cilium.io/v2alpha1
 kind: CiliumL2AnnouncementPolicy

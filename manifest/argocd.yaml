@@ -337,7 +337,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: argocd
+  name: argocd-private
   namespace: argocd
   annotations:
     external-dns.custom/type: private
@@ -347,9 +347,6 @@ spec:
       recordType: CNAME
       targets:
         - intgw.<path:stringreplacesecret#domain>
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
 ---
 ## Private Repository Secret example
 ## https://argo-cd.readthedocs.io/en/stable/user-guide/private-repositories/

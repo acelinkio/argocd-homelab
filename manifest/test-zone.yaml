@@ -108,7 +108,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: echo
+  name: echo-private
   namespace: test-zone
   annotations:
     external-dns.custom/type: private
@@ -118,9 +118,6 @@ spec:
       recordType: CNAME
       targets:
         - intgw.<path:stringreplacesecret#domain>
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -196,7 +193,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: httpbin
+  name: httpbin-private
   namespace: test-zone
   annotations:
     external-dns.custom/type: private
@@ -206,6 +203,3 @@ spec:
       recordType: CNAME
       targets:
         - intgw.<path:stringreplacesecret#domain>
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"

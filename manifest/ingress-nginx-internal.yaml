@@ -75,6 +75,3 @@ spec:
       recordType: A
       targets:
         - 192.168.1.12
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"

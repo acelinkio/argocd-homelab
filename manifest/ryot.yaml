@@ -188,7 +188,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: ryot
+  name: ryot-private
   namespace: ryot
   annotations:
     external-dns.custom/type: private
@@ -197,7 +197,21 @@ spec:
     - dnsName: ryot.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
+        - intgw.<path:stringreplacesecret#domain>
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: ryot-public
+  namespace: ryot
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: ryot.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
         - ingress.<path:stringreplacesecret#domain>
-      # providerSpecific:
-      #   - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-      #     value: "false"
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"

@@ -63,9 +63,6 @@ spec:
       recordType: A
       targets:
         - "192.168.1.11"
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: Gateway
@@ -126,6 +123,3 @@ spec:
       recordType: A
       targets:
         - "192.168.1.10"
-      providerSpecific:
-        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-          value: "false"

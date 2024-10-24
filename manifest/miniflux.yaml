@@ -190,7 +190,7 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: miniflux
+  name: miniflux-private
   namespace: miniflux
   annotations:
     external-dns.custom/type: private
@@ -199,7 +199,21 @@ spec:
     - dnsName: rss.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
+        - intgw.<path:stringreplacesecret#domain>
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: miniflux-public
+  namespace: miniflux
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: rss.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
         - ingress.<path:stringreplacesecret#domain>
-      # providerSpecific:
-      #   - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-      #     value: "false"
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"

@@ -304,7 +304,24 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: vikunja
+  name: vikunja-public
+  namespace: vikunja
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: tasks.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - ingress.<path:stringreplacesecret#domain>
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: vikunja-private
   namespace: vikunja
   annotations:
     external-dns.custom/type: private
@@ -314,6 +331,3 @@ spec:
       recordType: CNAME
       targets:
         - ingress.<path:stringreplacesecret#domain>
-      # providerSpecific:
-      #   - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
-      #     value: "false"

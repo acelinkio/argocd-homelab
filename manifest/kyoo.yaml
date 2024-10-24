@@ -320,10 +320,10 @@ spec:
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
-  name: kyoo
+  name: kyoo-public
   namespace: kyoo
   annotations:
-    external-dns.custom/type: private
+    external-dns.custom/type: public
 spec:
   endpoints:
     - dnsName: kyoo.<path:stringreplacesecret#domain>
@@ -333,6 +333,20 @@ spec:
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: kyoo-private
+  namespace: kyoo
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: kyoo.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
