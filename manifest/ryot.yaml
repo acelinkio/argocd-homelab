@@ -95,50 +95,50 @@ spec:
       app.kubernetes.io/instance: ryot
   template:
     metadata:
-      labels: 
+      labels:
         app.kubernetes.io/instance: ryot
         app.kubernetes.io/name: ryot
     spec:
-      containers: 
+      containers:
         - env:
-          - name: FRONTEND_URL
-            value: "https://ryot.<path:stringreplacesecret#domain>"
-          - name: USERS_DISABLE_LOCAL_AUTH
-            value: "true"
-          - name: SERVER_OIDC_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: client_id
-                name: sso
-          - name: SERVER_OIDC_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                key: client_secret
-                name: sso
-          - name: SERVER_OIDC_ISSUER_URL
-            value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
-          - name: HELPERVAR_POSTGRES_USER
-            valueFrom:
-              secretKeyRef:
-                key: postgresuser
-                name: ryot-configsecrets
-          - name: HELPERVAR_POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgrespassword
-                name: ryot-configsecrets
-          - name: VIDEO_GAMES_TWITCH_CLIENT_ID
-            valueFrom:
-              secretKeyRef:
-                key: twitch_client_id
-                name: ryot-configsecrets
-          - name: VIDEO_GAMES_TWITCH_CLIENT_SECRET
-            valueFrom:
-              secretKeyRef:
-                key: twitch_client_secret
-                name: ryot-configsecrets
-          - name: DATABASE_URL
-            value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
+            - name: FRONTEND_URL
+              value: "https://ryot.<path:stringreplacesecret#domain>"
+            - name: USERS_DISABLE_LOCAL_AUTH
+              value: "true"
+            - name: SERVER_OIDC_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: sso
+            - name: SERVER_OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: sso
+            - name: SERVER_OIDC_ISSUER_URL
+              value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
+            - name: HELPERVAR_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuser
+                  name: ryot-configsecrets
+            - name: HELPERVAR_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgrespassword
+                  name: ryot-configsecrets
+            - name: VIDEO_GAMES_TWITCH_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: twitch_client_id
+                  name: ryot-configsecrets
+            - name: VIDEO_GAMES_TWITCH_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: twitch_client_secret
+                  name: ryot-configsecrets
+            - name: DATABASE_URL
+              value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
           image: ghcr.io/ignisda/ryot:v7.7.0
           name: main
 ---
@@ -168,22 +168,22 @@ metadata:
   namespace: ryot
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "ryot.<path:stringreplacesecret#domain>"
+    - "ryot.<path:stringreplacesecret#domain>"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: ryot
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: ryot
+          port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint

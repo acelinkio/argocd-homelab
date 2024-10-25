@@ -183,22 +183,22 @@ metadata:
   namespace: mealie
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "mealie.<path:stringreplacesecret#domain>"
+    - "mealie.<path:stringreplacesecret#domain>"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: mealie
-      port: 9000
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: mealie
+          port: 9000
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint

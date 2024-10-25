@@ -146,49 +146,49 @@ spec:
       app.kubernetes.io/instance: vikunja
   template:
     metadata:
-      labels: 
+      labels:
         app.kubernetes.io/component: api
         app.kubernetes.io/instance: vikunja
         app.kubernetes.io/name: vikunja
     spec:
-      containers: 
+      containers:
         - env:
-          - name: VIKUNJA_AUTH_LOCAL
-            value: "false"
-          - name: VIKUNJA_DATABASE_TYPE
-            value: postgres
-          - name: VIKUNJA_DATABASE_HOST
-            value: cluster01.postgres
-          - name: VIKUNJA_DATABASE_DATABASE
-            value: vikunja
-          - name: VIKUNJA_DATABASE_SSLMODE
-            value: require
-          - name: VIKUNJA_DATABASE_USER
-            valueFrom:
-              secretKeyRef:
-                key: postgresuser
-                name: vikunja-configsecrets
-          - name: VIKUNJA_DATABASE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                key: postgrespassword
-                name: vikunja-configsecrets
-          - name: VIKUNJA_SERVICE_PUBLICURL
-            value: https://tasks.<path:stringreplacesecret#domain>
-          - name: VIKUNJA_SERVICE_JWTSECRET
-            valueFrom:
-              secretKeyRef:
-                name: vikunja-configsecrets
-                key: jwtsecret
+            - name: VIKUNJA_AUTH_LOCAL
+              value: "false"
+            - name: VIKUNJA_DATABASE_TYPE
+              value: postgres
+            - name: VIKUNJA_DATABASE_HOST
+              value: cluster01.postgres
+            - name: VIKUNJA_DATABASE_DATABASE
+              value: vikunja
+            - name: VIKUNJA_DATABASE_SSLMODE
+              value: require
+            - name: VIKUNJA_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuser
+                  name: vikunja-configsecrets
+            - name: VIKUNJA_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgrespassword
+                  name: vikunja-configsecrets
+            - name: VIKUNJA_SERVICE_PUBLICURL
+              value: https://tasks.<path:stringreplacesecret#domain>
+            - name: VIKUNJA_SERVICE_JWTSECRET
+              valueFrom:
+                secretKeyRef:
+                  name: vikunja-configsecrets
+                  key: jwtsecret
           image: vikunja/api:0.22.1
           name: main
           volumeMounts:
-          - mountPath: /etc/vikunja/config.yaml
-            name: api-config
-            subPath: config.yaml
-          - mountPath: /app/vikunja/files
-            name: files
-      volumes: 
+            - mountPath: /etc/vikunja/config.yaml
+              name: api-config
+              subPath: config.yaml
+            - mountPath: /app/vikunja/files
+              name: files
+      volumes:
         - name: api-config
           secret:
             secretName: sso
@@ -213,12 +213,12 @@ spec:
       app.kubernetes.io/instance: vikunja
   template:
     metadata:
-      labels: 
+      labels:
         app.kubernetes.io/component: frontend
         app.kubernetes.io/instance: vikunja
         app.kubernetes.io/name: vikunja
-    spec: 
-      containers: 
+    spec:
+      containers:
         - image: vikunja/frontend:0.22.1
           name: main
 ---
@@ -271,35 +271,35 @@ metadata:
   namespace: vikunja
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "tasks.<path:stringreplacesecret#domain>"
+    - "tasks.<path:stringreplacesecret#domain>"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /.well-known
-    - path:
-        type: PathPrefix
-        value: /dav
-    - path:
-        type: PathPrefix
-        value: /api
-    backendRefs:
-    - name: vikunja-api
-      port: 3456
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-    backendRefs:
-    - name: vikunja-frontend
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /.well-known
+        - path:
+            type: PathPrefix
+            value: /dav
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: vikunja-api
+          port: 3456
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: vikunja-frontend
+          port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint

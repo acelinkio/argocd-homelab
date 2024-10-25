@@ -115,18 +115,18 @@ metadata:
   namespace: observability
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "grafana.<path:stringreplacesecret#domain>"
+    - "grafana.<path:stringreplacesecret#domain>"
   rules:
-  - backendRefs:
-    - name: grafana
-      port: 80
+    - backendRefs:
+        - name: grafana
+          port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -220,7 +220,7 @@ spec:
           commonConfig:
             replication_factor: 1
           storage:
-            type: 'filesystem'
+            type: "filesystem"
         singleBinary:
           replicas: 1
   syncPolicy:

@@ -283,15 +283,15 @@ metadata:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "hubble.<path:stringreplacesecret#domain>"
+    - "hubble.<path:stringreplacesecret#domain>"
   rules:
-  - backendRefs:
-    - name: hubble-ui
-      port: 80
+    - backendRefs:
+        - name: hubble-ui
+          port: 80
 ---
 # apiVersion: gateway.networking.k8s.io/v1
 # kind: GRPCRoute

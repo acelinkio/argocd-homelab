@@ -65,48 +65,48 @@ metadata:
   namespace: test-zone
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
-  - name: external
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "echo.<path:stringreplacesecret#domain>"
+    - "echo.<path:stringreplacesecret#domain>"
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /api
-    backendRefs:
-    - name: echo
-      port: 80
-    filters:
-      - type: URLRewrite
-        urlRewrite:
-          path:
-            type: ReplacePrefixMatch
-            replacePrefixMatch: /
-  - backendRefs:
-    - name: echo
-      port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: echo
+          port: 80
       filters:
-      - requestHeaderModifier:
-          add:
-          - name: mytestheader1backend1
-            value: "setviahttproute"
-        type: RequestHeaderModifier
-    filters:
-    - type: URLRewrite
-      urlRewrite:
-        hostname: why.hello.there
-    - requestHeaderModifier:
-        set:
-        - name: mytestheader1all
-          value: "setviahttproute"
-        - name: mytestheader2all
-          value: "setviahttproute"
-      type: RequestHeaderModifier
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+    - backendRefs:
+        - name: echo
+          port: 80
+          filters:
+            - requestHeaderModifier:
+                add:
+                  - name: mytestheader1backend1
+                    value: "setviahttproute"
+              type: RequestHeaderModifier
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: why.hello.there
+        - requestHeaderModifier:
+            set:
+              - name: mytestheader1all
+                value: "setviahttproute"
+              - name: mytestheader2all
+                value: "setviahttproute"
+          type: RequestHeaderModifier
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -200,15 +200,15 @@ metadata:
   namespace: test-zone
 spec:
   parentRefs:
-  - name: internal
-    namespace: gateway
-    sectionName: https
+    - name: internal
+      namespace: gateway
+      sectionName: https
   hostnames:
-  - "httpbin.<path:stringreplacesecret#domain>"
+    - "httpbin.<path:stringreplacesecret#domain>"
   rules:
-  - backendRefs:
-    - name: httpbin
-      port: 80
+    - backendRefs:
+        - name: httpbin
+          port: 80
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint

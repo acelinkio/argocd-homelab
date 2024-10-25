@@ -15,23 +15,23 @@ spec:
     annotations:
       io.cilium/lb-ipam-ips: 192.168.1.11
   listeners:
-  - protocol: HTTP
-    port: 80
-    name: http
-    allowedRoutes:
-      namespaces:
-        from: Same
-  - protocol: HTTPS
-    port: 443
-    name: https
-    tls:
-      certificateRefs:
-      - kind: Secret
-        name: wildcard-production
-        namespace: certificate
-    allowedRoutes:
-      namespaces:
-        from: All
+    - protocol: HTTP
+      port: 80
+      name: http
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - protocol: HTTPS
+      port: 443
+      name: https
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-production
+            namespace: certificate
+      allowedRoutes:
+        namespaces:
+          from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -75,23 +75,23 @@ spec:
     annotations:
       io.cilium/lb-ipam-ips: 192.168.1.10
   listeners:
-  - protocol: HTTP
-    port: 80
-    name: http
-    allowedRoutes:
-      namespaces:
-        from: Same
-  - protocol: HTTPS
-    port: 443
-    name: https
-    tls:
-      certificateRefs:
-      - kind: Secret
-        name: wildcard-production
-        namespace: certificate
-    allowedRoutes:
-      namespaces:
-        from: All
+    - protocol: HTTP
+      port: 80
+      name: http
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - protocol: HTTPS
+      port: 443
+      name: https
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-production
+            namespace: certificate
+      allowedRoutes:
+        namespaces:
+          from: All
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute

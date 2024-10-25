@@ -292,7 +292,7 @@ spec:
 #     publictestdb:
 #       defaultUsers: true
 #       extensions: {}
-#       schemas:      
+#       schemas:
 #         public:
 #           defaultRoles: false
 #           defaultUsers: false

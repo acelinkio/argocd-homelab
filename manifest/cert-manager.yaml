@@ -61,12 +61,12 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-staging
     solvers:
-    - dns01:
-        cloudflare:
-          apiTokenSecretRef:
-            name: cert-manager
-            key: token
-      selector: {}
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cert-manager
+              key: token
+        selector: {}
 ---
 apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
@@ -81,9 +81,9 @@ spec:
     privateKeySecretRef:
       name: letsencrypt-production
     solvers:
-    - dns01:
-        cloudflare:
-          apiTokenSecretRef:
-            name: cert-manager
-            key: token
-      selector: {}
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cert-manager
+              key: token
+        selector: {}

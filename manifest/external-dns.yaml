@@ -61,7 +61,7 @@ spec:
               secretKeyRef:
                 name: external-dns
                 key: cloudflare-api-key
-        extraArgs: 
+        extraArgs:
           - "--annotation-filter=external-dns.custom/type in (public)"
   syncPolicy:
     automated:
@@ -117,7 +117,7 @@ spec:
                 port: http-webhook
               initialDelaySeconds: 10
               timeoutSeconds: 5
-        extraArgs: 
+        extraArgs:
           - "--annotation-filter=external-dns.custom/type in (private)"
         fullnameOverride: external-dns-unifi
         policy: sync
