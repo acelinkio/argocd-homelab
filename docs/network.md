@@ -32,3 +32,7 @@ Cilium does not allocate the first and last IP addresses of a CIDR block.  https
 | gateway        | cilium                     | external         | cilium                                       | external               | 192.168.1.10             |
 | gateway        | cilium                     | internal         | cilium                                       | internal               | 192.168.1.11             |
 | ingress        | ingress-nginx              | internal         | ingress-nginx-internal                       | n/a                    | 192.168.1.12             |
+
+
+# DNS
+Note that many modern web browsers use DNSoverHTTPS.  Be sure to add an exception for your domain, otherwise traffic will go through Cloudflare when possible.
