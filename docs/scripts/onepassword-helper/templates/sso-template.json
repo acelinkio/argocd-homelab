@@ -1,0 +1,61 @@
+{
+    "title": "sso",
+    "category": "LOGIN",
+    "sections": [
+      {
+        "id": "add more" 
+      }
+    ],
+    "fields": [
+      {
+        "section": { "id": "add more" },
+        "type": "STRING",      "label": "argocd_client_id",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "CONCEALED",   "label": "argocd_client_secret",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "STRING",      "label": "grafana_client_id",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "CONCEALED",   "label": "grafana_client_secret",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "STRING",      "label": "miniflux_client_id",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "CONCEALED",   "label": "miniflux_client_secret",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "STRING",      "label": "ryot_client_id",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "CONCEALED",   "label": "ryot_client_secret",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "STRING",      "label": "vikunja_client_id",
+        "value": ""
+      },
+      {
+        "section": { "id": "add more" },
+        "type": "CONCEALED",   "label": "vikunja_client_secret",
+        "value": ""
+      }
+    ]
+  }
