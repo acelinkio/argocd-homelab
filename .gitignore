@@ -1,5 +1,13 @@
+# macos
 .DS_Store
 *.swp
 
+# terraform
+.terraform
+*.tfstate
+*.tfstate.*
+.terraform.lock.hcl
+
+# personal
 scratch/*
 1password-credentials.json
