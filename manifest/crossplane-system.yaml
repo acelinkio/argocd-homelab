@@ -27,15 +27,6 @@ spec:
 apiVersion: pkg.crossplane.io/v1
 kind: Provider
 metadata:
-  name: provider-sql
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  package: "xpkg.upbound.io/crossplane-contrib/provider-sql:v0.9.0"
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
   name: provider-terraform
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
