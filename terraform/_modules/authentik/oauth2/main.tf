@@ -2,6 +2,10 @@ data "authentik_flow" "default-authorization-flow" {
   slug = "default-provider-authorization-explicit-consent"
 }
 
+data "authentik_flow" "default-invalidation-flow" {
+  slug = "default-provider-invalidation-flow"
+}
+
 data "authentik_certificate_key_pair" "generated" {
   name = "authentik Self-signed Certificate"
 }
@@ -12,6 +16,7 @@ resource "authentik_provider_oauth2" "provider" {
   client_id            = var.client_credentials[each.key].client_id
   client_secret        = var.client_credentials[each.key].client_secret
   authorization_flow   = data.authentik_flow.default-authorization-flow.id
+  invalidation_flow    = data.authentik_flow.default-invalidation-flow.id
   access_code_validity = "minutes=10"
   redirect_uris        = each.value.auth_provider.redirect_uris
   signing_key          = data.authentik_certificate_key_pair.generated.id
