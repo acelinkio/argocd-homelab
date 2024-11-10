@@ -292,19 +292,19 @@ spec:
       - name: AUTHENTIK_URL
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_url
       # used by authentik terraform provider
       - name: AUTHENTIK_TOKEN
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_token
     varFiles:
       - source: SecretKey
         secretKeyRef:
-          key: sso.tfvars
-          name: sso
+          key: oauth.tfvars
+          name: tf-authentik
           namespace: tf-workspace
     source: Inline
     initArgs:
@@ -483,13 +483,13 @@ spec:
       - name: AUTHENTIK_URL
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_url
       # used by authentik terraform provider
       - name: AUTHENTIK_TOKEN
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_token
     source: Inline
     initArgs:
@@ -541,23 +541,23 @@ spec:
       - name: AUTHENTIK_URL
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_url
       # used by authentik terraform provider
       - name: AUTHENTIK_TOKEN
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: authentik_token
       - name: TF_VAR_federation_google_client_id
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: federation_google_client_id
       - name: TF_VAR_federation_google_client_secret
         secretKeyRef:
           namespace: tf-workspace
-          name: sso
+          name: tf-authentik
           key: federation_google_client_secret
     source: Inline
     initArgs:
