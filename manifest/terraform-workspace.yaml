@@ -1,0 +1,460 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: tf-workspace
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: tf-workspace
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        authentik_url: "https://auth.{{ .domainbase | toString }}"
+        authentik_token: "{{ .authentik_token | toString }}"
+        federation_google_client_id: "{{ .federation_google_client_id | toString }}"
+        federation_google_client_secret: "{{ .federation_google_client_secret | toString }}"
+        sso.tfvars: |-
+          domainbase = "{{ .domainbase | toString }}"
+          client_credentials = {
+            "argocd" = {
+              client_id     = "{{ .argocd_client_id | toString }}"
+              client_secret = "{{ .argocd_client_secret | toString }}"
+            }
+            "grafana" = {
+              client_id     = "{{ .grafana_client_id | toString }}"
+              client_secret = "{{ .grafana_client_secret | toString }}"
+            }
+            "kyoo" = {
+              client_id     = "{{ .kyoo_client_id | toString }}"
+              client_secret = "{{ .kyoo_client_secret | toString }}"
+            }
+            "miniflux" = {
+              client_id     = "{{ .miniflux_client_id | toString }}"
+              client_secret = "{{ .miniflux_client_secret | toString }}"
+            }
+            "mealie" = {
+              client_id     = "{{ .mealie_client_id | toString }}"
+              client_secret = "{{ .mealie_client_secret | toString }}"
+            }
+            "ryot" = {
+              client_id     = "{{ .ryot_client_id | toString }}"
+              client_secret = "{{ .ryot_client_secret | toString }}"
+            }
+            "vikunja" = {
+              client_id     = "{{ .vikunja_client_id | toString }}"
+              client_secret = "{{ .vikunja_client_secret | toString }}"
+            }
+          }
+  data:
+    - secretKey: domainbase
+      remoteRef:
+        key: stringreplacesecret
+        property: domain
+    - secretKey: authentik_token
+      remoteRef:
+        key: authentik
+        property: bootstrap_token
+    - secretKey: argocd_client_id
+      remoteRef:
+        key: sso
+        property: argocd_client_id
+    - secretKey: argocd_client_secret
+      remoteRef:
+        key: sso
+        property: argocd_client_secret
+    - secretKey: grafana_client_id
+      remoteRef:
+        key: sso
+        property: grafana_client_id
+    - secretKey: grafana_client_secret
+      remoteRef:
+        key: sso
+        property: grafana_client_secret
+    - secretKey: kyoo_client_id
+      remoteRef:
+        key: sso
+        property: kyoo_client_id
+    - secretKey: kyoo_client_secret
+      remoteRef:
+        key: sso
+        property: kyoo_client_secret
+    - secretKey: mealie_client_id
+      remoteRef:
+        key: sso
+        property: mealie_client_id
+    - secretKey: mealie_client_secret
+      remoteRef:
+        key: sso
+        property: mealie_client_secret
+    - secretKey: miniflux_client_id
+      remoteRef:
+        key: sso
+        property: miniflux_client_id
+    - secretKey: miniflux_client_secret
+      remoteRef:
+        key: sso
+        property: miniflux_client_secret
+    - secretKey: ryot_client_id
+      remoteRef:
+        key: sso
+        property: ryot_client_id
+    - secretKey: ryot_client_secret
+      remoteRef:
+        key: sso
+        property: ryot_client_secret
+    - secretKey: vikunja_client_id
+      remoteRef:
+        key: sso
+        property: vikunja_client_id
+    - secretKey: vikunja_client_secret
+      remoteRef:
+        key: sso
+        property: vikunja_client_secret
+    - secretKey: federation_google_client_id
+      remoteRef:
+        key: sso
+        property: federation_google_client_id
+    - secretKey: federation_google_client_secret
+      remoteRef:
+        key: sso
+        property: federation_google_client_secret
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: ProviderConfig
+metadata:
+  name: authentik-provider
+spec:
+  configuration: |
+    provider "authentik" {
+    }
+
+    terraform {
+      required_providers {
+        authentik = {
+          source = "goauthentik/authentik"
+          version = "2024.10.0"
+        }
+      }
+      backend "kubernetes" {
+        secret_suffix     = "authentik-provider"
+        namespace         = "authentik"
+        in_cluster_config = true
+      }
+    }
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: authentik-oauth
+spec:
+  providerConfigRef:
+    name: authentik-provider
+  forProvider:
+    env:
+      # used by authentik terraform provider
+      - name: AUTHENTIK_URL
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_url
+      # used by authentik terraform provider
+      - name: AUTHENTIK_TOKEN
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_token
+    varFiles:
+      - source: SecretKey
+        secretKeyRef:
+          key: sso.tfvars
+          name: sso
+          namespace: tf-workspace
+    source: Inline
+    initArgs:
+      - -upgrade=true
+    module: |-
+      variable "domainbase" {}
+      variable "client_credentials" {
+        type = map(object({
+          client_id     = string
+          client_secret = string
+        }))
+        sensitive = true
+      }
+
+      data "authentik_property_mapping_provider_scope" "email" {
+        managed = "goauthentik.io/providers/oauth2/scope-email"
+      }
+
+      data "authentik_property_mapping_provider_scope" "offline_access" {
+        managed = "goauthentik.io/providers/oauth2/scope-offline_access"
+      }
+
+      data "authentik_property_mapping_provider_scope" "openid" {
+        managed = "goauthentik.io/providers/oauth2/scope-openid"
+      }
+
+      data "authentik_property_mapping_provider_scope" "profile" {
+        managed = "goauthentik.io/providers/oauth2/scope-profile"
+      }
+
+      module "oauth2" {
+        source = "github.com/acelinkio/argocd-homelab.git//terraform/_modules/authentik/oauth2?ref=main"
+
+        oauth2 = {
+          "argocd" = {
+            auth_application = {
+              icon       = "https://argo-cd.readthedocs.io/en/stable/assets/logo.png"
+              launch_url = "https://argocd.${var.domainbase}/auth/login"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://argocd.${var.domainbase}/api/dex/callback",
+                "http://localhost:8085/auth/callback"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "grafana" = {
+            auth_application = {
+              icon       = "https://grafana.com/static/img/menu/grafana2.svg"
+              launch_url = "https://grafana.${var.domainbase}/login/generic_oauth"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://grafana.${var.domainbase}/login/generic_oauth"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "kyoo" = {
+            auth_application = {
+              icon       = "https://github.com/zoriya/Kyoo/raw/master/icons/icon-256x256.png"
+              launch_url = "https://kyoo.${var.domainbase}/api/auth/logged/service"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://kyoo.${var.domainbase}/api/auth/logged/service"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "mealie" = {
+            auth_application = {
+              icon       = "https://avatars.githubusercontent.com/u/92342333?s=48&v=4"
+              launch_url = "https://mealie.${var.domainbase}/?redirectToProvider=true"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://mealie.${var.domainbase}/login"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "miniflux" = {
+            auth_application = {
+              icon       = "https://raw.githubusercontent.com/miniflux/logo/master/icon.svg"
+              launch_url = "https://rss.${var.domainbase}/oauth2/oidc/redirect"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://rss.${var.domainbase}/oauth2/oidc/callback"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "ryot" = {
+            auth_application = {
+              icon       = "https://github.com/IgnisDa/ryot/blob/main/apps/frontend/public/logo-light.png?raw=true"
+              launch_url = "https://ryot.${var.domainbase}/?redirectToProvider=true"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://ryot.${var.domainbase}/api/auth"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "vikunja" = {
+            auth_application = {
+              icon       = "https://kolaente.dev/avatars/dd73c49581a6904336c5d40fb66ef950?size=280"
+              launch_url = "https://tasks.${var.domainbase}/?redirectToProvider=true"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                "https://tasks.${var.domainbase}/auth/openid/authentik"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+        }
+        client_credentials = var.client_credentials
+      }
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: authentik-groups
+spec:
+  providerConfigRef:
+    name: authentik-provider
+  forProvider:
+    env:
+      # used by authentik terraform provider
+      - name: AUTHENTIK_URL
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_url
+      # used by authentik terraform provider
+      - name: AUTHENTIK_TOKEN
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_token
+    source: Inline
+    initArgs:
+      - -upgrade=true
+    module: |-
+      resource "authentik_group" "argocd_admin" {
+        name         = "ArgoCD Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "grafana_admin" {
+        name         = "Grafana Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "kyoo_admin" {
+        name         = "kyoo Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "mealie_admin" {
+        name         = "mealie Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "mealie_user" {
+        name         = "mealie User"
+        is_superuser = false
+      }
+      resource "authentik_group" "miniflux_admin" {
+        name         = "Miniflux Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "ryot_admin" {
+        name         = "ryot Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "vikunja_admin" {
+        name         = "Vikunja Admin"
+        is_superuser = false
+      }
+---
+apiVersion: tf.upbound.io/v1beta1
+kind: Workspace
+metadata:
+  name: authentik-signin
+spec:
+  providerConfigRef:
+    name: authentik-provider
+  forProvider:
+    env:
+      # used by authentik terraform provider
+      - name: AUTHENTIK_URL
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_url
+      # used by authentik terraform provider
+      - name: AUTHENTIK_TOKEN
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: authentik_token
+      - name: TF_VAR_federation_google_client_id
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: federation_google_client_id
+      - name: TF_VAR_federation_google_client_secret
+        secretKeyRef:
+          namespace: tf-workspace
+          name: sso
+          key: federation_google_client_secret
+    source: Inline
+    initArgs:
+      - -upgrade=true
+    module: |-
+      variable "federation_google_client_id" {}
+      variable "federation_google_client_secret" {}
+      data "authentik_flow" "default-source-authentication" {
+        slug = "default-source-authentication"
+      }      
+      resource "authentik_source_oauth" "google" {
+        name                = "google"
+        slug                = "google"
+        authentication_flow = data.authentik_flow.default-source-authentication.id
+        enrollment_flow     = authentik_flow.no_enrollment.uuid
+        provider_type   = "google"
+        consumer_key    = var.federation_google_client_id
+        consumer_secret = var.federation_google_client_secret
+        user_matching_mode = "email_link"
+      }
+      resource "authentik_flow" "no_enrollment" {
+        name        = "disable-enrollment"
+        title       = "Disable enrollment"
+        slug        = "disable-enrollment"
+        designation = "enrollment"
+      }
