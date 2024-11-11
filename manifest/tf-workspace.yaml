@@ -35,6 +35,10 @@ spec:
               client_id     = "{{ .grafana_client_id | toString }}"
               client_secret = "{{ .grafana_client_secret | toString }}"
             }
+            "komga" = {
+              client_id     = "{{ .komga_client_id | toString }}"
+              client_secret = "{{ .komga_client_secret | toString }}"
+            }
             "kyoo" = {
               client_id     = "{{ .kyoo_client_id | toString }}"
               client_secret = "{{ .kyoo_client_secret | toString }}"
@@ -81,6 +85,14 @@ spec:
       remoteRef:
         key: sso
         property: grafana_client_secret
+    - secretKey: komga_client_id
+      remoteRef:
+        key: sso
+        property: komga_client_id
+    - secretKey: komga_client_secret
+      remoteRef:
+        key: sso
+        property: komga_client_secret
     - secretKey: kyoo_client_id
       remoteRef:
         key: sso
@@ -241,6 +253,24 @@ spec:
             auth_provider = {
               redirect_uris = [
                 "https://grafana.${var.domainbase}/login/generic_oauth"
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "komga" = {
+            auth_application = {
+              icon       = "https://komga.org/img/logo.svg"
+              launch_url = "https://komga.${var.domainbase}"
+              policy     = "all"
+            }
+            auth_provider = {
+              redirect_uris = [
+                ".*"
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
