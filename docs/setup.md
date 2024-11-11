@@ -54,6 +54,8 @@ homelab                        # vault used for containing secrets
   - create key named `argocd_client_secret`
   - create key named `grafana_client_id`
   - create key named `grafana_client_secret`
+  - create key named `komga_client_id`
+  - create key named `komga_client_secret`
   - create key named `kyoo_client_id`
   - create key named `kyoo_client_secret`
   - create key named `mealie_client_id`
@@ -225,11 +227,14 @@ This is a manual step until either the default authentik resource can be importe
 
 Update stage default-provider-authoerization-consent to use 26 weeks instead of 4.  
 
+### Login to Komga
+Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
+
 ### Login to Kyoo
 Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
 
 ### Login to Mealie
-Login to Authentik.  Add your user to `mealie Admin` and `mealie User` groups.  Login to mealie via OIDC.  Delete the default user.
+Login to Authentik.  Add your user to `mealie Admin` Authentik groups.  Login to mealie via OIDC.  Delete the default user.
 
 # Additional Comments
 * If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
