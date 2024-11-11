@@ -144,7 +144,7 @@ spec:
               value: "Authentik"
             - name: OIDC_REMEMBER_ME
               value: "true"
-          image: ghcr.io/mealie-recipes/mealie:v2.1.0
+          image: ghcr.io/mealie-recipes/mealie:v2.2.0
           name: app
           resources:
             limits:
