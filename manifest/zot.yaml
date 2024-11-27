@@ -1,0 +1,37 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: zot
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: zot
+  namespace: argocd
+spec:
+  destination:
+    namespace: zot
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: zot
+    repoURL: http://zotregistry.dev/helm-charts
+    targetRevision: 0.1.65
+    helm:
+      valuesObject:
+        image:
+          repository: ghcr.io/project-zot/zot
+          tag: ""
+        service:
+          type: ClusterIP
+        persistence: true
+        pvc:
+          create: true
+          storage: 8Gi
+          storageClassName: longhorn
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
