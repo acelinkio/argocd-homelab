@@ -270,7 +270,7 @@ spec:
             }
             auth_provider = {
               redirect_uris = [
-                "\.*"
+                ".*"
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
