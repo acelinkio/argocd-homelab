@@ -279,10 +279,12 @@ spec:
             existingSecret: misc
           oidc_providers:
             - name: Authentik
+              logo: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
               existingSecret: sso
               clientIdKey: clientId
               clientSecretKey: clientSecret
-              logo: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
+              scope: "email openid profile"
+              authMethod: ClientSecretBasic
               authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
               tokenAddress: https://auth.<path:stringreplacesecret#domain>/application/o/token/
               profileAddress: https://auth.<path:stringreplacesecret#domain>/application/o/userinfo/
