@@ -277,14 +277,14 @@ spec:
           address: https://kyoo.<path:stringreplacesecret#domain>
           apikey:
             existingSecret: misc
-          oidc:
-            enabled: true
-            existingSecret: sso
-            name: Authentik
-            logo: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
-            authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
-            tokenAddress: https://auth.<path:stringreplacesecret#domain>/application/o/token/
-            profileAddress: https://auth.<path:stringreplacesecret#domain>/application/o/userinfo/
+          oidc_providers:
+            - name: Authentik
+              enabled: true
+              existingSecret: sso
+              logo: https://avatars.githubusercontent.com/u/82976448?s=48&v=4
+              authorizationAddress: https://auth.<path:stringreplacesecret#domain>/application/o/authorize/
+              tokenAddress: https://auth.<path:stringreplacesecret#domain>/application/o/token/
+              profileAddress: https://auth.<path:stringreplacesecret#domain>/application/o/userinfo/
         media:
           volumes:
             - name: media
