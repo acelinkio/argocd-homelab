@@ -283,12 +283,12 @@ spec:
           "kyoo" = {
             auth_application = {
               icon       = "https://github.com/zoriya/Kyoo/raw/master/icons/icon-256x256.png"
-              launch_url = "https://kyoo.${var.domainbase}/api/auth/login/service?redirectUrl=https://kyoo.${var.domainbase}/login/callback"
+              launch_url = "https://kyoo.${var.domainbase}/api/auth/login/authentik?redirectUrl=https://kyoo.${var.domainbase}/login/callback"
               policy     = "all"
             }
             auth_provider = {
               redirect_uris = [
-                "https://kyoo.${var.domainbase}/api/auth/logged/service"
+                "https://kyoo.${var.domainbase}/api/auth/logged/authentik"
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
