@@ -155,7 +155,7 @@ spec:
       required_providers {
         authentik = {
           source = "goauthentik/authentik"
-          version = "2024.10.0"
+          version = "2024.10.2"
         }
       }
       backend "kubernetes" {
@@ -270,7 +270,7 @@ spec:
             }
             auth_provider = {
               redirect_uris = [
-                ".*"
+                "\.*"
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
