@@ -10,11 +10,33 @@ metadata:
   name: zot
   namespace: zot
 data:
-  # default configuration
   config.json: |-
     {
-      "storage":{
-          "rootDirectory":"/var/lib/registry"
+      "storage": {
+        "rootDirectory": "/var/lib/registry",
+        "dedupe": true,
+        "gc": true,
+        "gcDelay": "1h",
+        "gcInterval": "24h",
+        "retention": {
+          "dryRun": false,
+          "delay": "24h",
+          "policies": [
+            {
+              "repositories": ["**"],
+              "deleteReferrers": true,
+              "deleteUntagged": true,
+              "keepTags": [
+                {
+                  "mostRecentlyPushedCount": 5,
+                  "mostRecentlyPulledCount": 5,
+                  "pulledWithin": "720h",
+                  "pushedWithin": "720h"
+                }
+              ]
+            }
+          ]
+        }
       },
       "http":{
           "address":"0.0.0.0",
@@ -22,14 +44,15 @@ data:
           "compat": ["docker2s2"]
       },
       "log":{
-          "level":"debug"
+          "level":"info"
       },
       "extensions": {
+        "scrub": {
+          "enable": true,
+          "interval": "24h"
+        },
         "search": {
-            "enable": true,
-            "cve": {
-                "updateInterval": "2h"
-            }
+            "enable": true
         },
         "ui": {
             "enable": true
@@ -45,6 +68,8 @@ kind: Deployment
 metadata:
   name: zot
   namespace: zot
+  annotations:
+    reloader.stakater.com/auto: "true"
   labels:
     app.kubernetes.io/instance: zot
     app.kubernetes.io/name: zot
