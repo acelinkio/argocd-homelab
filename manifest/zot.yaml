@@ -98,6 +98,10 @@ spec:
           volumeMounts:
             - name: zot-registry
               mountPath: /var/lib/registry
+            - mountPath: /etc/zot/config.json
+              name: config
+              readOnly: true
+              subPath: config.json
       volumes:
         - name: zot-registry
           persistentVolumeClaim:
