@@ -144,3 +144,58 @@ spec:
     app.kubernetes.io/instance: zot
     app.kubernetes.io/name: zot
   type: ClusterIP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: zot
+  namespace: zot
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    # - name: external
+    #   namespace: gateway
+    #   sectionName: https
+  hostnames:
+    - "zot.<path:stringreplacesecret#domain>"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: zot
+          port: 5000
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: zot-private
+  namespace: zot
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: zot.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+# ---
+# apiVersion: externaldns.k8s.io/v1alpha1
+# kind: DNSEndpoint
+# metadata:
+#   name: zot-public
+#   namespace: zot
+#   annotations:
+#     external-dns.custom/type: public
+# spec:
+#   endpoints:
+#     - dnsName: zot.<path:stringreplacesecret#domain>
+#       recordType: CNAME
+#       targets:
+#         - ingress.<path:stringreplacesecret#domain>
+#       providerSpecific:
+#         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+#           value: "true"
