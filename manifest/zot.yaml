@@ -23,7 +23,9 @@ data:
           "delay": "24h",
           "policies": [
             {
-              "repositories": ["**"],
+              "repositories": [
+                "**"
+              ],
               "deleteReferrers": true,
               "deleteUntagged": true,
               "keepTags": [
@@ -38,12 +40,12 @@ data:
           ]
         }
       },
-      "http":{
-          "address":"0.0.0.0",
-          "port":"5000",
+      "http": {
+        "address": "0.0.0.0",
+        "port": "5000"
       },
-      "log":{
-          "level":"info"
+      "log": {
+        "level": "info"
       },
       "extensions": {
         "scrub": {
@@ -51,10 +53,10 @@ data:
           "interval": "24h"
         },
         "search": {
-            "enable": true
+          "enable": true
         },
         "ui": {
-            "enable": true
+          "enable": true
         },
         "mgmt": {
           "enable": true
