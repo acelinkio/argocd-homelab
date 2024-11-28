@@ -11,16 +11,16 @@ data "authentik_certificate_key_pair" "generated" {
 }
 
 resource "authentik_provider_oauth2" "provider" {
-  for_each             = var.oauth2
-  name                 = lower(each.key)
-  client_id            = var.client_credentials[each.key].client_id
-  client_secret        = var.client_credentials[each.key].client_secret
-  authorization_flow   = data.authentik_flow.default-authorization-flow.id
-  invalidation_flow    = data.authentik_flow.default-invalidation-flow.id
-  access_code_validity = "minutes=10"
-  redirect_uris        = each.value.auth_provider.redirect_uris
-  signing_key          = data.authentik_certificate_key_pair.generated.id
-  property_mappings    = each.value.auth_provider.property_mappings
+  for_each              = var.oauth2
+  name                  = lower(each.key)
+  client_id             = var.client_credentials[each.key].client_id
+  client_secret         = var.client_credentials[each.key].client_secret
+  authorization_flow    = data.authentik_flow.default-authorization-flow.id
+  invalidation_flow     = data.authentik_flow.default-invalidation-flow.id
+  access_code_validity  = "minutes=10"
+  allowed_redirect_uris = each.value.auth_provider.allowed_redirect_uris
+  signing_key           = data.authentik_certificate_key_pair.generated.id
+  property_mappings     = each.value.auth_provider.property_mappings
 }
 
 resource "authentik_application" "application" {

@@ -232,9 +232,13 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://argocd.${var.domainbase}/api/dex/callback",
-                "http://localhost:8085/auth/callback"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://argocd.${var.domainbase}/api/dex/callback",
+                  matching_mode = "strict",
+                  url           = "http://localhost:8085/auth/callback",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -251,8 +255,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://grafana.${var.domainbase}/login/generic_oauth"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://grafana.${var.domainbase}/login/generic_oauth",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -269,8 +276,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                ".*"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://komga.${var.domainbase}/login/oauth2/code/authentik",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -287,8 +297,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://kyoo.${var.domainbase}/api/auth/logged/authentik"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://kyoo.${var.domainbase}/api/auth/logged/authentik",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -305,8 +318,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://mealie.${var.domainbase}/login"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://mealie.${var.domainbase}/login",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -323,8 +339,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://rss.${var.domainbase}/oauth2/oidc/callback"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://rss.${var.domainbase}/oauth2/oidc/callback",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -341,8 +360,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://ryot.${var.domainbase}/api/auth"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://ryot.${var.domainbase}/api/auth",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,
@@ -359,8 +381,11 @@ spec:
               policy     = "all"
             }
             auth_provider = {
-              redirect_uris = [
-                "https://tasks.${var.domainbase}/auth/openid/authentik"
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://tasks.${var.domainbase}/auth/openid/authentik",
+                }
               ]
               property_mappings = [
                 data.authentik_property_mapping_provider_scope.openid.id,

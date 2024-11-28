@@ -6,8 +6,11 @@ variable "oauth2" {
       policy     = string
     })
     auth_provider = object({
-      redirect_uris     = optional(list(string))
-      property_mappings = optional(list(string))
+      allowed_redirect_uris = optional(list(object({
+        matching_mode = string
+        url           = string
+      })))
+      property_mappings     = optional(list(string))
     })
   }))
 }
