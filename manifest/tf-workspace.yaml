@@ -236,6 +236,8 @@ spec:
                 {
                   matching_mode = "strict",
                   url           = "https://argocd.${var.domainbase}/api/dex/callback",
+                },
+                {
                   matching_mode = "strict",
                   url           = "http://localhost:8085/auth/callback",
                 }
