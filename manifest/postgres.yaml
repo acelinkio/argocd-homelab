@@ -276,11 +276,89 @@ spec:
         remoteRef:
           remoteKey: postgres.cluster01.vikunja.owner
           property: password
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: cluster02
+  namespace: postgres
+spec:
+  teamId: acid
+  volume:
+    size: 8Gi
+    storageClass: longhorn
+  numberOfInstances: 2
+  preparedDatabases:
+    discourse:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        public:
+          defaultRoles: false
+          defaultUsers: false
+  postgresql:
+    version: "16"
+    parameters:
+      password_encryption: scram-sha-256
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster02.discourse.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: discourse-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster02.discourse.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster02.discourse.owner
+          property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster02.superadmin
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: postgres.cluster02.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster02.superadmin
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster02.superadmin
+          property: password
 # ---
 # apiVersion: acid.zalan.do/v1
 # kind: postgresql
 # metadata:
-#   name: cluster02
+#   name: cluster03
 #   namespace: postgres
 # spec:
 #   teamId: acid
@@ -311,7 +389,7 @@ spec:
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster02.publictestdb.owner
+#   name: cluster03.publictestdb.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -322,23 +400,23 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: publictestdb-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+#       name: publictestdb-owner-user.cluster03.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: postgres.cluster02.publictestdb.owner
+#           remoteKey: postgres.cluster03.publictestdb.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: postgres.cluster02.publictestdb.owner
+#           remoteKey: postgres.cluster03.publictestdb.owner
 #           property: password
 # ---
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster02.datatestdb.owner
+#   name: cluster03.datatestdb.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -349,42 +427,15 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: datatestdb-owner-user.cluster02.credentials.postgresql.acid.zalan.do
+#       name: datatestdb-owner-user.cluster03.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: postgres.cluster02.datatestdb.owner
+#           remoteKey: postgres.cluster03.datatestdb.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: postgres.cluster02.datatestdb.owner
-#           property: password
-# ---
-# apiVersion: external-secrets.io/v1alpha1
-# kind: PushSecret
-# metadata:
-#   name: cluster02.superadmin
-#   namespace: postgres
-#   annotations:
-#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-# spec:
-#   refreshInterval: "5m"
-#   secretStoreRefs:
-#     - name: 1password
-#       kind: ClusterSecretStore
-#   selector:
-#     secret:
-#       name: postgres.cluster02.credentials.postgresql.acid.zalan.do
-#   data:
-#     - match:
-#         secretKey: username
-#         remoteRef:
-#           remoteKey: postgres.cluster02.superadmin
-#           property: username
-#     - match:
-#         secretKey: password
-#         remoteRef:
-#           remoteKey: postgres.cluster02.superadmin
+#           remoteKey: postgres.cluster03.datatestdb.owner
 #           property: password
