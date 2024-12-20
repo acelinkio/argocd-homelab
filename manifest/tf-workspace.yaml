@@ -31,6 +31,10 @@ spec:
               client_id     = "{{ .argocd_client_id | toString }}"
               client_secret = "{{ .argocd_client_secret | toString }}"
             }
+            "discourse" = {
+              client_id     = "{{ .discourse_client_id | toString }}"
+              client_secret = "{{ .discourse_client_secret | toString }}"
+            }
             "grafana" = {
               client_id     = "{{ .grafana_client_id | toString }}"
               client_secret = "{{ .grafana_client_secret | toString }}"
@@ -77,6 +81,14 @@ spec:
       remoteRef:
         key: sso
         property: argocd_client_secret
+    - secretKey: discourse_client_id
+      remoteRef:
+        key: sso
+        property: discourse_client_id
+    - secretKey: discourse_client_secret
+      remoteRef:
+        key: sso
+        property: discourse_client_secret
     - secretKey: grafana_client_id
       remoteRef:
         key: sso
@@ -240,6 +252,27 @@ spec:
                 {
                   matching_mode = "strict",
                   url           = "http://localhost:8085/auth/callback",
+                }
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "discourse" = {
+            auth_application = {
+              icon       = "https://avatars.githubusercontent.com/u/3220138?s=200&v=4"
+              launch_url = "https://discourse.${var.domainbase}/"
+              policy     = "all"
+            }
+            auth_provider = {
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://discourse.${var.domainbase}/",
                 }
               ]
               property_mappings = [
