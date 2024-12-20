@@ -60,7 +60,7 @@ spec:
   project: homelab
   source:
     chart: discourse
-    repoURL: https://charts.bitnami.com/bitnami
+    repoURL: registry-1.docker.io/bitnamicharts
     targetRevision: 15.1.1
     helm:
       # https://github.com/bitnami/charts/tree/main/bitnami/discourse
