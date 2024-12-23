@@ -255,7 +255,7 @@ spec:
               kyoo_back:
                 existingSecret: kyoo-back
             kyoo_transcoder:
-              host: cluster01.postgres.svc.cluster.local
+              host: cluster01.postgres
               kyoo_transcoder:
                 existingSecret: kyoo-transcoder
           rabbitmq:
@@ -298,27 +298,6 @@ spec:
             - name: media
               mountPath: /data
               readOnly: true
-        extraObjects:
-          - kind: PersistentVolumeClaim
-            apiVersion: v1
-            metadata:
-              name: back-storage
-            spec:
-              accessModes:
-                - "ReadWriteOnce"
-              resources:
-                requests:
-                  storage: "3Gi"
-          - kind: PersistentVolumeClaim
-            apiVersion: v1
-            metadata:
-              name: transcoder-storage
-            spec:
-              accessModes:
-                - "ReadWriteOnce"
-              resources:
-                requests:
-                  storage: "3Gi"
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
