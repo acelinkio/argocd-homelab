@@ -296,10 +296,6 @@ spec:
               nfs:
                 server: nassy.pinahouse
                 path: /spin0/media
-          volumeMounts:
-            - name: media
-              mountPath: /media
-              readOnly: true
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
