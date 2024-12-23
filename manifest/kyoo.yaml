@@ -244,6 +244,8 @@ spec:
     helm:
       valuesObject:
         global:
+          image:
+            tag: "4.7.0"
           meilisearch:
             kyoo_back:
               existingSecret: kyoo-back
