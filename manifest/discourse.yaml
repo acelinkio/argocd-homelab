@@ -221,7 +221,7 @@ spec:
   source:
     chart: redis-ha
     repoURL: https://dandydeveloper.github.io/charts/
-    targetRevision: 4.31.0
+    targetRevision: 4.32.0
     helm:
       valuesObject:
         auth: true
