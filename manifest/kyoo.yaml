@@ -245,7 +245,7 @@ spec:
       valuesObject:
         global:
           image:
-            tag: "4.7.0"
+            tag: "4.7.1"
           meilisearch:
             kyoo_back:
               existingSecret: kyoo-back
@@ -258,6 +258,7 @@ spec:
                 existingSecret: kyoo-back
             kyoo_transcoder:
               host: cluster01.postgres
+              sslmode: require
               kyoo_transcoder:
                 existingSecret: kyoo-transcoder
           rabbitmq:
@@ -351,12 +352,6 @@ spec:
       backendRefs:
         - name: kyoo-back
           port: 5000
-      filters:
-        - type: URLRewrite
-          urlRewrite:
-            path:
-              type: ReplacePrefixMatch
-              replacePrefixMatch: /
     - matches:
         - path:
             type: PathPrefix
