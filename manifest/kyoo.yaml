@@ -238,14 +238,12 @@ spec:
     server: https://kubernetes.default.svc
   project: homelab
   source:
-    path: chart/
-    repoURL: https://github.com/zoriya/Kyoo.git
-    targetRevision: master
+    chart: kyoo
+    repoURL: ghcr.io/zoriya/helm-charts
+    targetRevision: 4.7.1
     helm:
       valuesObject:
         global:
-          image:
-            tag: "4.7.1"
           meilisearch:
             kyoo_back:
               existingSecret: kyoo-back
