@@ -49,8 +49,6 @@ spec:
     chart: tenant
     repoURL: https://operator.min.io
     targetRevision: 6.0.4
-    # template generate unused kubernetes secret
-    # https://github.com/minio/operator/issues/2380
     helm:
       valuesObject:
         tenant:
@@ -61,6 +59,10 @@ spec:
             requestAutoCert: false
           configuration:
             name: tenant-config
+          configSecret:
+            existingSecret: true
+            accessKey: ~
+            secretKey: ~
           pools:
             - servers: 1
               name: pool0
