@@ -61,8 +61,8 @@ spec:
             name: tenant-config
           configSecret:
             existingSecret: true
-            accessKey: ~
-            secretKey: ~
+            accessKey: ""
+            secretKey: ""
           pools:
             - servers: 1
               name: pool0
