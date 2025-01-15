@@ -82,6 +82,8 @@ kind: HTTPRoute
 metadata:
   name: tenant-console
   namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   parentRefs:
     - name: internal
@@ -104,6 +106,7 @@ metadata:
   name: tenant-console-private
   namespace: minio
   annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     external-dns.custom/type: private
 spec:
   endpoints:
@@ -117,6 +120,8 @@ kind: HTTPRoute
 metadata:
   name: tenant
   namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
   parentRefs:
     - name: internal
@@ -139,6 +144,7 @@ metadata:
   name: tenant-private
   namespace: minio
   annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
     external-dns.custom/type: private
 spec:
   endpoints:
@@ -146,3 +152,23 @@ spec:
       recordType: CNAME
       targets:
         - intgw.<path:stringreplacesecret#domain>
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: minio-admin
+  namespace: minio
+---
+apiVersion: sts.min.io/v1alpha1
+kind: PolicyBinding
+metadata:
+  name: minio-admin-binding
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  application:
+    serviceaccount: minio-admin
+    namespace: minio
+  policies:
+    - consoleAdmin
