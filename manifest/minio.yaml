@@ -172,3 +172,59 @@ spec:
     namespace: minio
   policies:
     - consoleAdmin
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jobscripts
+  namespace: minio
+data:
+  config.sh: |-
+    #!/bin/bash
+    
+    # create buckets
+    mc mb tenant/logos --ignore-existing
+    mc mb tenant/vikunja --ignore-existing
+---
+# kubectl create job -n minio --from=cronjob/run-scripts run-scripts-immediate
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-scripts
+  namespace: minio
+spec:
+  schedule: "*/15 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          volumes:
+            - name: config-dir
+              emptyDir: {}
+            - name: script-volume
+              configMap:
+                name: jobscripts
+                defaultMode: 0777
+          containers:
+            - name: mc
+              image: quay.io/minio/mc:RELEASE.2024-10-02T08-27-28Z
+              command:
+                - /bin/sh
+                - -c
+                - /scripts/config.sh
+              env:
+                - name: MC_HOST_tenant
+                  value: http://$(ACCESS_KEY):$(SECRET_KEY)@minio.minio.svc.cluster.local
+                - name: MC_STS_ENDPOINT_tenant
+                  value: https://sts.minio-operator.svc.cluster.local:4223/sts/minio
+                - name: MC_WEB_IDENTITY_TOKEN_FILE_tenant
+                  value: /var/run/secrets/kubernetes.io/serviceaccount/token
+              volumeMounts:
+                - name: config-dir
+                  mountPath: /.mc
+                - name: script-volume
+                  mountPath: /scripts/config.sh
+                  subPath: config.sh
+          serviceAccountName: minio-admin
+          serviceAccount: minio-admin
