@@ -155,7 +155,7 @@ spec:
   source:
     chart: kube-prometheus-stack
     repoURL: https://prometheus-community.github.io/helm-charts
-    targetRevision: 68.1.0
+    targetRevision: 68.2.0
     helm:
       valuesObject:
         grafana:
