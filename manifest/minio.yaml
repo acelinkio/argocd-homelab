@@ -35,6 +35,28 @@ spec:
         key: minio.tenant
         property: root_password
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: minio
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: sso
+        property: minio_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: minio_client_secret
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
@@ -179,13 +201,19 @@ metadata:
   name: jobscripts
   namespace: minio
 data:
-  # https://min.io/docs/minio/linux/reference/minio-mc/mc-idp-openid.html#mc.idp.openid.add
   config.sh: |-
     #!/bin/bash
     
     # create buckets
     mc mb tenant/logos --ignore-existing
     mc mb tenant/vikunja --ignore-existing
+
+    # configure oidc
+    if mc idp openid info tenant authentik; then
+      echo "authentik idp already configured"
+    else
+      echo "configuring authentik idp"
+    fi
 ---
 # kubectl create job -n minio --from=cronjob/run-scripts run-scripts-immediate
 apiVersion: batch/v1
@@ -221,6 +249,16 @@ spec:
                   value: https://sts.minio-operator.svc.cluster.local:4223/sts/minio
                 - name: MC_WEB_IDENTITY_TOKEN_FILE_tenant
                   value: /var/run/secrets/kubernetes.io/serviceaccount/token
+                - name: sso_client_id
+                  valueFrom:
+                    secretKeyRef:
+                      key: minio_client_id
+                      name: sso
+                - name: sso_client_secret
+                  valueFrom:
+                    secretKeyRef:
+                      key: minio_client_secret
+                      name: sso
               volumeMounts:
                 - name: config-dir
                   mountPath: /.mc
