@@ -48,11 +48,11 @@ spec:
   target:
     creationPolicy: Owner
   data:
-    - secretKey: client_id
+    - secretKey: minio_client_id
       remoteRef:
         key: sso
         property: minio_client_id
-    - secretKey: client_secret
+    - secretKey: minio_client_secret
       remoteRef:
         key: sso
         property: minio_client_secret
@@ -249,12 +249,12 @@ spec:
                   value: https://sts.minio-operator.svc.cluster.local:4223/sts/minio
                 - name: MC_WEB_IDENTITY_TOKEN_FILE_tenant
                   value: /var/run/secrets/kubernetes.io/serviceaccount/token
-                - name: sso_client_id
+                - name: minio_client_id
                   valueFrom:
                     secretKeyRef:
                       key: minio_client_id
                       name: sso
-                - name: sso_client_secret
+                - name: minio_client_secret
                   valueFrom:
                     secretKeyRef:
                       key: minio_client_secret
