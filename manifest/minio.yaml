@@ -214,7 +214,7 @@ data:
     else
       echo "configuring authentik idp"
       mc idp openid add tenant authentik client_id=$minio_client_id client_secret=$minio_client_secret config_url="https://auth.<path:stringreplacesecret#domain>/application/o/minio/.well-known/openid-configuration" scopes="email,profile,openid,groups" redirect_uri="https://minio-console.<path:stringreplacesecret#domain>/oauth_callback" role_policy="consoleAdmin"
-      mc admin service restart tenant --quiet --disable-pager
+      mc admin service restart tenant --json
     fi
 ---
 # kubectl create job -n minio --from=cronjob/run-scripts run-scripts-immediate
