@@ -239,7 +239,7 @@ spec:
                 defaultMode: 0777
           containers:
             - name: mc
-              image: quay.io/minio/mc:RELEASE.2024-10-02T08-27-28Z
+              image: quay.io/minio/mc:RELEASE.2025-01-17T23-25-50Z
               command:
                 - /bin/sh
                 - -c
