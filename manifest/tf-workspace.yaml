@@ -51,6 +51,10 @@ spec:
               client_id     = "{{ .miniflux_client_id | toString }}"
               client_secret = "{{ .miniflux_client_secret | toString }}"
             }
+            "minio" = {
+              client_id     = "{{ .minio_client_id | toString }}"
+              client_secret = "{{ .minio_client_secret | toString }}"
+            }
             "mealie" = {
               client_id     = "{{ .mealie_client_id | toString }}"
               client_secret = "{{ .mealie_client_secret | toString }}"
@@ -129,6 +133,14 @@ spec:
       remoteRef:
         key: sso
         property: miniflux_client_secret
+    - secretKey: minio_client_id
+      remoteRef:
+        key: sso
+        property: minio_client_id
+    - secretKey: minio_client_secret
+      remoteRef:
+        key: sso
+        property: minio_client_secret
     - secretKey: ryot_client_id
       remoteRef:
         key: sso
