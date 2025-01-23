@@ -91,13 +91,11 @@ spec:
               volumesPerServer: 1
               size: 5Gi
               storageClassName: longhorn
-  # should be resolved in next release
-  # https://github.com/minio/operator/pull/2337
-  # syncPolicy:
-  #   automated:
-  #     allowEmpty: true
-  #     prune: true
-  #     selfHeal: true
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
