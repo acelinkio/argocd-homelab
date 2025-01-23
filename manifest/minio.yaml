@@ -179,6 +179,7 @@ metadata:
   name: jobscripts
   namespace: minio
 data:
+  # https://min.io/docs/minio/linux/reference/minio-mc/mc-idp-openid.html#mc.idp.openid.add
   config.sh: |-
     #!/bin/bash
     
