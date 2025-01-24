@@ -48,7 +48,7 @@ spec:
     creationPolicy: Owner
     template:
       data:
-        config.yaml: |
+        config.yaml: |-
           auth:
             openid:
               enabled: true
