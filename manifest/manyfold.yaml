@@ -173,7 +173,7 @@ spec:
               value: "enabled"
             - name: OIDC_ISSUER
               value: "https://auth.<path:stringreplacesecret#domain>/application/o/manyfold/"
-            - name: OIDC_ISSUER
+            - name: OIDC_CLIENT_ID
               valueFrom:
                 secretKeyRef:
                   key: client_id
@@ -183,11 +183,6 @@ spec:
                 secretKeyRef:
                   key: client_secret
                   name: sso
-            # - name: SERVER_OIDC_CLIENT_ID
-            #   valueFrom:
-            #     secretKeyRef:
-            #       key: client_id
-            #       name: sso
           # pending: https://github.com/bjw-s-labs/container-images/pull/425
           # image: ghcr.io/bjw-s/manyfold:0.94.0
           image: ghcr.io/manyfold3d/manyfold:0.97.1
