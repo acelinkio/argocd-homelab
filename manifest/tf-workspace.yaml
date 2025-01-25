@@ -372,7 +372,7 @@ spec:
           }
           "manyfold" = {
             auth_application = {
-              icon       = "https://avatars.githubusercontent.com/u/92342333?s=48&v=4"
+              icon       = "https://avatars.githubusercontent.com/u/152926958?s=200&v=4"
               launch_url = "https://manyfold.${var.domainbase}/"
               policy     = "all"
             }
