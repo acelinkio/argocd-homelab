@@ -171,8 +171,8 @@ spec:
               value: "enabled"
             - name: OIDC_NAME
               value: "Authentik"
-            - name: FORCE_OIDC
-              value: "enabled"
+            # - name: FORCE_OIDC
+            #   value: "enabled"
             - name: OIDC_ISSUER
               value: "https://auth.<path:stringreplacesecret#domain>/application/o/manyfold/"
             - name: OIDC_CLIENT_ID
