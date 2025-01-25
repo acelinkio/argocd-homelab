@@ -189,6 +189,22 @@ spec:
           # image: ghcr.io/bjw-s/manyfold:0.94.0
           image: ghcr.io/manyfold3d/manyfold:0.97.1
           name: main
+          volumeMounts:
+            - mountPath: /media
+              name: media
+            - mountPath: /tmp
+              name: tmpfs
+              subPath: host-tmp
+            - mountPath: /app/tmp
+              name: tmpfs
+              subPath: app-tmp
+      volumes:
+        - name: media
+          nfs:
+            server: nassy.pinahouse
+            path: /spin0/media/3d
+        - emptyDir: {}
+          name: tmpfs
 ---
 apiVersion: v1
 kind: Service
