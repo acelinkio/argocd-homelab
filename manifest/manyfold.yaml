@@ -53,3 +53,176 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: manyfold
+  namespace: manyfold
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: secret_key
+      remoteRef:
+        key: manyfold
+        property: secret_key
+    - secretKey: redis_password
+      remoteRef:
+        key: manyfold
+        property: redis_password
+    - secretKey: postgrespassword
+      remoteRef:
+        key: postgres.cluster01.manyfold.owner
+        property: password
+    - secretKey: postgresuser
+      remoteRef:
+        key: postgres.cluster01.manyfold.owner
+        property: username
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manyfold
+  namespace: manyfold
+  labels:
+    app.kubernetes.io/instance: manyfold
+    app.kubernetes.io/name: manyfold
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: manyfold
+      app.kubernetes.io/instance: manyfold
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: manyfold
+        app.kubernetes.io/name: manyfold
+    spec:
+      containers:
+        - env:
+            - name: SECRET_KEY_BASE
+              valueFrom:
+                secretKeyRef:
+                  key: secret_key
+                  name: manyfold
+            - name: DATABASE_ADAPTER
+              value: postgresql
+            - name: DATABASE_HOST
+              value: cluster01.postgres
+            - name: DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuser
+                  name: manyfold
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgrespassword
+                  name: manyfold
+            - name: DATABASE_NAME
+              value: manyfold
+            - name: HELPERVAR_REDIS_USER
+              value: ""
+            - name: HELPERVAR_REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: redis_password
+                  name: manyfold
+            - name: REDIS_URL
+              value: redis://$(HELPERVAR_REDIS_USER):$(HELPERVAR_REDIS_PASSWORD)@manyfold-redis-redis-ha-haproxy:6379
+            - name: MULTIUSER
+              value: enabled
+            - name: PORTS
+              value: "3214"
+            - name: TZ
+              value: "America/Los_Angeles"
+            # - name: SERVER_OIDC_CLIENT_ID
+            #   valueFrom:
+            #     secretKeyRef:
+            #       key: client_id
+            #       name: sso
+          # pending: https://github.com/bjw-s-labs/container-images/pull/425
+          # image: ghcr.io/bjw-s/manyfold:0.94.0
+          image: ghcr.io/manyfold3d/manyfold:0.97.1
+          name: main
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: manyfold
+    app.kubernetes.io/name: manyfold
+  name: manyfold
+  namespace: manyfold
+spec:
+  ports:
+    - name: http
+      port: 3214
+      protocol: TCP
+      targetPort: 3214
+  selector:
+    app.kubernetes.io/instance: manyfold
+    app.kubernetes.io/name: manyfold
+  type: ClusterIP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: manyfold
+  namespace: manyfold
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "manyfold.acelink.io"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: manyfold
+          port: 3214
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: manyfold-private
+  namespace: manyfold
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: manyfold.acelink.io
+      recordType: CNAME
+      targets:
+        - intgw.acelink.io
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: manyfold-public
+  namespace: manyfold
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: manyfold.acelink.io
+      recordType: CNAME
+      targets:
+        - intgw.acelink.io
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
