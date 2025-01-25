@@ -150,7 +150,7 @@ spec:
             #       name: sso
           # pending: https://github.com/bjw-s-labs/container-images/pull/425
           # image: ghcr.io/bjw-s/manyfold:0.94.0
-          image: ghcr.io/manyfold3d/manyfold:0.97.1
+          image: ghcr.io/manyfold3d/manyfold:0.98.0
           name: main
 ---
 apiVersion: v1
