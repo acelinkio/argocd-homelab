@@ -166,7 +166,7 @@ spec:
             - name: TZ
               value: "America/Los_Angeles"
             - name: PUBLIC_HOSTNAME
-              value: "https://manyfold.<path:stringreplacesecret#domain>"
+              value: "manyfold.<path:stringreplacesecret#domain>"
             - name: OIDC_NAME
               value: "Authentik"
             - name: FORCE_OIDC
