@@ -41,6 +41,13 @@ spec:
         data:
           defaultRoles: false
           defaultUsers: false
+    manyfold:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
+          defaultRoles: false
+          defaultUsers: false
     mealie:
       defaultUsers: true
       extensions: {}
@@ -167,6 +174,33 @@ spec:
         secretKey: password
         remoteRef:
           remoteKey: postgres.cluster01.kyoo_transcoder.owner
+          property: password
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster01.manyfold.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: manyfold-owner-user.cluster01.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster01.manyfold.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster01.manyfold.owner
           property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
