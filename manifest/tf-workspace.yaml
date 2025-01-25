@@ -47,6 +47,14 @@ spec:
               client_id     = "{{ .kyoo_client_id | toString }}"
               client_secret = "{{ .kyoo_client_secret | toString }}"
             }
+            "manyfold" = {
+              client_id     = "{{ .manyfold_client_id | toString }}"
+              client_secret = "{{ .manyfold_client_secret | toString }}"
+            }
+            "mealie" = {
+              client_id     = "{{ .mealie_client_id | toString }}"
+              client_secret = "{{ .mealie_client_secret | toString }}"
+            }
             "miniflux" = {
               client_id     = "{{ .miniflux_client_id | toString }}"
               client_secret = "{{ .miniflux_client_secret | toString }}"
@@ -54,10 +62,6 @@ spec:
             "minio" = {
               client_id     = "{{ .minio_client_id | toString }}"
               client_secret = "{{ .minio_client_secret | toString }}"
-            }
-            "mealie" = {
-              client_id     = "{{ .mealie_client_id | toString }}"
-              client_secret = "{{ .mealie_client_secret | toString }}"
             }
             "ryot" = {
               client_id     = "{{ .ryot_client_id | toString }}"
@@ -117,6 +121,14 @@ spec:
       remoteRef:
         key: sso
         property: kyoo_client_secret
+    - secretKey: manyfold_client_id
+      remoteRef:
+        key: sso
+        property: manyfold_client_id
+    - secretKey: manyfold_client_secret
+      remoteRef:
+        key: sso
+        property: manyfold_client_secret
     - secretKey: mealie_client_id
       remoteRef:
         key: sso
@@ -358,6 +370,27 @@ spec:
               ]
             }
           }
+          "manyfold" = {
+            auth_application = {
+              icon       = "https://avatars.githubusercontent.com/u/92342333?s=48&v=4"
+              launch_url = "https://manyfold.${var.domainbase}/"
+              policy     = "all"
+            }
+            auth_provider = {
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://manyfold.${var.domainbase}/users/auth/openid_connect/callback",
+                }
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
           "mealie" = {
             auth_application = {
               icon       = "https://avatars.githubusercontent.com/u/92342333?s=48&v=4"
@@ -502,6 +535,10 @@ spec:
       }
       resource "authentik_group" "kyoo_admin" {
         name         = "kyoo Admin"
+        is_superuser = false
+      }
+      resource "authentik_group" "manyfold_admin" {
+        name         = "Manyfold Admin"
         is_superuser = false
       }
       resource "authentik_group" "mealie_admin" {
