@@ -86,6 +86,28 @@ spec:
         key: postgres.cluster01.manyfold.owner
         property: username
 ---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: manyfold
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: sso
+        property: manyfold_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: manyfold_client_secret
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -143,6 +165,22 @@ spec:
               value: "3214"
             - name: TZ
               value: "America/Los_Angeles"
+            - name: OIDC_NAME
+              value: "Authentik"
+            - name: FORCE_OIDC
+              value: "enabled"
+            - name: OIDC_ISSUER
+              value: "https://auth.<path:stringreplacesecret#domain>/application/o/manyfold/"
+            - name: OIDC_ISSUER
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: sso
+            - name: OIDC_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: sso
             # - name: SERVER_OIDC_CLIENT_ID
             #   valueFrom:
             #     secretKeyRef:
