@@ -186,7 +186,7 @@ spec:
       namespace: gateway
       sectionName: https
   hostnames:
-    - "manyfold.acelink.io"
+    - "manyfold.<path:stringreplacesecret#domain>"
   rules:
     - matches:
         - path:
@@ -205,10 +205,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: manyfold.acelink.io
+    - dnsName: manyfold.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intgw.acelink.io
+        - intgw.<path:stringreplacesecret#domain>
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -219,10 +219,10 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: manyfold.acelink.io
+    - dnsName: manyfold.<path:stringreplacesecret#domain>
       recordType: CNAME
       targets:
-        - intgw.acelink.io
+        - intgw.<path:stringreplacesecret#domain>
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"
