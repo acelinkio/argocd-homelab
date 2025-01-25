@@ -167,6 +167,8 @@ spec:
               value: "America/Los_Angeles"
             - name: PUBLIC_HOSTNAME
               value: "manyfold.<path:stringreplacesecret#domain>"
+            - name: HTTPS_ONLY
+              value: "enabled"
             - name: OIDC_NAME
               value: "Authentik"
             - name: FORCE_OIDC
