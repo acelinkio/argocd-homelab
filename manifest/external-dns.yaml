@@ -42,7 +42,7 @@ spec:
   source:
     chart: external-dns
     repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.15.0
+    targetRevision: 1.15.1
     helm:
       valuesObject:
         provider:
@@ -82,7 +82,7 @@ spec:
   source:
     chart: external-dns
     repoURL: https://kubernetes-sigs.github.io/external-dns/
-    targetRevision: 1.15.0
+    targetRevision: 1.15.1
     helm:
       skipCrds: true
       valuesObject:
