@@ -152,7 +152,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: "rss.acelink.io"
+    - host: "rss.<path:stringreplacesecret#domain>"
       http:
         paths:
           - path: "/"

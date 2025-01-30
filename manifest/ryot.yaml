@@ -152,7 +152,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: "ryot.acelink.io"
+    - host: "ryot.<path:stringreplacesecret#domain>"
       http:
         paths:
           - path: "/"

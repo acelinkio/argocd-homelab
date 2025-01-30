@@ -232,7 +232,7 @@ metadata:
 spec:
   ingressClassName: ingress-nginx-internal
   rules:
-    - host: "tasks.acelink.io"
+    - host: "tasks.<path:stringreplacesecret#domain>"
       http:
         paths:
           - path: "/api"
