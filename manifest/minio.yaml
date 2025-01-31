@@ -223,6 +223,7 @@ metadata:
   namespace: minio
 spec:
   schedule: "*/15 * * * *"
+  successfulJobsHistoryLimit: 1
   jobTemplate:
     spec:
       template:
