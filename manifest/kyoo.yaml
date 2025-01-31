@@ -295,6 +295,11 @@ spec:
               nfs:
                 server: nassy.pinahouse
                 path: /spin0/media
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
