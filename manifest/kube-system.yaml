@@ -58,6 +58,8 @@ spec:
           enabled: true
           # rk1's run on 5.10 version of kernel, 5.12 is required
           bbr: false
+        # disable ebpf due to issues
+        # https://github.com/cilium/cilium/issues/30510#issuecomment-1926155601
         bpf:
           masquerade: true
           hostLegacyRouting: true
