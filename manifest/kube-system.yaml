@@ -58,11 +58,11 @@ spec:
           enabled: true
           # rk1's run on 5.10 version of kernel, 5.12 is required
           bbr: false
-        # disable ebpf due to issues
-        # https://github.com/cilium/cilium/issues/30510#issuecomment-1926155601
         bpf:
           masquerade: true
-          hostLegacyRouting: true
+          # disable ebpf due to issues
+          # https://github.com/cilium/cilium/issues/30510#issuecomment-1926155601
+          # hostLegacyRouting: true
         envoy:
           enabled: false
         cluster:
@@ -102,7 +102,6 @@ spec:
           algorithm: maglev
           mode: dsr
         localRedirectPolicy: true
-        # testing https://github.com/cilium/cilium/issues/20942
         operator:
           replicas: 1
           rollOutPods: true
@@ -116,8 +115,6 @@ spec:
           secretsNamespace:
             create: false
             name: certificate
-          # gatewayClass:
-          #   create: "true"
   syncPolicy:
     automated:
       allowEmpty: true
