@@ -52,6 +52,8 @@ homelab                        # vault used for containing secrets
 - Each application should have a unique clientid that is upto 30 characters long. They will also need a unique clientsecret that is between 30-90 characters long.
   - create key named `argocd_client_id`
   - create key named `argocd_client_secret`
+  - create key named `discourse_client_id`
+  - create key named `discourse_client_secret`
   - create key named `grafana_client_id`
   - create key named `grafana_client_secret`
   - create key named `komga_client_id`
@@ -73,11 +75,25 @@ homelab                        # vault used for containing secrets
 - Federated authentication via Google.
   - Follow https://docs.goauthentik.io/integrations/sources/google/ for generating OAuth credentials.  Save clientid into key named `federation_google_client_id` and clientsecret into key named `federation_google_client_secret`
 
-### String Replacement
+### Other Secrets
+
+#### String Replacement
 - In the homelab vault, create secret named `stringreplacesecret`
 - Save your domain mydomain.com into a key named `domain`. 
 - Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
+#### Authentik
+- In the homelab vault, create secret named `authentik`
+- Create a random password named `secret_key`.
+- Create a random password for the initial user named `bootstrap_password` used for logging in with the default admin account.
+- Create key named `bootstrap_email` used for specifying the email address of the default admin account.
+- Create a random token named `bootstrap_token` used for accessing the api.
+
+#### Discourse
+- In the homelab vault, create secret named `discourse`
+- Create a random password for the initial user named `bootstrap_password` used for logging in with the default admin account.
+- Create a random password for sending email named `smtp_password` used for sending emails. (WIP)
+- Create a random password for sending email named `redis_password` used for authenticating emails. (WIP)
 
 ### Ryot
 - In the homelab vault, create secret named `ryot`
@@ -242,6 +258,9 @@ Does not appear to support oidc mapping.  First user to login via oidc is an adm
 
 ### Login to Mealie
 Login to Authentik.  Add your user to `mealie Admin` Authentik groups.  Login to mealie via OIDC.  Delete the default user.
+
+### Discourse Setup
+Discourse requires additional configurations done inside of the application.  Those notes can be found in the discourse.md
 
 # Additional Comments
 * If doing find and replace, be sure to leave `https://github.com/acelinkio/empty.git`.
