@@ -78,11 +78,11 @@ spec:
         discourse:
           persistPlugins: false
           plugins:
-            - https://github.com/discourse/discourse-oauth2-basic
             - https://github.com/discourse/discourse-adplugin
             - https://github.com/discourse/discourse-needs-love
             - https://github.com/discourse/discourse-post-voting
             - https://github.com/discourse/discourse-openid-connect
+            - https://github.com/discourse/discourse-data-explorer
         smtp:
           enabled: true
           host: mailpit.mailpit
