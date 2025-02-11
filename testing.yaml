@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: testing
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - git:
+        repoURL: https://github.com/acelinkio/argocd-homelab.git
+        revision: HEAD
+        directories:
+          - path: testdir/testns/*
+  template:
+    metadata:
+      name: '{{.path.basename}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/acelinkio/argocd-homelab.git
+        path: '{{.path.path}}'
+        targetRevision: HEAD
+      destination:
+        server: "https://kubernetes.default.svc"
+        namespace: testns
+      syncPolicy: {}
