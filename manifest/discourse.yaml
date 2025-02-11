@@ -130,7 +130,7 @@ spec:
     - ReadWriteMany
   resources:
     requests:
-      storage: 8Gi
+      storage: 2Gi
   storageClassName: longhorn
 ---
 apiVersion: gateway.networking.k8s.io/v1
