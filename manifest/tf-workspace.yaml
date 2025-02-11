@@ -296,7 +296,7 @@ spec:
               allowed_redirect_uris = [
                 {
                   matching_mode = "strict",
-                  url           = "https://discourse.${var.domainbase}/",
+                  url           = "https://discourse.${var.domainbase}/auth/oidc/callback",
                 }
               ]
               property_mappings = [
