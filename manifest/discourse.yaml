@@ -67,7 +67,7 @@ spec:
       # https://github.com/bitnami/containers/blob/main/bitnami/discourse/
       valuesObject:
         # must be set to 1 replica for initial install
-        replicaCount: 1
+        replicaCount: 0
         host: discourse.<path:stringreplacesecret#domain>
         siteName: "Acelink's Discourse"
         auth:
