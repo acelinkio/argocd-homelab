@@ -71,6 +71,7 @@ metadata:
   namespace: gateway
   annotations:
     external-dns.alpha.kubernetes.io/target: external.bitey.life
+    external-dns.custom/type: public
   labels:
     gateway: external
 spec:
@@ -79,6 +80,7 @@ spec:
     annotations:
       io.cilium/lb-ipam-ips: 192.168.1.10
       external-dns.alpha.kubernetes.io/hostname: external.bitey.life
+      external-dns.custom/type: public
   listeners:
     - protocol: HTTP
       port: 80
