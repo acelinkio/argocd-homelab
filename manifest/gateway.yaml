@@ -69,6 +69,10 @@ kind: Gateway
 metadata:
   name: external
   namespace: gateway
+  annotations:
+    external-dns.alpha.kubernetes.io/target: external.bitey.life
+  labels:
+    gateway: external
 spec:
   gatewayClassName: cilium
   infrastructure:
