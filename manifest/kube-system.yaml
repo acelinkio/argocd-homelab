@@ -64,7 +64,7 @@ spec:
           # https://github.com/cilium/cilium/issues/30510#issuecomment-1926155601
           # hostLegacyRouting: true
         envoy:
-          enabled: false
+          enabled: true
         cluster:
           name: home-cluster
           id: 1
