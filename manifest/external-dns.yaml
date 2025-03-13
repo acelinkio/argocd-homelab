@@ -127,6 +127,8 @@ spec:
           - service
           - ingress
           - crd
+          - gateway-httproute
+          - gateway-grpcroute
   syncPolicy:
     automated:
       allowEmpty: true
