@@ -98,6 +98,8 @@ kind: HTTPRoute
 metadata:
   name: httpsredirect-externalgw
   namespace: gateway
+  annotations:
+    external-dns.custom/type: public
 spec:
   parentRefs:
     - name: external
