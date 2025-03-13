@@ -78,6 +78,7 @@ spec:
   infrastructure:
     annotations:
       io.cilium/lb-ipam-ips: 192.168.1.10
+      external-dns.alpha.kubernetes.io/hostname: external.bitey.life
   listeners:
     - protocol: HTTP
       port: 80
