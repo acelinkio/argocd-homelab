@@ -55,6 +55,8 @@ spec:
           - service
           - ingress
           - crd
+          - gateway-httproute
+          - gateway-grpcroute
         env:
           - name: CF_API_TOKEN
             valueFrom:
@@ -63,6 +65,7 @@ spec:
                 key: cloudflare-api-key
         extraArgs:
           - "--annotation-filter=external-dns.custom/type in (public)"
+          - "--gateway-label-filter=gateway==external"
   syncPolicy:
     automated:
       allowEmpty: true
