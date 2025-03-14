@@ -40,7 +40,6 @@ homelab                        # vault used for containing secrets
 #### external-dns
 - In the homelab vault, create secret named `external-dns`
 - Follow https://developers.cloudflare.com/fundamentals/api/get-started/create-token/ for generating a token and save into key named `cloudflare-token`
-- Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 - Lab Specific implementation.  Follow https://help.ui.com/hc/en-us/articles/1500011491541-Granting-Access-to-UniFi-Roles-and-Permissions to add a new user credentials to your unifi gear.  Save username into key named `unifi-user` and password into key named `unifi-password`.
 
 #### cert-manager

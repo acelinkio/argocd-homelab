@@ -20,10 +20,6 @@ spec:
       remoteRef:
         key: external-dns
         property: cloudflare-token
-    - secretKey: cloudflare-tunnelid
-      remoteRef:
-        key: external-dns
-        property: cloudflare-tunnelid
     - secretKey: unifi-user
       remoteRef:
         key: external-dns
@@ -67,16 +63,10 @@ spec:
               secretKeyRef:
                 name: external-dns
                 key: cloudflare-api-key
-          - name: CF_TUNNEL_ID
-            valueFrom:
-              secretKeyRef:
-                name: external-dns
-                key: cloudflare-tunnelid
         extraArgs:
           - --cloudflare-proxied
           - "--annotation-filter=external-dns.custom/type in (public)"
           - --gateway-label-filter=gateway==external
-          - --zone-id-filter=$(CF_TUNNEL_ID)
   syncPolicy:
     automated:
       allowEmpty: true
