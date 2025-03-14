@@ -69,20 +69,11 @@ kind: Gateway
 metadata:
   name: external
   namespace: gateway
-  annotations:
-    external-dns.alpha.kubernetes.io/target: external.bitey.life
-    external-dns.custom/type: public
-  labels:
-    gateway: external
 spec:
   gatewayClassName: cilium
-  addresses:
-    - type: IPAddress
-      value: 192.168.1.10
   infrastructure:
     annotations:
-      external-dns.alpha.kubernetes.io/hostname: external.bitey.life
-      external-dns.custom/type: public
+      io.cilium/lb-ipam-ips: 192.168.1.10
   listeners:
     - protocol: HTTP
       port: 80
@@ -107,8 +98,6 @@ kind: HTTPRoute
 metadata:
   name: httpsredirect-externalgw
   namespace: gateway
-  annotations:
-    external-dns.custom/type: public
 spec:
   parentRefs:
     - name: external
