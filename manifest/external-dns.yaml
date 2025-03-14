@@ -53,10 +53,7 @@ spec:
         txtOwnerId: kubernetes
         sources:
           - service
-          - ingress
           - crd
-          - gateway-httproute
-          - gateway-grpcroute
         env:
           - name: CF_API_TOKEN
             valueFrom:
@@ -64,9 +61,7 @@ spec:
                 name: external-dns
                 key: cloudflare-api-key
         extraArgs:
-          - --cloudflare-proxied
           - "--annotation-filter=external-dns.custom/type in (public)"
-          - --gateway-label-filter=gateway==external
   syncPolicy:
     automated:
       allowEmpty: true
@@ -131,8 +126,6 @@ spec:
           - service
           - ingress
           - crd
-          - gateway-httproute
-          - gateway-grpcroute
   syncPolicy:
     automated:
       allowEmpty: true
