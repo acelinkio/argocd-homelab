@@ -175,13 +175,13 @@ spec:
         prometheus:
           prometheusSpec:
             retention: 1d
-  syncPolicy:
-    syncOptions:
-      - ServerSideApply=true
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+  syncPolicy: {}
+    # syncOptions:
+    #   - ServerSideApply=true
+    # automated:
+    #   allowEmpty: true
+    #   prune: true
+    #   selfHeal: true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
