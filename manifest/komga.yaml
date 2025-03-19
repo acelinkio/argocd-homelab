@@ -134,7 +134,7 @@ spec:
             secretName: komga
         - name: media
           nfs:
-            server: nassy.pinahouse
+            server: "192.168.1.179"
             path: /spin0/media
 ---
 kind: PersistentVolumeClaim
