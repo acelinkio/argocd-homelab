@@ -110,25 +110,6 @@ spec:
       prune: true
       selfHeal: true
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: auth
-  namespace: authentik
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: auth.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: authentik-server
-                port:
-                  number: 80
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

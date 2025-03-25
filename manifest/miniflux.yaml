@@ -144,25 +144,6 @@ spec:
           image: ghcr.io/miniflux/miniflux:2.2.6-distroless
           name: main
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: miniflux
-  namespace: miniflux
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: "rss.<path:stringreplacesecret#domain>"
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: miniflux
-                port:
-                  number: 80
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

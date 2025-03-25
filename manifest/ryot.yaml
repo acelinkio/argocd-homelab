@@ -144,25 +144,6 @@ spec:
           image: ghcr.io/ignisda/ryot:v8.4.0
           name: main
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: ryot
-  namespace: ryot
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: "ryot.<path:stringreplacesecret#domain>"
-      http:
-        paths:
-          - path: "/"
-            pathType: Prefix
-            backend:
-              service:
-                name: ryot
-                port:
-                  number: 8000
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

@@ -89,25 +89,6 @@ spec:
       prune: true
       selfHeal: true
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: grafana
-  namespace: observability
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: grafana.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: grafana
-                port:
-                  number: 80
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:

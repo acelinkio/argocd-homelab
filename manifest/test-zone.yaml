@@ -39,25 +39,6 @@ spec:
   selector:
     app.kubernetes.io/name: echo
 ---
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: echo
-  namespace: test-zone
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: echo.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: echo
-                port:
-                  number: 80
----
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
 metadata:
@@ -173,25 +154,6 @@ spec:
       protocol: TCP
   selector:
     app.kubernetes.io/name: httpbin
----
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: httpbin
-  namespace: test-zone
-spec:
-  ingressClassName: ingress-nginx-internal
-  rules:
-    - host: httpbin.<path:stringreplacesecret#domain>
-      http:
-        paths:
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: httpbin
-                port:
-                  number: 80
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
