@@ -17,7 +17,7 @@ spec:
   source:
     chart: crossplane
     repoURL: https://charts.crossplane.io/stable
-    targetRevision: 1.19.0
+    targetRevision: 1.19.1
   syncPolicy:
     automated:
       allowEmpty: true
