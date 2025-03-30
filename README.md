@@ -13,7 +13,7 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 │   └── settings.json          # Project specific settings
 ├── docs/                      # Documentation
 │   ├── faq.md                 # Frequently Asked Questions
-│   ├── netowrk.md             # Networking details
+│   ├── network.md             # Networking details
 │   └── setup.md               # Installation steps
 ├── manifest/                  # Watched by ArgoCD ApplicationSet
 │   └── $namespace.yaml        # Per namespace, App of Apps
