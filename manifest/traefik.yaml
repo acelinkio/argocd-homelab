@@ -54,8 +54,12 @@ spec:
         gatewayClass:
           enabled: true
         providers:
+          # https://doc.traefik.io/traefik-hub/api-gateway/reference/install/providers/ref-provider-crd#configuration-example
           kubernetesCRD:
             enabled: true
+            allowEmptyServices: true
+            nativeLBByDefault: true
+            throttleDuration: 2s
           kubernetesIngress:
             enabled: false
           kubernetesGateway:
