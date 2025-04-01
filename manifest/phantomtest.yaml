@@ -1,0 +1,115 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: phantomtest
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phantomtest-api
+  namespace: phantomtest
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: phantomtest-api
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: phantomtest-api
+    spec:
+      containers:
+        - image: zot.bitey.life/phantomtest-api:1.0.0
+          imagePullPolicy: Always
+          name: phantomtest-api
+          ports:
+            - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phantomtest-api
+  namespace: phantomtest
+spec:
+  ports:
+    - port: 3000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: phantomtest-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: phantomtest-auth
+  namespace: phantomtest
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: phantomtest-auth
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: phantomtest-auth
+    spec:
+      containers:
+        - image: zot.bitey.life/phantomtest-auth:1.0.0
+          imagePullPolicy: Always
+          name: phantomtest-auth
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: phantomtest-auth
+  namespace: phantomtest
+spec:
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: phantomtest-auth
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: phantomtest
+  namespace: phantomtest
+spec:
+  parentRefs:
+    - name: external-traefik
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "pt.bitey.life"
+  rules:
+    # https://doc.traefik.io/traefik-hub/api-gateway/reference/routing/kubernetes/ref-routing-provider-gatewayapi#using-traefik-middleware-as-httproute-filter
+    - backendRefs:
+        - name: phantomtest-api
+          port: 3000
+# need to add middleware cr, then add in filter
+# EXAMPLE
+      # filters:
+      #   - type: ExtensionRef
+      #     extensionRef:
+      #       group: traefik.io
+      #       kind: Middleware
+      #       name: add-prefix
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: phantomtest
+  namespace: phantomtest
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: "pt.bitey.life"
+      recordType: CNAME
+      targets:
+        - extgw-traefik.bitey.life
