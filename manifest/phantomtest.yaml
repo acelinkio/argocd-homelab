@@ -23,6 +23,9 @@ spec:
         - image: zot.bitey.life/phantomtest-api:1.0.0
           imagePullPolicy: Always
           name: phantomtest-api
+          env:
+            - name: AUTH_SERVER
+              value: "http://phantomtest-auth:8080"
           ports:
             - containerPort: 3000
 ---
