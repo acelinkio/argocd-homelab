@@ -7,6 +7,30 @@ metadata:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: traefik-crds
+  namespace: argocd
+spec:
+  destination:
+    namespace: traefik
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: traefik-crds
+    repoURL: https://traefik.github.io/charts
+    targetRevision: 1.6.0
+    helm:
+      valuesObject:
+        traefik: true
+        gatewayAPI: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: traefik
   namespace: argocd
 spec:
@@ -19,6 +43,7 @@ spec:
     repoURL: https://traefik.github.io/charts
     targetRevision: 34.5.0
     helm:
+      skipCrds: true
       valuesObject:
         ingressClass:
           enabled: false
