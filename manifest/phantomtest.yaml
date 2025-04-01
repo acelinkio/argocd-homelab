@@ -88,17 +88,29 @@ spec:
     - "pt.bitey.life"
   rules:
     # https://doc.traefik.io/traefik-hub/api-gateway/reference/routing/kubernetes/ref-routing-provider-gatewayapi#using-traefik-middleware-as-httproute-filter
-    - backendRefs:
+    - matches:
+        - path: 
+            type: PathPrefix
+            value: /.well-known/
+        - path: 
+            type: PathPrefix
+            value: /auth
+      backendRefs:
+        - name: phantomtest-auth
+          port: 8080
+    - matches:
+        - path: 
+            type: PathPrefix
+            value: /
+      backendRefs:
         - name: phantomtest-api
           port: 3000
-# need to add middleware cr, then add in filter
-# EXAMPLE
       # filters:
       #   - type: ExtensionRef
       #     extensionRef:
       #       group: traefik.io
       #       kind: Middleware
-      #       name: add-prefix
+      #       name: auth-middleware
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -113,3 +125,17 @@ spec:
       recordType: CNAME
       targets:
         - extgw-traefik.bitey.life
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: auth-middleware
+  namespace: phantomtest
+spec:
+  forwardAuth:
+    address: https://pt.bitey.life/auth/jwt
+    authRequestHeaders:
+      - "Authorization"
+      - "X-Api-Key"
+    authResponseHeaders:
+      - Authorization
