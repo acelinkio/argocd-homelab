@@ -36,7 +36,7 @@ data:
     originRequest:
       originServerName: cloudflared.<path:stringreplacesecret#domain>
     ingress:
-      - host: pt.bitey.life
+      - hostname: pt.bitey.life
         service: https://traefik.traefik.svc.cluster.local:443
       - service: https://cilium-gateway-external.gateway.svc.cluster.local:443
 ---
