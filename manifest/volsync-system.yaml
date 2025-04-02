@@ -22,6 +22,8 @@ spec:
       valuesObject:
         manageCRDs: true
         replicaCount: 2
+        image:
+          repository: ghcr.io/home-operations/volsync
   syncPolicy:
     automated:
       allowEmpty: true
