@@ -64,7 +64,7 @@ spec:
             enabled: false
           kubernetesGateway:
             enabled: true
-            experimentalChannel: true
+            #experimentalChannel: true
         ports:
           web:
             port: 80
