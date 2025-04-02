@@ -183,3 +183,32 @@ spec:
       recordType: A
       targets:
         - "192.168.1.13"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: internal-traefik
+  namespace: gateway
+spec:
+  infrastructure:
+    annotations:
+      io.cilium/lb-ipam-ips: 192.168.1.16
+  gatewayClassName: traefik
+  listeners:
+    - protocol: HTTP
+      port: 80
+      name: http
+      allowedRoutes:
+        namespaces:
+          from: Same
+    - protocol: HTTPS
+      port: 443
+      name: https
+      tls:
+        certificateRefs:
+          - kind: Secret
+            name: wildcard-production
+            namespace: certificate
+      allowedRoutes:
+        namespaces:
+          from: All
