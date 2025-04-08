@@ -128,13 +128,6 @@ spec:
     spec:
       containers:
         - name: traefik-manual
-          # env:
-          #   - name: TRAEFIK_ENTRYPOINTS_WEB
-          #     value: "true"
-          #   - name: TRAEFIK_ENTRYPOINTS_WEB_ADDRESS
-          #     value: ":80"
-          #   - name: TRAEFIK_API_INSECURE
-          #     value: "true"
           image: docker.io/traefik:v3.3.4
           args:
             - '--entryPoints.web.address=:80/tcp'
