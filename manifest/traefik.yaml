@@ -77,3 +77,152 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-manual
+  namespace: traefik
+  labels:
+    app.kubernetes.io/instance: traefik-manual
+    app.kubernetes.io/name: traefik-manual
+    app.kubernetes.io/service: traefik-manual
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+    - port: 443
+      targetPort: 443
+      protocol: TCP
+      name: https
+  selector:
+    app.kubernetes.io/component: traefik-manual
+    app.kubernetes.io/instance: traefik-manual
+    app.kubernetes.io/name: traefik-manual
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: traefik-manual
+  namespace: traefik
+  labels:
+    app.kubernetes.io/component: traefik-manual
+    app.kubernetes.io/instance: traefik-manual
+    app.kubernetes.io/name: traefik-manual
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: traefik-manual
+      app.kubernetes.io/name: traefik-manual
+      app.kubernetes.io/instance: traefik-manual
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: traefik-manual
+        app.kubernetes.io/instance: traefik-manual
+        app.kubernetes.io/name: traefik-manual
+    spec:
+      containers:
+        - name: traefik-manual
+          # env:
+          #   - name: TRAEFIK_ENTRYPOINTS_WEB
+          #     value: "true"
+          #   - name: TRAEFIK_ENTRYPOINTS_WEB_ADDRESS
+          #     value: ":80"
+          #   - name: TRAEFIK_API_INSECURE
+          #     value: "true"
+          image: docker.io/traefik:v3.3.4
+          args:
+            - '--entryPoints.web.address=:80/tcp'
+            - '--entryPoints.websecure.address=:443/tcp'
+            - '--api.dashboard=true'
+            - '--api.insecure=true'
+            - '--log.level=INFO'
+            - --providers.file.filename=/dynamic_config/dynamic_config.yaml
+          ports:
+            - name: metrics
+              containerPort: 9100
+              protocol: TCP
+            - name: traefik
+              containerPort: 8080
+              protocol: TCP
+            - name: web
+              containerPort: 80
+              protocol: TCP
+            - name: websecure
+              containerPort: 443
+              protocol: TCP
+          volumeMounts:
+            - name: config
+              mountPath: /dynamic_config
+              readOnly: true
+      volumes:
+        - name: config
+          configMap:
+            name: traefik-manual
+            items:
+              - key: dynamic_config.yaml
+                path: dynamic_config.yaml
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-manual
+  namespace: traefik
+data:
+  dynamic_config.yaml: |
+    http:
+      routers:
+        phantomtest-basepath:
+          entryPoints:
+          - web
+          middlewares:
+          - phantomtest-api
+          service: phantomtest-api
+          rule: "Host(`pt2.bitey.life`) && PathPrefix(`/`)"
+        phantomtest-wellknown:
+          entryPoints:
+          - web
+          service: phantomtest-auth
+          rule: "Host(`pt2.bitey.life`) && PathPrefix(`/.well-known/`)"
+        phantomtest-auth:
+          entryPoints:
+          - web
+          service: phantomtest-auth
+          rule: "Host(`pt2.bitey.life`) && PathPrefix(`/auth`)"
+      middlewares:
+        phantomtest-api:
+          forwardAuth:
+            address: "http://pt2.bitey.life/auth/jwt"
+            authRequestHeaders:
+              - "Authorization"
+              - "X-Api-Key"
+            authResponseHeaders:
+              - Authorization
+      services:
+        phantomtest-api:
+          loadBalancer:
+            servers:
+            - url: http://phantomtest-api.phantomtest.svc.cluster.local:3000/
+        phantomtest-auth:
+          loadBalancer:
+            servers:
+            - url: http://phantomtest-auth.phantomtest.svc.cluster.local:8080/
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: traefik-manual
+  namespace: traefik
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: pt2.bitey.life
+      recordType: A
+      targets:
+        - "192.168.1.14"
