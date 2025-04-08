@@ -65,6 +65,8 @@ spec:
           kubernetesGateway:
             enabled: true
             #experimentalChannel: true
+        additionalArguments:
+          - "--api.insecure=true"
         ports:
           web:
             port: 80
