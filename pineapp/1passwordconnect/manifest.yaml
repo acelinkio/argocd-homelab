@@ -1,0 +1,54 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: 1passwordconnect
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: 1passwordconnect
+  namespace: 1passwordconnect
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        1password-credentials.json: "{{ .json | b64enc }}"
+  data:
+    - secretKey: json
+      remoteRef:
+        key: 1passwordconnect
+        property: 1password-credentials.json
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: 1passwordconnect
+  namespace: argocd
+spec:
+  destination:
+    namespace: 1passwordconnect
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: connect
+    repoURL: https://1password.github.io/connect-helm-charts
+    targetRevision: 1.17.0
+    helm:
+      valuesObject:
+        connect:
+          credentialsName: 1passwordconnect
+          credentialsKey: 1password-credentials.json
+          serviceType: ClusterIP
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
