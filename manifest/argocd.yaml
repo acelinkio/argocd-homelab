@@ -226,6 +226,8 @@ metadata:
   name: homelab-manifest
   namespace: argocd
 spec:
+  syncPolicy:
+    preserveResourcesOnDeletion: true
   goTemplate: true
   generators:
     - git:
