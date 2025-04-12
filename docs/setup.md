@@ -4,14 +4,14 @@
 
 # Preperation
 
-## Update manifests
+## Update cluster configs
 argocd-homelab aims to be as agnostic as possible, however several configurations are implementation specific.  Be sure to review the settings related to infrastructure.
-- Review `manifest/kube-system.yaml`
-- Review `manifest/longhorn-system.yaml`
-- Review `manifest/gateway.yaml`
-- Review `manifest/kyoo.yaml`
+- Review `pineapp/kube-system/manifest.yaml`
+- Review `pineapp/longhorn-system/manifest.yaml`
+- Review `pineapp/gateway/manifest.yaml`
+- Review `pineapp/kyoo/manifest.yaml`
 - Update `docs/network.md`
-- Update `manifest/external-dns.yaml`
+- Update `pineapp/external-dns/manifest.yaml`
 
 ## 1Password
 - Create vault named `homelab`
@@ -162,7 +162,7 @@ kubectl taint nodes rk1-01 node-role.kubernetes.io/control-plane:NoSchedule
 
 
 # INSTALL CILIUM
-export cilium_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "cilium" and .kind == "Application")' -)
+export cilium_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/pineapp/kube-system/manifest.yaml" | yq eval-all '. | select(.metadata.name == "cilium" and .kind == "Application")' -)
 export cilium_name=$(echo "$cilium_applicationyaml" | yq eval '.metadata.name' -)
 export cilium_chart=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.chart' -)
 export cilium_repo=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.repoURL' -)
@@ -173,7 +173,7 @@ export cilium_values=$(echo "$cilium_applicationyaml" | yq eval '.spec.source.he
 echo "$cilium_values" | helm template $cilium_name $cilium_chart --repo $cilium_repo --version $cilium_version --namespace $cilium_namespace --values - | kubectl apply --filename -
 
 # INSTALL COREDNS
-export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/kube-system.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
+export coredns_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/pineapp/kube-system/manifest.yaml" | yq eval-all '. | select(.metadata.name == "coredns" and .kind == "Application")' -)
 export coredns_name=$(echo "$coredns_applicationyaml" | yq eval '.metadata.name' -)
 export coredns_chart=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.chart' -)
 export coredns_repo=$(echo "$coredns_applicationyaml" | yq eval '.spec.source.repoURL' -)
@@ -214,14 +214,14 @@ kubectl create secret generic 1passwordconnect --namespace external-secrets --fr
 
 ## argocd
 ```bash
-export argocd_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.metadata.name == "argocd" and .kind == "Application")' -)
+export argocd_applicationyaml=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/pineapp/argocd/manifest.yaml" | yq eval-all '. | select(.metadata.name == "argocd" and .kind == "Application")' -)
 export argocd_name=$(echo "$argocd_applicationyaml" | yq eval '.metadata.name' -)
 export argocd_chart=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.chart' -)
 export argocd_repo=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.repoURL' -)
 export argocd_namespace=$(echo "$argocd_applicationyaml" | yq eval '.spec.destination.namespace' -)
 export argocd_version=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.targetRevision' -)
 export argocd_values=$(echo "$argocd_applicationyaml" | yq eval '.spec.source.helm.valuesObject' - | yq eval 'del(.configs.cm)' -)
-export argocd_config=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/manifest/argocd.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
+export argocd_config=$(curl -sL "https://raw.githubusercontent.com/acelinkio/argocd-homelab/main/pineapp/argocd/manifest.yaml" | yq eval-all '. | select(.kind == "AppProject" or .kind == "ApplicationSet")' -)
 
 # install
 echo "$argocd_values" | helm template $argocd_name $argocd_chart --repo $argocd_repo --version $argocd_version --namespace $argocd_namespace --values - | kubectl apply --namespace $argocd_namespace --filename -
