@@ -1,0 +1,33 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: longhorn-system
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: longhorn-system
+  namespace: argocd
+spec:
+  destination:
+    namespace: longhorn-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: longhorn
+    repoURL: https://charts.longhorn.io
+    targetRevision: 1.8.1
+    helm:
+      valuesObject:
+        persistence:
+          defaultClass: true
+          defaultClassReplicaCount: 3
+          reclaimPolicy: Retain
+        preUpgradeChecker:
+          jobEnabled: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
