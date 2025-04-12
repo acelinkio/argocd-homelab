@@ -164,7 +164,7 @@ spec:
     #   namespace: gateway
     #   sectionName: https
   hostnames:
-    - "zot.<path:stringreplacesecret#domain>"
+    - "zot.bitey.life"
   rules:
     - matches:
         - path:
@@ -183,10 +183,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: zot.<path:stringreplacesecret#domain>
+    - dnsName: zot.bitey.life
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intgw.bitey.life
 # ---
 # apiVersion: externaldns.k8s.io/v1alpha1
 # kind: DNSEndpoint
@@ -197,10 +197,10 @@ spec:
 #     external-dns.custom/type: public
 # spec:
 #   endpoints:
-#     - dnsName: zot.<path:stringreplacesecret#domain>
+#     - dnsName: zot.bitey.life
 #       recordType: CNAME
 #       targets:
-#         - ingress.<path:stringreplacesecret#domain>
+#         - ingress.bitey.life
 #       providerSpecific:
 #         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
 #           value: "true"
