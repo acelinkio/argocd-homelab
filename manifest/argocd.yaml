@@ -255,10 +255,10 @@ spec:
       syncPolicy:
         syncOptions:
           - CreateNamespace=true
-        automated:
-          prune: true
-          selfHeal: true
-          allowEmpty: true
+        automated: {}
+          # prune: true
+          # selfHeal: true
+          # allowEmpty: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
