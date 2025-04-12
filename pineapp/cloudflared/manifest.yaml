@@ -1,0 +1,114 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: cloudflared
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: cloudflared
+  namespace: cloudflared
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: credentials.json
+      remoteRef:
+        key: cloudflared
+        property: credentials.json
+    - secretKey: TunnelID
+      remoteRef:
+        key: cloudflared
+        property: TunnelID
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared
+  namespace: cloudflared
+data:
+  config.yaml: |
+    originRequest:
+      originServerName: cloudflared.bitey.life
+    ingress:
+      - hostname: pt.bitey.life
+        service: https://traefik.traefik.svc.cluster.local:443
+      - service: https://cilium-gateway-external.gateway.svc.cluster.local:443
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared
+  namespace: cloudflared
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  selector:
+    matchLabels:
+      app: cloudflared
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: cloudflared
+    spec:
+      containers:
+        - name: cloudflared
+          image: docker.io/cloudflare/cloudflared:2025.4.0
+          args:
+            - tunnel
+            - --config
+            - /etc/cloudflared/config/config.yaml
+            - run
+            - $(TunnelID)
+          env:
+            # https://github.com/cloudflare/cloudflared/blob/master/cmd/cloudflared/tunnel/cmd.go
+            # https://github.com/cloudflare/cloudflared/blob/master/cmd/cloudflared/tunnel/subcommands.go
+            - name: TunnelID
+              valueFrom:
+                secretKeyRef:
+                  name: cloudflared
+                  key: TunnelID
+            - name: NO_AUTOUPDATE
+              value: "true"
+            - name: TUNNEL_ORIGIN_SERVER_NAME
+              value: cloudflared-test.bitey.life
+            - name: TUNNEL_CRED_FILE
+              value: /etc/cloudflared/creds/credentials.json
+            - name: TUNNEL_METRICS
+              value: 0.0.0.0:2000
+            - name: TUNNEL_TRANSPORT_PROTOCOL
+              value: quic
+            - name: TUNNEL_ORIGIN_ENABLE_HTTP2
+              value: "true"
+            - name: TUNNEL_POST_QUANTUM
+              value: "true"
+          livenessProbe:
+            httpGet:
+              path: /ready
+              port: 2000
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          volumeMounts:
+            - name: config
+              mountPath: /etc/cloudflared/config
+              readOnly: true
+            - name: creds
+              mountPath: /etc/cloudflared/creds
+              readOnly: true
+      volumes:
+        - name: creds
+          secret:
+            secretName: cloudflared
+        - name: config
+          configMap:
+            name: cloudflared
+            items:
+              - key: config.yaml
+                path: config.yaml
