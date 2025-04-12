@@ -1,0 +1,270 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: minio
+# minio tenants are required to be namespace isolated
+# https://github.com/minio/operator/issues/2381
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: tenant-config
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        config.env: |-
+          export MINIO_ROOT_USER="{{ .MINIO_ROOT_USER | toString }}"
+          export MINIO_ROOT_PASSWORD="{{ .MINIO_ROOT_PASSWORD | toString }}"
+  data:
+    - secretKey: MINIO_ROOT_USER
+      remoteRef:
+        key: minio.tenant
+        property: root_user
+    - secretKey: MINIO_ROOT_PASSWORD
+      remoteRef:
+        key: minio.tenant
+        property: root_password
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: minio
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: minio_client_id
+      remoteRef:
+        key: sso
+        property: minio_client_id
+    - secretKey: minio_client_secret
+      remoteRef:
+        key: sso
+        property: minio_client_secret
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: minio-tenant
+  namespace: argocd
+spec:
+  destination:
+    namespace: minio
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: tenant
+    repoURL: https://operator.min.io
+    targetRevision: 7.0.1
+    helm:
+      valuesObject:
+        tenant:
+          name: tenant
+          features:
+            bucketDNS: true
+          certificate:
+            requestAutoCert: false
+          configuration:
+            name: tenant-config
+          configSecret:
+            existingSecret: true
+            accessKey: ""
+            secretKey: ""
+          pools:
+            - servers: 1
+              name: pool0
+              volumesPerServer: 1
+              size: 5Gi
+              storageClassName: longhorn
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tenant-console
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "minio-console.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: tenant-console
+          port: 9090
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: tenant-console-private
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: minio-console.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: tenant
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "minio.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: minio
+          port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: tenant-private
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: minio.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: minio-admin
+  namespace: minio
+---
+apiVersion: sts.min.io/v1alpha1
+kind: PolicyBinding
+metadata:
+  name: minio-admin-binding
+  namespace: minio
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  application:
+    serviceaccount: minio-admin
+    namespace: minio
+  policies:
+    - consoleAdmin
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jobscripts
+  namespace: minio
+data:
+  config.sh: |-
+    #!/bin/bash
+    
+    # create buckets
+    mc mb tenant/logos --ignore-existing
+    mc mb tenant/vikunja --ignore-existing
+
+    # configure oidc
+    if mc idp openid info tenant authentik; then
+      echo "authentik idp already configured"
+    else
+      echo "configuring authentik idp"
+      mc idp openid add tenant authentik client_id=$minio_client_id client_secret=$minio_client_secret config_url="https://auth.bitey.life/application/o/minio/.well-known/openid-configuration" scopes="email,profile,openid,groups" redirect_uri="https://minio-console.bitey.life/oauth_callback" role_policy="consoleAdmin"
+      mc admin service restart tenant --json
+    fi
+---
+# kubectl create job -n minio --from=cronjob/run-scripts run-scripts-immediate
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: run-scripts
+  namespace: minio
+spec:
+  schedule: "*/15 * * * *"
+  successfulJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: Never
+          volumes:
+            - name: config-dir
+              emptyDir: {}
+            - name: script-volume
+              configMap:
+                name: jobscripts
+                defaultMode: 0777
+          containers:
+            - name: mc
+              image: quay.io/minio/mc:RELEASE.2025-01-17T23-25-50Z
+              command:
+                - /bin/sh
+                - -c
+                - /scripts/config.sh
+              env:
+                - name: MC_HOST_tenant
+                  value: http://$(ACCESS_KEY):$(SECRET_KEY)@minio.minio.svc.cluster.local
+                - name: MC_STS_ENDPOINT_tenant
+                  value: https://sts.minio-operator.svc.cluster.local:4223/sts/minio
+                - name: MC_WEB_IDENTITY_TOKEN_FILE_tenant
+                  value: /var/run/secrets/kubernetes.io/serviceaccount/token
+                - name: minio_client_id
+                  valueFrom:
+                    secretKeyRef:
+                      key: minio_client_id
+                      name: sso
+                - name: minio_client_secret
+                  valueFrom:
+                    secretKeyRef:
+                      key: minio_client_secret
+                      name: sso
+              volumeMounts:
+                - name: config-dir
+                  mountPath: /.mc
+                - name: script-volume
+                  mountPath: /scripts/config.sh
+                  subPath: config.sh
+          serviceAccountName: minio-admin
+          serviceAccount: minio-admin
