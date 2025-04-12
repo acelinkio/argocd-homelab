@@ -1,0 +1,54 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: postgres-operator
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: postgres-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgres-operator
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator
+    targetRevision: 1.14.0
+    helm:
+      valuesObject:
+        image:
+          registry: ghcr.io
+          repository: zalando/postgres-operator
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: postgres-operator-ui
+  namespace: argocd
+spec:
+  destination:
+    namespace: postgres-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: postgres-operator-ui
+    repoURL: https://opensource.zalando.com/postgres-operator/charts/postgres-operator-ui
+    targetRevision: 1.14.0
+    helm:
+      valuesObject:
+        envs:
+          targetNamespace: "*"
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
