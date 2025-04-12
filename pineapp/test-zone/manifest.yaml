@@ -1,0 +1,187 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: test-zone
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: echo
+  namespace: test-zone
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: echo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: echo
+    spec:
+      containers:
+        - image: ealen/echo-server
+          imagePullPolicy: Always
+          name: echo
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: echo
+  namespace: test-zone
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: echo
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: echo
+  namespace: test-zone
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "echo.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: echo
+          port: 80
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+    - backendRefs:
+        - name: echo
+          port: 80
+          filters:
+            - requestHeaderModifier:
+                add:
+                  - name: mytestheader1backend1
+                    value: "setviahttproute"
+              type: RequestHeaderModifier
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: why.hello.there
+        - requestHeaderModifier:
+            set:
+              - name: mytestheader1all
+                value: "setviahttproute"
+              - name: mytestheader2all
+                value: "setviahttproute"
+          type: RequestHeaderModifier
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: echo-private
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: echo.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: echo-public
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: echo.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: httpbin
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: httpbin
+    spec:
+      containers:
+        - image: kong/httpbin
+          imagePullPolicy: Always
+          name: httpbin
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+  selector:
+    app.kubernetes.io/name: httpbin
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: httpbin
+  namespace: test-zone
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "httpbin.bitey.life"
+  rules:
+    - backendRefs:
+        - name: httpbin
+          port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: httpbin-private
+  namespace: test-zone
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: httpbin.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
