@@ -18,7 +18,6 @@ argocd-homelab aims to be as agnostic as possible, however several configuration
 ```
 homelab                        # vault used for containing secrets
 ├── sso                        # secret used for configuring sso
-├── stringreplacesecret        # secret used for basic string replacement by ArgoCD Vault Plugin
 └── $namespace                 # secret dedicated for each namespace
 ```
 
@@ -76,12 +75,6 @@ homelab                        # vault used for containing secrets
   - Follow https://docs.goauthentik.io/integrations/sources/google/ for generating OAuth credentials.  Save clientid into key named `federation_google_client_id` and clientsecret into key named `federation_google_client_secret`
 
 ### Other Secrets
-
-#### String Replacement
-**WIP TO REMOVE**
-- In the homelab vault, create secret named `stringreplacesecret`
-- Save your domain mydomain.com into a key named `domain`. 
-- Save the above Cloudflare tunnel id into a key named `cloudflaretunnelid`.
 
 #### Authentik
 - In the homelab vault, create secret named `authentik`
@@ -197,13 +190,8 @@ kubectl label nodes mynodename kubernetes.io/role=worker
 ## https://developer.1password.com/docs/cli/get-started
 # login via `eval $(op signin)`
 
-export domain="$(op read op://homelab/stringreplacesecret/domain)"
-export cloudflaretunnelid="$(op read op://homelab/stringreplacesecret/cloudflaretunnelid)"
 export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1password-credentials.json | base64)"
 export externalsecrets_token="$(op read op://homelab/external-secrets/token)"
-
-kubectl create namespace argocd
-kubectl create secret generic stringreplacesecret --namespace argocd --from-literal domain=$domain --from-literal cloudflaretunnelid=$cloudflaretunnelid
 
 kubectl create namespace 1passwordconnect
 kubectl create secret generic 1passwordconnect --namespace 1passwordconnect --from-literal 1password-credentials.json="$onepasswordconnect_json"
