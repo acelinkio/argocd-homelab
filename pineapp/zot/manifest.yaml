@@ -1,0 +1,206 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: zot
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: zot
+  namespace: zot
+data:
+  config.json: |-
+    {
+      "storage": {
+        "rootDirectory": "/var/lib/registry",
+        "dedupe": true,
+        "gc": true,
+        "gcDelay": "1h",
+        "gcInterval": "24h",
+        "retention": {
+          "dryRun": false,
+          "delay": "24h",
+          "policies": [
+            {
+              "repositories": [
+                "**"
+              ],
+              "deleteReferrers": true,
+              "deleteUntagged": true,
+              "keepTags": [
+                {
+                  "mostRecentlyPushedCount": 5,
+                  "mostRecentlyPulledCount": 5,
+                  "pulledWithin": "720h",
+                  "pushedWithin": "720h"
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "http": {
+        "address": "0.0.0.0",
+        "port": "5000"
+      },
+      "log": {
+        "level": "info"
+      },
+      "extensions": {
+        "scrub": {
+          "enable": true,
+          "interval": "24h"
+        },
+        "search": {
+          "enable": true
+        },
+        "ui": {
+          "enable": true
+        },
+        "mgmt": {
+          "enable": true
+        }
+      }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zot
+  namespace: zot
+  annotations:
+    reloader.stakater.com/auto: "true"
+  labels:
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/name: zot
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: zot
+      app.kubernetes.io/name: zot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: zot
+        app.kubernetes.io/name: zot
+    spec:
+      containers:
+        - env:
+            - name: exampleenv
+              value: "myexample"
+          name: zot
+          image: ghcr.io/project-zot/zot:v2.1.2
+          ports:
+            - name: zot
+              containerPort: 5000
+              protocol: TCP
+          volumeMounts:
+            - name: zot-registry
+              mountPath: /var/lib/registry
+            - mountPath: /etc/zot/config.json
+              name: config
+              readOnly: true
+              subPath: config.json
+      volumes:
+        - name: zot-registry
+          persistentVolumeClaim:
+            claimName: zot-storage
+        - name: config
+          configMap:
+            name: zot
+            items:
+              - key: config.json
+                path: config.json
+  strategy:
+    type: Recreate
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: zot
+  name: zot-storage
+  namespace: zot
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: longhorn
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/name: zot
+  name: zot
+  namespace: zot
+spec:
+  ports:
+    - name: zot
+      port: 5000
+      protocol: TCP
+      targetPort: zot
+  selector:
+    app.kubernetes.io/instance: zot
+    app.kubernetes.io/name: zot
+  type: ClusterIP
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: zot
+  namespace: zot
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    # - name: external
+    #   namespace: gateway
+    #   sectionName: https
+  hostnames:
+    - "zot.<path:stringreplacesecret#domain>"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: zot
+          port: 5000
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: zot-private
+  namespace: zot
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: zot.<path:stringreplacesecret#domain>
+      recordType: CNAME
+      targets:
+        - intgw.<path:stringreplacesecret#domain>
+# ---
+# apiVersion: externaldns.k8s.io/v1alpha1
+# kind: DNSEndpoint
+# metadata:
+#   name: zot-public
+#   namespace: zot
+#   annotations:
+#     external-dns.custom/type: public
+# spec:
+#   endpoints:
+#     - dnsName: zot.<path:stringreplacesecret#domain>
+#       recordType: CNAME
+#       targets:
+#         - ingress.<path:stringreplacesecret#domain>
+#       providerSpecific:
+#         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+#           value: "true"
