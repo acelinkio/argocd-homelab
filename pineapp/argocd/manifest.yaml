@@ -81,28 +81,6 @@ spec:
       prune: true
       selfHeal: true
 ---
-apiVersion: external-secrets.io/v1beta1
-kind: ExternalSecret
-metadata:
-  name: stringreplacesecret
-  namespace: argocd
-spec:
-  refreshInterval: "5m"
-  secretStoreRef:
-    kind: ClusterSecretStore
-    name: 1password
-  target:
-    creationPolicy: Owner
-  data:
-    - secretKey: domain
-      remoteRef:
-        key: stringreplacesecret
-        property: domain
-    - secretKey: cloudflaretunnelid
-      remoteRef:
-        key: stringreplacesecret
-        property: cloudflaretunnelid
----
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
