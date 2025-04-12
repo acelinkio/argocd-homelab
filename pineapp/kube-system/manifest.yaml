@@ -1,0 +1,331 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kube-system
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gatewaycrds
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    repoURL: https://github.com/acelinkio/empty.git
+    path: .
+    plugin:
+      name: kustomize-inline
+      env:
+        - name: KUSTOMIZATION_YAML
+          value: |-
+            apiVersion: kustomize.config.k8s.io/v1beta1
+            kind: Kustomization
+            resources:
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/standard/gateway.networking.k8s.io_referencegrants.yaml
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_gateways.yaml
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_tlsroutes.yaml
+              - https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.2.1/config/crd/experimental/gateway.networking.k8s.io_grpcroutes.yaml
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cilium
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: cilium
+    repoURL: https://helm.cilium.io/
+    targetRevision: 1.17.2
+    helm:
+      valuesObject:
+        autoDirectNodeRoutes: true
+        bandwidthManager:
+          enabled: true
+          # rk1's run on 5.10 version of kernel, 5.12 is required
+          bbr: false
+        bpf:
+          masquerade: true
+          # disable ebpf due to issues
+          # https://github.com/cilium/cilium/issues/30510#issuecomment-1926155601
+          # hostLegacyRouting: true
+        envoy:
+          enabled: true
+        cluster:
+          name: home-cluster
+          id: 1
+        endpointRoutes:
+          enabled: true
+        hubble:
+          enabled: true
+          metrics:
+            enabled:
+              - dns:query
+              - drop
+              - tcp
+              - flow
+              - port-distribution
+              - icmp
+              - http
+          relay:
+            enabled: true
+            rollOutPods: true
+          ui:
+            enabled: true
+            rollOutPods: true
+            ingress:
+              enabled: false
+        ipam:
+          mode: kubernetes
+        ipv4NativeRoutingCIDR: "10.42.0.0/16"
+        k8sServiceHost: "192.168.1.195"
+        k8sServicePort: 6443
+        kubeProxyReplacement: true
+        kubeProxyReplacementHealthzBindAddr: 0.0.0.0:10256
+        l2announcements:
+          enabled: true
+        loadBalancer:
+          algorithm: maglev
+          mode: dsr
+        localRedirectPolicy: true
+        operator:
+          replicas: 1
+          rollOutPods: true
+        rollOutCiliumPods: true
+        securityContext:
+          privileged: true
+        routingMode: native
+        gatewayAPI:
+          enabled: true
+          externalTrafficPolicy: Local
+          secretsNamespace:
+            create: false
+            name: certificate
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+  ignoreDifferences:
+    - group: core
+      kind: ConfigMap
+      name: hubble-ca-cert
+      jsonPointers:
+        - /data/ca.crt
+    - group: core
+      kind: Secret
+      name: hubble-relay-client-certs
+      jsonPointers:
+        - /data/ca.crt
+        - /data/tls.crt
+        - /data/tls.key
+    - group: core
+      kind: Secret
+      name: hubble-server-certs
+      jsonPointers:
+        - /data/ca.crt
+        - /data/tls.crt
+        - /data/tls.key
+    - group: core
+      kind: Secret
+      name: cilium-ca
+      jsonPointers:
+        - /data/ca.crt
+        - /data/ca.key
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: coredns
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: coredns
+    repoURL: https://coredns.github.io/helm
+    targetRevision: 1.39.2
+    helm:
+      valuesObject:
+        fullnameOverride: coredns
+        replicaCount: 1
+        k8sAppLabelOverride: kube-dns
+        service:
+          name: kube-dns
+          clusterIP: "10.43.0.10"
+        serviceAccount:
+          create: true
+        deployment:
+          annotations:
+            reloader.stakater.com/auto: "true"
+        servers:
+          - zones:
+              - zone: .
+                scheme: dns://
+                use_tcp: true
+            port: 53
+            plugins:
+              - name: log
+              - name: errors
+              - name: health
+                configBlock: |-
+                  lameduck 5s
+              - name: ready
+              - name: kubernetes
+                parameters: cluster.local in-addr.arpa ip6.arpa
+                configBlock: |-
+                  pods insecure
+                  fallthrough in-addr.arpa ip6.arpa
+                  ttl 30
+              - name: prometheus
+                parameters: 0.0.0.0:9153
+              - name: forward
+                parameters: . /etc/resolv.conf
+              - name: cache
+                parameters: 30
+              - name: loop
+              - name: reload
+              - name: loadbalance
+        affinity:
+          nodeAffinity:
+            requiredDuringSchedulingIgnoredDuringExecution:
+              nodeSelectorTerms:
+                - matchExpressions:
+                    - key: node-role.kubernetes.io/control-plane
+                      operator: Exists
+        tolerations:
+          - key: CriticalAddonsOnly
+            operator: Exists
+          - key: node-role.kubernetes.io/control-plane
+            operator: Exists
+            effect: NoSchedule
+          - key: node-role.kubernetes.io/master
+            operator: Exists
+            effect: NoSchedule
+        topologySpreadConstraints:
+          - maxSkew: 1
+            topologyKey: kubernetes.io/hostname
+            whenUnsatisfiable: DoNotSchedule
+            labelSelector:
+              matchLabels:
+                app.kubernetes.io/instance: coredns
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: hubble
+  namespace: kube-system
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "hubble.bitey.life"
+  rules:
+    - backendRefs:
+        - name: hubble-ui
+          port: 80
+---
+# apiVersion: gateway.networking.k8s.io/v1
+# kind: GRPCRoute
+# metadata:
+#   name: hubble
+#   namespace: kube-system
+#   annotations:
+#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+# spec:
+#   parentRefs:
+#   - name: internal
+#     namespace: gateway
+#     sectionName: https
+#   hostnames:
+#   - "hubble.bitey.life"
+#   rules:
+#   - backendRefs:
+#     - name: hubble-ui
+#       port: 80
+# ---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: hubble-private
+  namespace: kube-system
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: hubble.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumL2AnnouncementPolicy
+metadata:
+  name: policy
+spec:
+  loadBalancerIPs: true
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: pool
+spec:
+  blocks:
+    - start: "192.168.1.10"
+      stop: "192.168.1.19"
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: metrics-server
+  namespace: argocd
+spec:
+  destination:
+    namespace: kube-system
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: metrics-server
+    repoURL: https://kubernetes-sigs.github.io/metrics-server/
+    targetRevision: 3.12.2
+    helm:
+      valuesObject:
+        args:
+          - --kubelet-insecure-tls
+          - --kubelet-preferred-address-types=InternalIP,ExternalIP,Hostname
+          - --kubelet-use-node-status-port
+          - --metric-resolution=15s
+        metrics:
+          enabled: true
+        serviceMonitor:
+          enabled: false
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true

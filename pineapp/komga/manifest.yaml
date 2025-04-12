@@ -1,0 +1,209 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: komga
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: komga
+  namespace: komga
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        application.yml: |
+          spring:
+            security:
+              oauth2:
+                client:
+                  registration:
+                    authentik:
+                      provider: authentik
+                      client-name: Authentik
+                      client-id: "{{ .client_id | toString }}"
+                      client-secret: "{{ .client_secret | toString }}"
+                      scope: openid,profile,email,offline_access
+                      authorization-grant-type: authorization_code
+                      redirect-uri: "{baseUrl}/{action}/oauth2/code/{registrationId}"
+                  provider:
+                    authentik:
+                      user-name-attribute: preferred_username
+                      issuer-uri: https://auth.bitey.life/application/o/komga/
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: sso
+        property: komga_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: komga_client_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: komga
+  namespace: komga
+  labels:
+    app.kubernetes.io/instance: komga
+    app.kubernetes.io/name: komga
+    app.kubernetes.io/service: komga
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: 8080
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/component: komga
+    app.kubernetes.io/instance: komga
+    app.kubernetes.io/name: komga
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: komga
+  namespace: komga
+  labels:
+    app.kubernetes.io/component: komga
+    app.kubernetes.io/instance: komga
+    app.kubernetes.io/name: komga
+  annotations:
+    reloader.stakater.com/auto: "true"
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: komga
+      app.kubernetes.io/name: komga
+      app.kubernetes.io/instance: komga
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: komga
+        app.kubernetes.io/instance: komga
+        app.kubernetes.io/name: komga
+    spec:
+      containers:
+        - env:
+            - name: TZ
+              value: "America/Los_Angeles"
+            - name:  SERVER_PORT
+              value: "8080"
+            - name: KOMGA_CONFIGDIR
+              value: /config
+            - name: KOMGA_OAUTH2_ACCOUNT_CREATION
+              value: "true"
+            - name: LOGGING_FILE_NAME
+              value: /dev/stdout
+          image: docker.io/gotson/komga:1.21.2
+          name: app
+          resources:
+            limits:
+              memory: 600Mi
+            requests:
+              cpu: 100m
+              memory: 400Mi
+          volumeMounts:
+            - mountPath: /config
+              name: data
+              subPath: data
+            - mountPath: /config/application.yml
+              name: config
+              subPath: application.yml
+            - mountPath: /media
+              name: media
+              readOnly: true
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: komga-data
+        - name: config
+          secret:
+            defaultMode: 256
+            secretName: komga
+        - name: media
+          nfs:
+            server: "192.168.1.179"
+            path: /spin0/media
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: komga-data
+  namespace: komga
+  labels:
+    app.kubernetes.io/instance: komga
+    app.kubernetes.io/name: komga
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "2Gi"
+  storageClassName: "longhorn"
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: komga
+  namespace: komga
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "komga.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: komga
+          port: 8080
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: komga-public
+  namespace: komga
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: komga.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: komga-private
+  namespace: komga
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: komga.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
