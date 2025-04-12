@@ -223,7 +223,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: homelab-manifest
+  name: pineapp-homelab
   namespace: argocd
 spec:
   syncPolicy:
@@ -234,31 +234,29 @@ spec:
         repoURL: https://github.com/acelinkio/argocd-homelab.git
         revision: HEAD
         files:
-          - path: manifest/*.yaml
+          - path: pineapp/**/manifest.yaml
   template:
     metadata:
-      name: '{{ normalize .path.filename }}'
+      name: '{{.path.basename}}.manifest'
     spec:
       project: homelab
       source:
         repoURL: https://github.com/acelinkio/argocd-homelab.git
         path: '{{ .path.path }}'
-        plugin:
-          name: avp-directory-include
-          env:
-            - name: FILE_NAME
-              value: '{{ .path.filename }}'
         targetRevision: HEAD
+        directory:
+          recurse: false
+          include: "{manifest.yaml}"
       destination:
         server: "https://kubernetes.default.svc"
-        namespace: '{{ trimSuffix (ext ".yaml") (base .path.filename) }}'
-      syncPolicy: {}
-        # syncOptions:
-        #   - CreateNamespace=true
-        # automated:
-        #   prune: true
-        #   selfHeal: true
-        #   allowEmpty: true
+        namespace: '{{.path.basename}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        automated:
+          prune: true
+          selfHeal: true
+          allowEmpty: true
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
