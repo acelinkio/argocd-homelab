@@ -59,3 +59,6 @@ flowchart TD
 * [network](docs/network.md)
 * [secret](docs/secret.md)
 * [setup](docs/setup.md)
+
+# todo
+* figure our externaldns record with cloudflared tunnel.  wants to be secret
