@@ -1,0 +1,64 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: external-secrets
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: external-secrets
+  namespace: external-secrets
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: external-secrets
+        property: token
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ClusterSecretStore
+metadata:
+  name: 1password
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  provider:
+    onepassword:
+      connectHost: http://onepassword-connect.1passwordconnect.svc.cluster.local:8080
+      vaults:
+        homelab: 1
+      auth:
+        secretRef:
+          connectTokenSecretRef:
+            name: 1passwordconnect
+            key: token
+            namespace: external-secrets
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: external-secrets
+  namespace: argocd
+spec:
+  destination:
+    namespace: external-secrets
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: external-secrets
+    repoURL: https://charts.external-secrets.io
+    targetRevision: 0.15.1
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true

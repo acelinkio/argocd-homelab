@@ -1,0 +1,239 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: discourse
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: discourse-configs
+  namespace: discourse
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: discourse-password
+      remoteRef:
+        key: discourse
+        property: bootstrap_password
+    - secretKey: smtp-password
+      remoteRef:
+        key: discourse
+        property: smtp_password
+    - secretKey: redis_password
+      remoteRef:
+        key: discourse
+        property: redis_password
+    - secretKey: postgres_user
+      remoteRef:
+        key: postgres.cluster02.discourse.owner
+        property: username
+    - secretKey: postgres_password
+      remoteRef:
+        key: postgres.cluster02.discourse.owner
+        property: password
+    - secretKey: postgres_superuser
+      remoteRef:
+        key: postgres.cluster02.superadmin
+        property: username
+    - secretKey: postgres_superpassword
+      remoteRef:
+        key: postgres.cluster02.superadmin
+        property: password
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: discourse
+  namespace: argocd
+spec:
+  destination:
+    namespace: discourse
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: discourse
+    repoURL: registry-1.docker.io/bitnamicharts
+    targetRevision: 15.1.12
+    helm:
+      # https://github.com/bitnami/charts/tree/main/bitnami/discourse
+      # https://github.com/bitnami/containers/blob/main/bitnami/discourse/
+      valuesObject:
+        # must be set to 1 replica for initial install
+        replicaCount: 1
+        host: discourse.bitey.life
+        siteName: "Acelink's Discourse"
+        auth:
+          email: admin@bitey.life
+          username: admin
+          existingSecret: discourse-configs
+          # reads password from discourse-password key
+        discourse:
+          persistPlugins: false
+          plugins:
+            - https://github.com/discourse/discourse-adplugin
+            - https://github.com/discourse/discourse-needs-love
+            - https://github.com/discourse/discourse-post-voting
+            - https://github.com/discourse/discourse-openid-connect
+            - https://github.com/discourse/discourse-data-explorer
+        smtp:
+          enabled: true
+          host: mailpit.mailpit
+          port: 1025
+          user: example
+          existingSecret: discourse-configs
+          # reads password from smtp-password key
+        networkPolicy:
+          enabled: false
+        redis:
+          enabled: false
+        postgresql:
+          enabled: false
+        persistence:
+          enabled: true
+          existingClaim: discourse-storage
+        externalDatabase:
+          host: "cluster02.postgres"
+          user: discourse_owner_user
+          postgresUser: "postgres"
+          database: discourse
+          existingSecret: discourse-configs
+          existingSecretPasswordKey: postgres_password
+          existingSecretPostgresPasswordKey: postgres_superpassword
+        externalRedis:
+          host: discourse-redis-redis-ha-haproxy
+          port: 6379
+          existingSecret: discourse-configs
+          existingSecretPasswordKey: redis_password
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app.kubernetes.io/instance: discourse
+  name: discourse-storage
+  namespace: discourse
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 2Gi
+  storageClassName: longhorn
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: discourse
+  namespace: discourse
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "discourse.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: discourse
+          port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: discourse-private
+  namespace: discourse
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: discourse.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: discourse-public
+  namespace: discourse
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: discourse.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: discourse-redis
+  namespace: discourse
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: password
+      remoteRef:
+        key: discourse
+        property: redis_password
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: discourse-redis
+  namespace: argocd
+spec:
+  destination:
+    namespace: discourse
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: redis-ha
+    repoURL: https://dandydeveloper.github.io/charts/
+    targetRevision: 4.33.2
+    helm:
+      valuesObject:
+        auth: true
+        existingSecret: discourse-redis
+        authKey: password
+        haproxy:
+          enabled: true
+        persistentVolume:
+          enabled: true
+          size: 2Gi
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
