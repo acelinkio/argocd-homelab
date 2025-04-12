@@ -102,7 +102,7 @@ spec:
       containers:
         - env:
             - name: FRONTEND_URL
-              value: "https://ryot.<path:stringreplacesecret#domain>"
+              value: "https://ryot.bitey.life"
             - name: USERS_DISABLE_LOCAL_AUTH
               value: "true"
             - name: SERVER_OIDC_CLIENT_ID
@@ -116,7 +116,7 @@ spec:
                   key: client_secret
                   name: sso
             - name: SERVER_OIDC_ISSUER_URL
-              value: "https://auth.<path:stringreplacesecret#domain>/application/o/ryot/"
+              value: "https://auth.bitey.life/application/o/ryot/"
             - name: HELPERVAR_POSTGRES_USER
               valueFrom:
                 secretKeyRef:
@@ -158,7 +158,7 @@ spec:
       namespace: gateway
       sectionName: https
   hostnames:
-    - "ryot.<path:stringreplacesecret#domain>"
+    - "ryot.bitey.life"
   rules:
     - matches:
         - path:
@@ -177,10 +177,10 @@ metadata:
     external-dns.custom/type: private
 spec:
   endpoints:
-    - dnsName: ryot.<path:stringreplacesecret#domain>
+    - dnsName: ryot.bitey.life
       recordType: CNAME
       targets:
-        - intgw.<path:stringreplacesecret#domain>
+        - intgw.bitey.life
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
@@ -191,10 +191,10 @@ metadata:
     external-dns.custom/type: public
 spec:
   endpoints:
-    - dnsName: ryot.<path:stringreplacesecret#domain>
+    - dnsName: ryot.bitey.life
       recordType: CNAME
       targets:
-        - ingress.<path:stringreplacesecret#domain>
+        - ingress.bitey.life
       providerSpecific:
         - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
           value: "true"
