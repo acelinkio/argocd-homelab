@@ -15,8 +15,9 @@ GitOps driven homelab using ArgoCD with a flat repository structure.
 │   ├── faq.md                 # Frequently Asked Questions
 │   ├── network.md             # Networking details
 │   └── setup.md               # Installation steps
-├── manifest/                  # Watched by ArgoCD ApplicationSet
-│   └── $namespace.yaml        # Per namespace, App of Apps
+├── pineapp/                   # Cluster managed by ArgoCD
+│   └── $namespace/            # Directory per namespace
+│       └── manifest.yaml      # Manifests relating to namespace.  AppOfApps
 ├── .gitignore                 # Ignored files list
 └── README.md                  # This file
 ```
@@ -34,7 +35,7 @@ An ApplicationSet dynamically generates an Applications for each yaml file insid
   
 ```mermaid
 erDiagram
-    ApplicationSet ||--|{ AppOfApps : "each manifest/*.yaml generates"
+    ApplicationSet ||--|{ AppOfApps : "each $cluster/$namespace/manifest.yaml generates"
     AppOfApps ||--o{ Application : "may contain additional"
 ```
   
@@ -43,7 +44,7 @@ erDiagram
 
 ```mermaid
 flowchart TD
-    A[ApplicationSet] -----> B(kube-system.yaml)
+    A[ApplicationSet] -----> B(pineapp/kube-system/manifest.yaml)
     B -----> D[coredns]
     B -----> E[cilium]
     B -----> F[metrics-server]
