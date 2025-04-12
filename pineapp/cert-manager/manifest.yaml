@@ -1,0 +1,89 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: cert-manager
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: argocd
+spec:
+  destination:
+    namespace: cert-manager
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: cert-manager
+    repoURL: https://charts.jetstack.io
+    targetRevision: v1.17.1
+    helm:
+      valuesObject:
+        installCRDs: true
+        extraArgs:
+          - --dns01-recursive-nameservers-only
+          - --dns01-recursive-nameservers=8.8.8.8:53,1.1.1.1:53
+  syncPolicy:
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: cert-manager
+  namespace: cert-manager
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: cert-manager
+        property: token
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+  namespace: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cert-manager
+              key: token
+        selector: {}
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-production
+  namespace: cert-manager
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: letsencrypt-production
+    solvers:
+      - dns01:
+          cloudflare:
+            apiTokenSecretRef:
+              name: cert-manager
+              key: token
+        selector: {}
