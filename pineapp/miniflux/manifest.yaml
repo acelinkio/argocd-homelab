@@ -1,0 +1,200 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: miniflux
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: miniflux-configsecrets
+  namespace: miniflux
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: postgrespassword
+      remoteRef:
+        key: postgres.cluster01.miniflux.owner
+        property: password
+    - secretKey: postgresuser
+      remoteRef:
+        key: postgres.cluster01.miniflux.owner
+        property: username
+---
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: sso
+  namespace: miniflux
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+  data:
+    - secretKey: client_id
+      remoteRef:
+        key: sso
+        property: miniflux_client_id
+    - secretKey: client_secret
+      remoteRef:
+        key: sso
+        property: miniflux_client_secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: miniflux
+  namespace: miniflux
+  labels:
+    app.kubernetes.io/instance: miniflux
+    app.kubernetes.io/name: miniflux
+    app.kubernetes.io/service: miniflux
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/instance: miniflux
+    app.kubernetes.io/name: miniflux
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: miniflux
+  namespace: miniflux
+  labels:
+    app.kubernetes.io/instance: miniflux
+    app.kubernetes.io/name: miniflux
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: miniflux
+      app.kubernetes.io/instance: miniflux
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/instance: miniflux
+        app.kubernetes.io/name: miniflux
+    spec:
+      containers:
+        - env:
+            - name: BASE_URL
+              value: https://rss.bitey.life
+            #- name: CREATE_ADMIN
+            #  value: "1"
+            - name: LOG_DATE_TIME
+              value: "1"
+            # - name: METRICS_ALLOWED_NETWORKS
+            #   value: 192.168.1.100/32
+            # - name: METRICS_COLLECTOR
+            #   value: "1"
+            - name: OAUTH2_CLIENT_ID
+              valueFrom:
+                secretKeyRef:
+                  key: client_id
+                  name: sso
+            - name: OAUTH2_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  key: client_secret
+                  name: sso
+            - name: OAUTH2_OIDC_DISCOVERY_ENDPOINT
+              value: https://auth.bitey.life/application/o/miniflux/
+            - name: OAUTH2_PROVIDER
+              value: oidc
+            - name: OAUTH2_REDIRECT_URL
+              value: https://rss.bitey.life/oauth2/oidc/callback
+            - name: OAUTH2_USER_CREATION
+              value: "1"
+            - name: POLLING_FREQUENCY
+              value: "15"
+            - name: POLLING_SCHEDULER
+              value: entry_frequency
+            - name: PORT
+              value: "80"
+            - name: RUN_MIGRATIONS
+              value: "1"
+            - name: HELPERVAR_POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  key: postgresuser
+                  name: miniflux-configsecrets
+            - name: HELPERVAR_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: postgrespassword
+                  name: miniflux-configsecrets
+            - name: DATABASE_URL
+              value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/miniflux"
+          image: ghcr.io/miniflux/miniflux:2.2.7-distroless
+          name: main
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: miniflux
+  namespace: miniflux
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "rss.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: miniflux
+          port: 80
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: miniflux-private
+  namespace: miniflux
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: rss.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: miniflux-public
+  namespace: miniflux
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: rss.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
