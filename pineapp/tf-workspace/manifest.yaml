@@ -20,12 +20,12 @@ spec:
     creationPolicy: Owner
     template:
       data:
-        authentik_url: "https://auth.{{ .domainbase | toString }}"
+        authentik_url: "https://auth.bitey.life"
         authentik_token: "{{ .authentik_token | toString }}"
         federation_google_client_id: "{{ .federation_google_client_id | toString }}"
         federation_google_client_secret: "{{ .federation_google_client_secret | toString }}"
         oauth.tfvars: |-
-          domainbase = "{{ .domainbase | toString }}"
+          domainbase = "bitey.life"
           client_credentials = {
             "argocd" = {
               client_id     = "{{ .argocd_client_id | toString }}"
@@ -73,10 +73,6 @@ spec:
             }
           }
   data:
-    - secretKey: domainbase
-      remoteRef:
-        key: stringreplacesecret
-        property: domain
     - secretKey: authentik_token
       remoteRef:
         key: authentik
