@@ -61,7 +61,7 @@ spec:
             - name: MP_SMTP_AUTH_ALLOW_INSECURE
               value: "1"
           name: mailpit
-          image: ghcr.io/axllent/mailpit:v1.24.0
+          image: ghcr.io/axllent/mailpit:v1.24.1
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
