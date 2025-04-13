@@ -13,7 +13,7 @@ spec:
   parentRefs:
     - name: external
       namespace: gateway
-      sectionName: http
+      sectionName: https
   hostnames:
     - "bitey.life"
   rules:
