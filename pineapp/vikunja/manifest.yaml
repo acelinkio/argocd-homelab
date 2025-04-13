@@ -109,7 +109,7 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: vikunja-api
+  name: vikunja
   namespace: vikunja
   labels:
     app.kubernetes.io/component: vikunja
@@ -163,12 +163,12 @@ spec:
           name: main
           volumeMounts:
             - mountPath: /etc/vikunja/config.yaml
-              name: api-config
+              name: config
               subPath: config.yaml
             - mountPath: /app/vikunja/files
               name: files
       volumes:
-        - name: api-config
+        - name: config
           secret:
             secretName: sso
         - name: files
