@@ -6,12 +6,12 @@
   prHourlyLimit: 3,
   argocd: {
     fileMatch: [
-      'manifest/.+\\.yaml$',
+      'pineapp/[^/]+/manifest\\.yaml$',
     ],
   },
   kubernetes: {
     fileMatch: [
-      'manifest/.+\\.yaml$',
+      'pineapp/[^/]+/manifest\\.yaml$',
     ],
   },
 }
