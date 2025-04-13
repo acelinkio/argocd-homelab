@@ -88,12 +88,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: vikunja-api
+  name: vikunja
   namespace: vikunja
   labels:
     app.kubernetes.io/instance: vikunja
     app.kubernetes.io/name: vikunja
-    app.kubernetes.io/service: vikunja-api
+    app.kubernetes.io/service: vikunja
 spec:
   type: ClusterIP
   ports:
@@ -102,28 +102,7 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app.kubernetes.io/component: api
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/name: vikunja
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: vikunja-frontend
-  namespace: vikunja
-  labels:
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/name: vikunja
-    app.kubernetes.io/service: vikunja-frontend
-spec:
-  type: ClusterIP
-  ports:
-    - port: 80
-      targetPort: 80
-      protocol: TCP
-      name: http
-  selector:
-    app.kubernetes.io/component: frontend
+    app.kubernetes.io/component: vikunja
     app.kubernetes.io/instance: vikunja
     app.kubernetes.io/name: vikunja
 ---
@@ -133,7 +112,7 @@ metadata:
   name: vikunja-api
   namespace: vikunja
   labels:
-    app.kubernetes.io/component: api
+    app.kubernetes.io/component: vikunja
     app.kubernetes.io/instance: vikunja
     app.kubernetes.io/name: vikunja
 spec:
@@ -141,13 +120,13 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      app.kubernetes.io/component: api
+      app.kubernetes.io/component: vikunja
       app.kubernetes.io/name: vikunja
       app.kubernetes.io/instance: vikunja
   template:
     metadata:
       labels:
-        app.kubernetes.io/component: api
+        app.kubernetes.io/component: vikunja
         app.kubernetes.io/instance: vikunja
         app.kubernetes.io/name: vikunja
     spec:
@@ -180,7 +159,7 @@ spec:
                 secretKeyRef:
                   name: vikunja-configsecrets
                   key: jwtsecret
-          image: vikunja/api:0.22.1
+          image: docker.io/vikunja/vikunja:0.24.6
           name: main
           volumeMounts:
             - mountPath: /etc/vikunja/config.yaml
@@ -195,32 +174,6 @@ spec:
         - name: files
           persistentVolumeClaim:
             claimName: vikunja-files
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: vikunja-frontend
-  namespace: vikunja
-  labels:
-    app.kubernetes.io/component: frontend
-    app.kubernetes.io/instance: vikunja
-    app.kubernetes.io/name: vikunja
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/component: frontend
-      app.kubernetes.io/name: vikunja
-      app.kubernetes.io/instance: vikunja
-  template:
-    metadata:
-      labels:
-        app.kubernetes.io/component: frontend
-        app.kubernetes.io/instance: vikunja
-        app.kubernetes.io/name: vikunja
-    spec:
-      containers:
-        - image: vikunja/frontend:0.22.1
-          name: main
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -241,23 +194,10 @@ spec:
     - matches:
         - path:
             type: PathPrefix
-            value: /.well-known
-        - path:
-            type: PathPrefix
-            value: /dav
-        - path:
-            type: PathPrefix
-            value: /api
-      backendRefs:
-        - name: vikunja-api
-          port: 3456
-    - matches:
-        - path:
-            type: PathPrefix
             value: /
       backendRefs:
-        - name: vikunja-frontend
-          port: 80
+        - name: vikunja
+          port: 3456
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
