@@ -79,7 +79,7 @@ spec:
           defaultRoles: false
           defaultUsers: false
   postgresql:
-    version: "16"
+    version: "17"
     parameters:
       password_encryption: scram-sha-256
 ---
@@ -331,7 +331,7 @@ spec:
           defaultRoles: false
           defaultUsers: false
   postgresql:
-    version: "16"
+    version: "17"
     parameters:
       password_encryption: scram-sha-256
 ---
