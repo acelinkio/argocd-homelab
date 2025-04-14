@@ -217,7 +217,7 @@ spec:
           database:
             name: psycopg2
             args:
-              database: datatestdb
+              database: matrix
               host: cluster03.postgres
               user: {{ .postgresuser | toString }}
               password: {{ .postgrespassword | toString }}
