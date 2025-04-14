@@ -388,62 +388,62 @@ spec:
         remoteRef:
           remoteKey: postgres.cluster02.superadmin
           property: password
-# ---
-# apiVersion: acid.zalan.do/v1
-# kind: postgresql
-# metadata:
-#   name: cluster03
-#   namespace: postgres
-# spec:
-#   teamId: acid
-#   volume:
-#     size: 5Gi
-#     storageClass: longhorn
-#   numberOfInstances: 2
-#   patroni:
-#     initdb:
-#       lc-collate: C
-#       lc-ctype: C
-#       encoding: UTF8
-#   preparedDatabases:
-#     matrix:
-#       defaultUsers: true
-#       extensions: {}
-#       schemas:
-#         data:
-#           defaultRoles: false
-#           defaultUsers: false
-#   postgresql:
-#     version: "17"
-#     parameters:
-#       password_encryption: scram-sha-256
-# ---
-# apiVersion: external-secrets.io/v1alpha1
-# kind: PushSecret
-# metadata:
-#   name: cluster03.matrix.owner
-#   namespace: postgres
-#   annotations:
-#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-# spec:
-#   refreshInterval: "5m"
-#   secretStoreRefs:
-#     - name: 1password
-#       kind: ClusterSecretStore
-#   selector:
-#     secret:
-#       name: matrix-owner-user.cluster03.credentials.postgresql.acid.zalan.do
-#   data:
-#     - match:
-#         secretKey: username
-#         remoteRef:
-#           remoteKey: postgres.cluster03.matrix.owner
-#           property: username
-#     - match:
-#         secretKey: password
-#         remoteRef:
-#           remoteKey: postgres.cluster03.matrix.owner
-#           property: password
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
+  name: cluster03
+  namespace: postgres
+spec:
+  teamId: acid
+  volume:
+    size: 5Gi
+    storageClass: longhorn
+  numberOfInstances: 2
+  patroni:
+    initdb:
+      lc-collate: C
+      lc-ctype: C
+      encoding: UTF8
+  preparedDatabases:
+    matrix:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
+          defaultRoles: false
+          defaultUsers: false
+  postgresql:
+    version: "17"
+    parameters:
+      password_encryption: scram-sha-256
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster03.matrix.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: matrix-owner-user.cluster03.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster03.matrix.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster03.matrix.owner
+          property: password
 # ---
 # apiVersion: acid.zalan.do/v1
 # kind: postgresql
