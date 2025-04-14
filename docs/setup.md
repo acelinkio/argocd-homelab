@@ -93,6 +93,13 @@ homelab                        # vault used for containing secrets
 - In the homelab vault, create secret named `ryot`
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
+### Matrix
+- In the homelab vault, create secret named `matrix`
+- Create a random 30 character string named `macaroon_secret_key`.
+- Create a random 30 character string named `registration_shared_secret`.
+- Create a random 30 character string named `form_secret`.
+- Create a secret based upon https://github.com/element-hq/synapse/blob/develop/synapse/_scripts/generate_signing_key.py and store in `signing_key`.
+
 ### Kyoo
 - In the homelab vault, create secret named `kyoo`
 - Generate random 30 character string to be used as an internal apikey for kyoo microservices.  Save apikey into key named `kyoo_apikeys`

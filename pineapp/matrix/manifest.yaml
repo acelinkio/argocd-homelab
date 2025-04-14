@@ -1,0 +1,262 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: matrix
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: matrix-data
+  namespace: matrix
+  labels:
+    app.kubernetes.io/instance: matrix
+    app.kubernetes.io/name: matrix
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+  storageClassName: "longhorn"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matrix
+  namespace: matrix
+  labels:
+    app.kubernetes.io/instance: matrix
+    app.kubernetes.io/name: matrix
+    app.kubernetes.io/service: matrix
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8008
+      targetPort: 8008
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/component: matrix
+    app.kubernetes.io/instance: matrix
+    app.kubernetes.io/name: matrix
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix
+  namespace: matrix
+  labels:
+    app.kubernetes.io/component: matrix
+    app.kubernetes.io/instance: matrix
+    app.kubernetes.io/name: matrix
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: matrix
+      app.kubernetes.io/name: matrix
+      app.kubernetes.io/instance: matrix
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/component: matrix
+        app.kubernetes.io/instance: matrix
+        app.kubernetes.io/name: matrix
+    spec:
+      containers:
+        - env:
+          - name: test123
+            value: "false"
+          image: ghcr.io/element-hq/synapse:v1.128.0
+          name: main
+          volumeMounts:
+            - mountPath: /data/media_store
+              name: data
+            - mountPath: /data/homeserver.yaml
+              name: config
+              subPath: homeserver.yaml
+            - name: logconfig
+              mountPath: /data/log.yaml
+              subPath: log.yaml
+            - name: signingkey
+              mountPath: /data/signing.key
+              subPath: signing.key
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: matrix-data
+        - name: config
+          secret:
+            secretName: config
+            items:
+              - key: homeserver.yaml
+                path: homeserver.yaml
+        - name: logconfig
+          secret:
+            secretName: config
+            items:
+              - key: log.yaml
+                path: log.yaml
+        - name: signingkey
+          secret:
+            secretName: config
+            items:
+              - key: signing.key
+                path: signing.key
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: matrix
+  namespace: matrix
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+    - name: external
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "matrix.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: matrix
+          port: 8008
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: matrix-public
+  namespace: matrix
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: matrix.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: matrix-private
+  namespace: matrix
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: matrix.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+# copy/pasta
+apiVersion: external-secrets.io/v1beta1
+kind: ExternalSecret
+metadata:
+  name: config
+  namespace: matrix
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: 1password
+  target:
+    creationPolicy: Owner
+    template:
+      data:
+        log.yaml: |-
+          version: 1
+          formatters:
+            precise:
+              format: '%(asctime)s - %(name)s - %(lineno)d - %(levelname)s - %(request)s - %(message)s'
+          filters:
+            context:
+              (): synapse.util.logcontext.LoggingContextFilter
+              request: ""
+          handlers:
+            console:
+              class: logging.StreamHandler
+              formatter: precise
+              filters: [context]
+              level: INFO
+          loggers:
+            synapse:
+              level: INFO
+          root:
+            level: INFO
+            handlers: [console]
+        signing.key: "{{ .signing_key | toString }}"
+        homeserver.yaml: |-
+          server_name: "matrix.bitey.life"
+          serve_server_wellknown: true
+          pid_file: /data/homeserver.pid
+          listeners:
+            - port: 8008
+              tls: false
+              type: http
+              x_forwarded: true
+              resources:
+                - names:
+                    - "client"
+                    - "federation"
+                  compress: false
+          database:
+            name: psycopg2
+            args:
+              database: datatestdb
+              host: cluster03.postgres
+              user: {{ .postgresuser | toString }}
+              password: {{ .postgrespassword | toString }}
+              port: 5432
+              cp_min: 5
+              cp_max: 10
+          enable_registration: false
+          enable_registration_without_verification: false
+          report_stats: false
+          trusted_key_servers:
+            - server_name: "matrix.org"
+          media_store_path: /data/media_store
+          log_config: "/data/log.yaml"
+          signing_key_path: "/data/signing.key"
+          registration_shared_secret: {{ .registration_shared_secret | toString }}
+          macaroon_secret_key: {{ .macaroon_secret_key | toString }}
+          form_secret: {{ .form_secret | toString }}
+  data:
+    - secretKey: postgrespassword
+      remoteRef:
+        key: postgres.cluster03.matrix.owner
+        property: password
+    - secretKey: postgresuser
+      remoteRef:
+        key: postgres.cluster03.matrix.owner
+        property: username
+    - secretKey: registration_shared_secret
+      remoteRef:
+        key: matrix
+        property: registration_shared_secret
+    - secretKey: macaroon_secret_key
+      remoteRef:
+        key: matrix
+        property: macaroon_secret_key
+    - secretKey: form_secret
+      remoteRef:
+        key: matrix
+        property: form_secret
+    - secretKey: signing_key
+      remoteRef:
+        key: matrix
+        property: signing_key
