@@ -235,6 +235,21 @@ spec:
           registration_shared_secret: {{ .registration_shared_secret | toString }}
           macaroon_secret_key: {{ .macaroon_secret_key | toString }}
           form_secret: {{ .form_secret | toString }}
+          oidc_providers:
+            - idp_id: authentik
+              idp_name: authentik
+              discover: true
+              issuer: "https://auth.bitey.life/application/o/matrix/"
+              client_id: {{ .matrix_client_id | toString }}
+              client_secret: {{ .matrix_client_secret | toString }}
+              scopes:
+                - "openid"
+                - "profile"
+                - "email"
+              user_mapping_provider:
+                config:
+                  localpart_template: {{ printf "\"{{ user.preferred_username }}\"" }}
+                  display_name_template: {{ printf "\"{{ user.preferred_username|capitalize }}\"" }}
   data:
     - secretKey: postgrespassword
       remoteRef:
@@ -260,3 +275,11 @@ spec:
       remoteRef:
         key: matrix
         property: signing_key
+    - secretKey: matrix_client_id
+      remoteRef:
+        key: sso
+        property: matrix_client_id
+    - secretKey: matrix_client_secret
+      remoteRef:
+        key: sso
+        property: matrix_client_secret
