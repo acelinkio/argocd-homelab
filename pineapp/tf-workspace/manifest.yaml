@@ -55,6 +55,10 @@ spec:
               client_id     = "{{ .mealie_client_id | toString }}"
               client_secret = "{{ .mealie_client_secret | toString }}"
             }
+            "matrix" = {
+              client_id     = "{{ .matrix_client_id | toString }}"
+              client_secret = "{{ .matrix_client_secret | toString }}"
+            }
             "miniflux" = {
               client_id     = "{{ .miniflux_client_id | toString }}"
               client_secret = "{{ .miniflux_client_secret | toString }}"
