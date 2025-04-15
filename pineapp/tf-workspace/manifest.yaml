@@ -125,6 +125,14 @@ spec:
       remoteRef:
         key: sso
         property: manyfold_client_secret
+    - secretKey: matrix_client_id
+      remoteRef:
+        key: sso
+        property: matrix_client_id
+    - secretKey: matrix_client_secret
+      remoteRef:
+        key: sso
+        property: matrix_client_secret
     - secretKey: mealie_client_id
       remoteRef:
         key: sso
@@ -377,6 +385,27 @@ spec:
                 {
                   matching_mode = "strict",
                   url           = "https://manyfold.${var.domainbase}/users/auth/openid_connect/callback",
+                }
+              ]
+              property_mappings = [
+                data.authentik_property_mapping_provider_scope.openid.id,
+                data.authentik_property_mapping_provider_scope.email.id,
+                data.authentik_property_mapping_provider_scope.profile.id,
+                data.authentik_property_mapping_provider_scope.offline_access.id
+              ]
+            }
+          }
+          "matrix" = {
+            auth_application = {
+              icon       = "https://avatars.githubusercontent.com/u/13446337?s=200&v=4"
+              launch_url = "https://matrix.${var.domainbase}/"
+              policy     = "all"
+            }
+            auth_provider = {
+              allowed_redirect_uris = [
+                {
+                  matching_mode = "strict",
+                  url           = "https://matrix.${var.domainbase}/_synapse/client/oidc/callback",
                 }
               ]
               property_mappings = [
