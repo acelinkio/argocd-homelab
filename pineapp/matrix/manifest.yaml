@@ -213,6 +213,7 @@ spec:
                 - names:
                     - "client"
                     - "federation"
+                    - "openid"
                   compress: false
           database:
             name: psycopg2
