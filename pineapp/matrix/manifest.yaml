@@ -239,6 +239,7 @@ spec:
           oidc_providers:
             - idp_id: authentik
               idp_name: authentik
+              allow_existing_users: true
               discover: true
               issuer: "https://auth.bitey.life/application/o/matrix/"
               client_id: {{ .matrix_client_id | toString }}
@@ -251,6 +252,7 @@ spec:
                 config:
                   localpart_template: {{ printf "\"{{ user.preferred_username }}\"" }}
                   display_name_template: {{ printf "\"{{ user.preferred_username|capitalize }}\"" }}
+                  email_template: {{ printf "\"{{ user.email }}\"" }}
   data:
     - secretKey: postgrespassword
       remoteRef:
