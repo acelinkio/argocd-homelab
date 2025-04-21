@@ -45,3 +45,12 @@ spec:
   args:
     - -d
     - --poll=15m
+---
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-opentofu
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  package: xpkg.upbound.io/upbound/provider-opentofu:v0.2.4
