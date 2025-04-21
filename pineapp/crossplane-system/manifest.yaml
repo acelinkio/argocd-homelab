@@ -31,7 +31,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/upbound/provider-terraform:v0.19.3
+  package: xpkg.upbound.io/upbound/provider-terraform:v0.20.0
   controllerConfigRef:
     name: terraform-config
 ---
