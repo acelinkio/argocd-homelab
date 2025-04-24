@@ -70,7 +70,7 @@ spec:
   source:
     chart: tenant
     repoURL: https://operator.min.io
-    targetRevision: 7.0.1
+    targetRevision: 7.1.1
     helm:
       valuesObject:
         tenant:
