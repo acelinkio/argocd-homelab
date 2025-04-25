@@ -17,7 +17,7 @@ spec:
   source:
     chart: traefik-crds
     repoURL: https://traefik.github.io/charts
-    targetRevision: 1.6.0
+    targetRevision: 1.7.0
     helm:
       valuesObject:
         traefik: true
