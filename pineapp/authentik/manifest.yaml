@@ -57,7 +57,7 @@ spec:
   source:
     chart: authentik
     repoURL: https://charts.goauthentik.io
-    targetRevision: 2025.2.4
+    targetRevision: 2025.4.0
     helm:
       valuesObject:
         server:
