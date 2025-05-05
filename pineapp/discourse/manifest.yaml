@@ -61,7 +61,7 @@ spec:
   source:
     chart: discourse
     repoURL: registry-1.docker.io/bitnamicharts
-    targetRevision: 15.1.13
+    targetRevision: 15.1.14
     helm:
       # https://github.com/bitnami/charts/tree/main/bitnami/discourse
       # https://github.com/bitnami/containers/blob/main/bitnami/discourse/
