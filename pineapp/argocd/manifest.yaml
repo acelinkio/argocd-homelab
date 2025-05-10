@@ -50,6 +50,7 @@ spec:
           cm:
             resource.compareoptions: |
               ignoreAggregatedRoles: true
+              ignoreResourceStatusField: crd
             url: "https://argocd.bitey.life"
             dex.config: |
               connectors:
