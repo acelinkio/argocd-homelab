@@ -69,7 +69,7 @@ spec:
         - env:
           - name: test123
             value: "false"
-          image: ghcr.io/element-hq/synapse:v1.129.0
+          image: ghcr.io/element-hq/synapse:v1.130.0
           name: main
           volumeMounts:
             - mountPath: /data/media_store
