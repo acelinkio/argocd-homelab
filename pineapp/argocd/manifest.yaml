@@ -41,7 +41,7 @@ spec:
   source:
     chart: argo-cd
     repoURL: https://argoproj.github.io/argo-helm
-    targetRevision: 8.0.12
+    targetRevision: 8.0.14
     helm:
       valuesObject:
         configs:
