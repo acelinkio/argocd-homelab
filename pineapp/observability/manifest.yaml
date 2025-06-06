@@ -231,7 +231,7 @@ spec:
   source:
     chart: fluent-bit
     repoURL: https://fluent.github.io/helm-charts
-    targetRevision: 0.49.0
+    targetRevision: 0.49.1
     helm:
       valuesObject:
         config:
