@@ -151,6 +151,12 @@ xt_socket
 iptable_raw
 EOF
 
+# add longhohn not loading packages
+modprobe dm_crypt
+
+cat << 'EOF' > /etc/modules-load.d/longhorn.conf
+dm_crypt
+EOF
 
 
 export SETUP_NODEIP=192.168.1.195
