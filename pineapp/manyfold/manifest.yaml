@@ -4,7 +4,7 @@ apiVersion: v1
 metadata:
   name: manyfold
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: manyfold-redis
@@ -54,7 +54,7 @@ spec:
       prune: true
       selfHeal: true
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: manyfold
@@ -86,7 +86,7 @@ spec:
         key: postgres.cluster01.manyfold.owner
         property: username
 ---
-apiVersion: external-secrets.io/v1beta1
+apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: sso
