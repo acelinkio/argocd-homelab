@@ -22,7 +22,7 @@ spec:
             hostname: en.wikipedia.org
             path: 
               type: ReplaceFullPath
-              replaceFullPath: "/wiki/Odaxelagnia"
+              replaceFullPath: "/wiki/Pineapple"
             scheme: https
             statusCode: 301
           type: RequestRedirect
