@@ -124,9 +124,7 @@ spec:
       defaultUsers: true
       extensions: {}
       schemas:
-        # still uses public schema...
-        # https://community.vikunja.io/t/postgres-database-has-error-pq-relation-tasks-does-not-exist/1333
-        public:
+        data:
           defaultRoles: false
           defaultUsers: false
   postgresql:

@@ -140,6 +140,8 @@ spec:
               value: cluster01.postgres
             - name: VIKUNJA_DATABASE_DATABASE
               value: vikunja
+            - name: VIKUNJA_DATABASE_SCHEMA
+              value: data
             - name: VIKUNJA_DATABASE_SSLMODE
               value: require
             - name: VIKUNJA_DATABASE_USER
