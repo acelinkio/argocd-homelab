@@ -97,11 +97,11 @@ spec:
         property: masterkey
     - secretKey: postgres_user
       remoteRef:
-        key: postgres.cluster01.kyoo_back.owner
+        key: postgres.cluster04.kyoo_back.owner
         property: username
     - secretKey: postgres_password
       remoteRef:
-        key: postgres.cluster01.kyoo_back.owner
+        key: postgres.cluster04.kyoo_back.owner
         property: password
     - secretKey: rabbitmq_user
       remoteRef:
@@ -171,11 +171,11 @@ spec:
   data:
     - secretKey: postgres_user
       remoteRef:
-        key: postgres.cluster01.kyoo_transcoder.owner
+        key: postgres.cluster04.kyoo_transcoder.owner
         property: username
     - secretKey: postgres_password
       remoteRef:
-        key: postgres.cluster01.kyoo_transcoder.owner
+        key: postgres.cluster04.kyoo_transcoder.owner
         property: password
 ---
 apiVersion: external-secrets.io/v1
@@ -249,13 +249,13 @@ spec:
               existingSecret: kyoo-back
           postgres:
             kyoo_back:
-              host: cluster01.postgres
+              host: cluster04.postgres
               kyoo_migrations:
                 existingSecret: kyoo-back
               kyoo_back:
                 existingSecret: kyoo-back
             kyoo_transcoder:
-              host: cluster01.postgres
+              host: cluster04.postgres
               sslmode: require
               kyoo_transcoder:
                 existingSecret: kyoo-transcoder
