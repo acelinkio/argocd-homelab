@@ -252,7 +252,7 @@ spec:
   volume:
     size: 8Gi
     storageClass: longhorn
-  numberOfInstances: 2
+  numberOfInstances: 1
   preparedDatabases:
     discourse:
       defaultUsers: true
@@ -330,7 +330,7 @@ spec:
   volume:
     size: 8Gi
     storageClass: longhorn
-  numberOfInstances: 2
+  numberOfInstances: 1
   patroni:
     initdb:
       lc-collate: C
