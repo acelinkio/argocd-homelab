@@ -104,6 +104,9 @@ spec:
                 secretKeyRef:
                   key: postgrespassword
                   name: authentik-configsecrets
+            # https://github.com/goauthentik/authentik/issues/16797
+            # - name: AUTHENTIK_POSTGRESQL__DEFAULT_SCHEMA
+            #   value: "data"
   syncPolicy:
     automated:
       allowEmpty: true

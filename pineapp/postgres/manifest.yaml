@@ -20,7 +20,8 @@ spec:
       defaultUsers: true
       extensions: {}
       schemas:
-        data:
+        # does not support non-public: https://github.com/goauthentik/authentik/issues/16797
+        public:
           defaultRoles: false
           defaultUsers: false
   postgresql:
