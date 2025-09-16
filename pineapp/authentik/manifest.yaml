@@ -37,11 +37,11 @@ spec:
         property: secret_key
     - secretKey: postgrespassword
       remoteRef:
-        key: postgres.cluster01.authentik.owner
+        key: postgres.cluster00.authentik.owner
         property: password
     - secretKey: postgresuser
       remoteRef:
-        key: postgres.cluster01.authentik.owner
+        key: postgres.cluster00.authentik.owner
         property: username
 ---
 apiVersion: argoproj.io/v1alpha1
@@ -65,7 +65,7 @@ spec:
             enabled: false
         authentik:
           postgresql:
-            host: "cluster01.postgres"
+            host: "cluster00.postgres"
             name: "authentik"
         redis:
           enabled: true

@@ -7,6 +7,57 @@ metadata:
 apiVersion: acid.zalan.do/v1
 kind: postgresql
 metadata:
+  name: cluster00
+  namespace: postgres
+spec:
+  teamId: acid
+  volume:
+    size: 4Gi
+    storageClass: longhorn
+  numberOfInstances: 1
+  preparedDatabases:
+    authentik:
+      defaultUsers: true
+      extensions: {}
+      schemas:
+        data:
+          defaultRoles: false
+          defaultUsers: false
+  postgresql:
+    version: "17"
+    parameters:
+      password_encryption: scram-sha-256
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: cluster00.authentik.owner
+  namespace: postgres
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: authentik-owner-user.cluster00.credentials.postgresql.acid.zalan.do
+  data:
+    - match:
+        secretKey: username
+        remoteRef:
+          remoteKey: postgres.cluster00.authentik.owner
+          property: username
+    - match:
+        secretKey: password
+        remoteRef:
+          remoteKey: postgres.cluster00.authentik.owner
+          property: password
+---
+apiVersion: acid.zalan.do/v1
+kind: postgresql
+metadata:
   name: cluster01
   namespace: postgres
 spec:
@@ -82,33 +133,6 @@ spec:
     version: "17"
     parameters:
       password_encryption: scram-sha-256
----
-apiVersion: external-secrets.io/v1alpha1
-kind: PushSecret
-metadata:
-  name: cluster01.authentik.owner
-  namespace: postgres
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  refreshInterval: "5m"
-  secretStoreRefs:
-    - name: 1password
-      kind: ClusterSecretStore
-  selector:
-    secret:
-      name: authentik-owner-user.cluster01.credentials.postgresql.acid.zalan.do
-  data:
-    - match:
-        secretKey: username
-        remoteRef:
-          remoteKey: postgres.cluster01.authentik.owner
-          property: username
-    - match:
-        secretKey: password
-        remoteRef:
-          remoteKey: postgres.cluster01.authentik.owner
-          property: password
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
