@@ -186,7 +186,7 @@ spec:
         key: sso
         property: federation_google_client_secret
 ---
-apiVersion: tf.upbound.io/v1beta1
+apiVersion: opentofu.upbound.io/v1beta1
 kind: ProviderConfig
 metadata:
   name: authentik-provider
@@ -209,7 +209,7 @@ spec:
       }
     }
 ---
-apiVersion: tf.upbound.io/v1beta1
+apiVersion: opentofu.upbound.io/v1beta1
 kind: Workspace
 metadata:
   name: authentik-oauth
@@ -529,7 +529,7 @@ spec:
         client_credentials = var.client_credentials
       }
 ---
-apiVersion: tf.upbound.io/v1beta1
+apiVersion: opentofu.upbound.io/v1beta1
 kind: Workspace
 metadata:
   name: authentik-groups
@@ -595,7 +595,7 @@ spec:
         is_superuser = false
       }
 ---
-apiVersion: tf.upbound.io/v1beta1
+apiVersion: opentofu.upbound.io/v1beta1
 kind: Workspace
 metadata:
   name: authentik-signin

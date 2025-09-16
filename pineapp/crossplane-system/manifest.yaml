@@ -23,22 +23,22 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
----
-apiVersion: pkg.crossplane.io/v1
-kind: Provider
-metadata:
-  name: provider-terraform
-  annotations:
-    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-spec:
-  package: xpkg.upbound.io/upbound/provider-terraform:v0.20.0
-  controllerConfigRef:
-    name: terraform-config
+# ---
+# apiVersion: pkg.crossplane.io/v1
+# kind: Provider
+# metadata:
+#   name: provider-terraform
+#   annotations:
+#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+# spec:
+#   package: xpkg.upbound.io/upbound/provider-terraform:v0.20.0
+#   controllerConfigRef:
+#     name: tf-config
 ---
 apiVersion: pkg.crossplane.io/v1alpha1
 kind: ControllerConfig
 metadata:
-  name: terraform-config
+  name: tf-config
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
@@ -53,4 +53,6 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  package: xpkg.upbound.io/upbound/provider-opentofu:v0.2.4
+  package: xpkg.upbound.io/upbound/provider-opentofu:v0.2.7
+  controllerConfigRef:
+    name: tf-config
