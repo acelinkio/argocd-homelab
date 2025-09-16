@@ -470,7 +470,7 @@ spec:
 # apiVersion: acid.zalan.do/v1
 # kind: postgresql
 # metadata:
-#   name: cluster04
+#   name: cluster05
 #   namespace: postgres
 # spec:
 #   teamId: acid
@@ -497,10 +497,11 @@ spec:
 #     version: "16"
 #     parameters:
 #       password_encryption: scram-sha-256
+# ---
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster04.publictestdb.owner
+#   name: cluster05.publictestdb.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -511,23 +512,23 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: publictestdb-owner-user.cluster04.credentials.postgresql.acid.zalan.do
+#       name: publictestdb-owner-user.cluster05.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: postgres.cluster04.publictestdb.owner
+#           remoteKey: postgres.cluster05.publictestdb.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: postgres.cluster04.publictestdb.owner
+#           remoteKey: postgres.cluster05.publictestdb.owner
 #           property: password
 # ---
 # apiVersion: external-secrets.io/v1alpha1
 # kind: PushSecret
 # metadata:
-#   name: cluster04.datatestdb.owner
+#   name: cluster05.datatestdb.owner
 #   namespace: postgres
 #   annotations:
 #     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
@@ -538,15 +539,15 @@ spec:
 #       kind: ClusterSecretStore
 #   selector:
 #     secret:
-#       name: datatestdb-owner-user.cluster04.credentials.postgresql.acid.zalan.do
+#       name: datatestdb-owner-user.cluster05.credentials.postgresql.acid.zalan.do
 #   data:
 #     - match:
 #         secretKey: username
 #         remoteRef:
-#           remoteKey: postgres.cluster04.datatestdb.owner
+#           remoteKey: postgres.cluster05.datatestdb.owner
 #           property: username
 #     - match:
 #         secretKey: password
 #         remoteRef:
-#           remoteKey: postgres.cluster04.datatestdb.owner
+#           remoteKey: postgres.cluster05.datatestdb.owner
 #           property: password
