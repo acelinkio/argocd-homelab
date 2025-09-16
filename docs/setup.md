@@ -250,7 +250,7 @@ This is a manual step until either the default authentik resource can be importe
 Update stage default-provider-authoerization-consent to use 26 weeks instead of 4.  
 
 ### Login to Komga
-Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
+Komga does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
 
 ### Login to Kyoo
 Kyoo does not seed the initial user.  Instead the first login allows for an administrator account to be created.  Be sure to set this up.
