@@ -50,6 +50,8 @@ spec:
       data:
         config.yaml: |-
           auth:
+            local:
+              enabled: true
             openid:
               enabled: true
               redirecturl: https://tasks.bitey.life/auth/openid/
@@ -164,9 +166,9 @@ spec:
           image: docker.io/vikunja/vikunja:1.0.0-rc2
           name: main
           volumeMounts:
-            # - mountPath: /etc/vikunja/config.yaml
-            #   name: config
-            #   subPath: config.yaml
+            - mountPath: /etc/vikunja/config.yaml
+              name: config
+              subPath: config.yaml
             - mountPath: /app/vikunja/files
               name: files
       volumes:
