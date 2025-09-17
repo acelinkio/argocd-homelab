@@ -161,7 +161,7 @@ spec:
                 secretKeyRef:
                   name: vikunja-configsecrets
                   key: jwtsecret
-          image: docker.io/vikunja/vikunja:0.24.6
+          image: docker.io/vikunja/vikunja:1.0.0-rc2
           name: main
           volumeMounts:
             - mountPath: /etc/vikunja/config.yaml
