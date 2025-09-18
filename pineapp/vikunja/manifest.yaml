@@ -52,13 +52,14 @@ spec:
           auth:
             openid:
               enabled: true
-              redirecturl: https://tasks.bitey.life/auth/openid/
               providers:
-                - name: authentik
+                bitey:
+                  name: authentik
                   authurl: https://auth.bitey.life/application/o/vikunja/
                   logouturl: https://auth.bitey.life/application/o/vikunja/end-session/
                   clientid: "{{ .client_id | toString }}"
                   clientsecret: "{{ .client_secret | toString }}"
+                  scope: openid email profile
   data:
     - secretKey: client_id
       remoteRef:
