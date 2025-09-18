@@ -53,7 +53,7 @@ spec:
             openid:
               enabled: true
               providers:
-                bitey:
+                authentik:
                   name: authentik
                   authurl: https://auth.bitey.life/application/o/vikunja/
                   logouturl: https://auth.bitey.life/application/o/vikunja/end-session/
