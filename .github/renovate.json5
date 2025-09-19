@@ -5,13 +5,13 @@
   ],
   prHourlyLimit: 3,
   argocd: {
-    fileMatch: [
-      'pineapp/[^/]+/manifest\\.yaml$',
+    managerFilePatterns: [
+      '/pineapp/[^/]+/manifest\\.yaml$/',
     ],
   },
   kubernetes: {
-    fileMatch: [
-      'pineapp/[^/]+/manifest\\.yaml$',
+    managerFilePatterns: [
+      '/pineapp/[^/]+/manifest\\.yaml$/',
     ],
   },
 }
