@@ -156,10 +156,10 @@ spec:
         prometheus:
           prometheusSpec:
             retention: 1d
-  syncPolicy: {}
-    # syncOptions:
-    #   - ServerSideApply=true
-    # automated:
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+    automated: {}
     #   allowEmpty: true
     #   prune: true
     #   selfHeal: true
