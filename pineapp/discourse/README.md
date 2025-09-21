@@ -8,7 +8,8 @@ Initial login requires using the default admin account with the bootstrap passwo
 Allow Security
 * Navigate to Admin -> Security -> Security
 * Set the setting for `allowed internal hosts` to your identity providers hostname.  auth.mydomain.tld
+* Set the setting for force HTTPS
 
 Configure OIDC
 * Navigate to Admin -> Plugins -> Installed
-* Enable the `OpenID Connect` plugin
+* Enable the `OpenID Connect` and configure.  be sure to set scope to `openid email profile`
