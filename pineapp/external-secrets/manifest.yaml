@@ -58,6 +58,8 @@ spec:
     repoURL: https://charts.external-secrets.io
     targetRevision: 0.19.2
   syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
     automated:
       allowEmpty: true
       prune: true
