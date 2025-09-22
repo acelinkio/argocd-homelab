@@ -1,0 +1,171 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: jellyfin
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: jellyfin-metadata
+  labels:
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+  namespace: jellyfin
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "10Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jellyfin
+  labels:
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+    app.kubernetes.io/service: jellyfin
+  namespace: jellyfin
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8096
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/controller: jellyfin
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: jellyfin
+  labels:
+    app.kubernetes.io/controller: jellyfin
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+  namespace: jellyfin
+spec:
+  revisionHistoryLimit: 3
+  replicas:
+  podManagementPolicy: OrderedReady
+  updateStrategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/controller: jellyfin
+      app.kubernetes.io/name: jellyfin
+      app.kubernetes.io/instance: jellyfin
+  serviceName: jellyfin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/controller: jellyfin
+        app.kubernetes.io/instance: jellyfin
+        app.kubernetes.io/name: jellyfin
+    spec:
+      enableServiceLinks: false
+      serviceAccountName: default
+      automountServiceAccountToken: true
+      securityContext:
+        fsGroup: 2000
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 2000
+        runAsUser: 2000
+      hostIPC: false
+      hostNetwork: false
+      hostPID: false
+      dnsPolicy: ClusterFirst
+      containers:
+        - env:
+            - name: DOTNET_SYSTEM_IO_DISABLEFILELOCKING
+              value: "true"
+            - name: JELLYFIN_PublishedServerUrl
+              value: https://jellyfin.bitey.life
+          image: ghcr.io/jellyfin/jellyfin:10.10.7@sha256:e4d1dc5374344446a3a78e43dd211247f22afba84ea2e5a13cbe1a94e1ff2141
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8096
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          name: app
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 8096
+            initialDelaySeconds: 0
+            periodSeconds: 10
+            timeoutSeconds: 1
+          resources:
+            limits:
+              memory: 8Gi
+            requests:
+              cpu: 100m
+              memory: 512Mi
+          volumeMounts:
+            - mountPath: /config
+              name: config
+            - mountPath: /mnt/media
+              name: media
+            - mountPath: /metadata
+              name: metadata
+              subPath: metadata
+            - mountPath: /config/data/introskipper
+              name: metadata
+              subPath: introskipper
+            - mountPath: /cache
+              name: tmpfs
+              subPath: cache
+            - mountPath: /transcode
+              name: tmpfs
+              subPath: transcode
+      volumes:
+        - name: media
+          nfs:
+            server: "192.168.1.179"
+            path: /spin0/media
+        - name: config
+          persistentVolumeClaim:
+            claimName: jellyfin
+        - name: metadata
+          persistentVolumeClaim:
+            claimName: jellyfin-metadata
+        - emptyDir: {}
+          name: tmpfs
+---
+apiVersion: gateway.networking.k8s.io/v1alpha2
+kind: HTTPRoute
+metadata:
+  name: jellyfin
+  labels:
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+  namespace: jellyfin
+spec:
+  parentRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: internal
+      namespace: network
+      sectionName: "https"
+  hostnames:
+    - "jellyfin.bitey.life"
+  rules:
+    - backendRefs:
+        - kind: Service
+          name: jellyfin
+          namespace: jellyfin
+          port: 80
+    - backendRefs: []
+      matches:
+        - path:
+            type: PathPrefix
+            value: /metrics
