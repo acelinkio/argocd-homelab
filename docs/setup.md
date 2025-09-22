@@ -91,6 +91,7 @@ homelab                        # vault used for containing secrets
 
 ### Ryot
 - In the homelab vault, create secret named `ryot`
+- Create 20 character random string into `server_access_token` key.
 - Video game tracking requires access through Twitch to https://www.igdb.com/.  Follow docs to generate OAuth credentials.  Save clientid into key named `twitch_client_id` and clientsecret into key named `twitch_client_secret` 
 
 ### Matrix

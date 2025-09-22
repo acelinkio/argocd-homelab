@@ -35,6 +35,10 @@ spec:
       remoteRef:
         key: ryot
         property: twitch_client_secret
+    - secretKey: server_access_token
+      remoteRef:
+        key: ryot
+        property: server_access_token
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
@@ -136,6 +140,11 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: twitch_client_secret
+                  name: ryot-configsecrets
+            - name: SERVER_ADMIN_ACCESS_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: server_access_token
                   name: ryot-configsecrets
             - name: DATABASE_URL
               value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
