@@ -7,6 +7,21 @@ metadata:
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
+  name: jellyfin-config
+  labels:
+    app.kubernetes.io/instance: jellyfin
+    app.kubernetes.io/name: jellyfin
+  namespace: jellyfin
+spec:
+  accessModes:
+    - "ReadWriteOnce"
+  resources:
+    requests:
+      storage: "1Gi"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
   name: jellyfin-metadata
   labels:
     app.kubernetes.io/instance: jellyfin
@@ -134,7 +149,7 @@ spec:
             path: /spin0/media
         - name: config
           persistentVolumeClaim:
-            claimName: jellyfin
+            claimName: jellyfin-config
         - name: metadata
           persistentVolumeClaim:
             claimName: jellyfin-metadata
