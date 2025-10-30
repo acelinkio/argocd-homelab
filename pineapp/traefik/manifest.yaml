@@ -218,4 +218,4 @@ spec:
     - dnsName: pt2.bitey.life
       recordType: A
       targets:
-        - "192.168.1.13"
+        - "192.168.1.12"
