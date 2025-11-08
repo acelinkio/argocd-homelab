@@ -105,7 +105,7 @@ spec:
                   key: postgrespassword
                   name: authentik-configsecrets
             - name: AUTHENTIK_POSTGRESQL__SSLMODE
-              value: "disable"
+              value: "prefer"
             # https://github.com/goauthentik/authentik/issues/16797
             # - name: AUTHENTIK_POSTGRESQL__DEFAULT_SCHEMA
             #   value: "data"
