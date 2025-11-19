@@ -128,7 +128,7 @@ spec:
     spec:
       containers:
         - name: traefik-manual
-          image: docker.io/traefik:v3.6.1
+          image: docker.io/traefik:v3.6.2
           args:
             - '--entryPoints.web.address=:80/tcp'
             - '--entryPoints.websecure.address=:443/tcp'
