@@ -1,0 +1,102 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: kyoo-dev
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyoo-dev
+  namespace: argocd
+spec:
+  project: homelab
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyoo-dev
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: https://github.com/zoriya/Kyoo
+    path: chart
+    targetRevision: master
+    # repoURL: ghcr.io/zoriya/helm-charts
+    # chart: kyoo
+    # targetRevision: edge
+    helm:
+      valuesObject:
+        global:
+          image:
+            tag: edge
+            imagePullPolicy: Always
+        postgres:
+          enabled: true
+        kyoo:
+          address: https://kyoo-dev.bitey.life
+        media:
+          volumes:
+            - name: media
+              nfs:
+                server: "192.168.1.179"
+                path: /spin0/media/movies
+        extraObjects:
+          - apiVersion: v1
+            kind: Secret
+            metadata:
+              name: bigsecret
+              namespace: kyootest
+            type: Opaque
+            stringData:
+              postgres_user: kyoo_all
+              postgres_password: watchSomething4me
+              scanner_apikey: secretapikey
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: kyoo-public
+  namespace: kyoo
+  annotations:
+    external-dns.custom/type: public
+spec:
+  endpoints:
+    - dnsName: kyoo-dev.bitey.life
+      recordType: CNAME
+      targets:
+        - ingress.bitey.life
+      providerSpecific:
+        - name: external-dns.alpha.kubernetes.io/cloudflare-proxied
+          value: "true"
+---
+apiVersion: externaldns.k8s.io/v1alpha1
+kind: DNSEndpoint
+metadata:
+  name: kyoo-private
+  namespace: kyoo
+  annotations:
+    external-dns.custom/type: private
+spec:
+  endpoints:
+    - dnsName: kyoo-dev.bitey.life
+      recordType: CNAME
+      targets:
+        - intgw.bitey.life
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: kyootest
+  namespace: kyootest
+spec:
+  parentRefs:
+    - name: internal
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "kyoo-dev.bitey.life"
+  rules:
+    - backendRefs:
+        - name: kyoo-dev-traefik
+          port: 80
