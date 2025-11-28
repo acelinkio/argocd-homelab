@@ -46,7 +46,7 @@ spec:
             kind: Secret
             metadata:
               name: bigsecret
-              namespace: kyootest
+              namespace: kyoo-dev
             type: Opaque
             stringData:
               postgres_user: kyoo_all
