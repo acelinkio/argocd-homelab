@@ -18,6 +18,10 @@ spec:
     automated:
       prune: true
       selfHeal: true
+  ignoreDifferences:
+    - kind: Deployment
+      jsonPointers:
+        - /spec/replicas
   source:
     repoURL: https://github.com/zoriya/Kyoo
     path: chart
