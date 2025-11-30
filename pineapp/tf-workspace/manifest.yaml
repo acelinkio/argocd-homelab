@@ -641,6 +641,7 @@ spec:
         authentication_flow = data.authentik_flow.default-source-authentication.id
         enrollment_flow     = authentik_flow.no_enrollment.uuid
         provider_type   = "google"
+        pkce            = S256
         consumer_key    = var.federation_google_client_id
         consumer_secret = var.federation_google_client_secret
         user_matching_mode = "email_link"
