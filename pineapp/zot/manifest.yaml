@@ -75,7 +75,7 @@ metadata:
     app.kubernetes.io/instance: zot
     app.kubernetes.io/name: zot
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/instance: zot
