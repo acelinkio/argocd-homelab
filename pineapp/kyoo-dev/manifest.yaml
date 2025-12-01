@@ -26,7 +26,7 @@ spec:
   source:
     repoURL: https://github.com/zoriya/Kyoo
     path: chart
-    targetRevision: master
+    targetRevision: fix/helm-pg
     # repoURL: ghcr.io/zoriya/helm-charts
     # chart: kyoo
     # targetRevision: edge
