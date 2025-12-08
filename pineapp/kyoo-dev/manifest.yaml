@@ -46,6 +46,28 @@ spec:
               nfs:
                 server: "192.168.1.179"
                 path: /spin0/media/movies
+        traefikproxy:
+          traefik:
+            extraArgs:
+              - '--entryPoints.web.address=:80/tcp'
+              - '--entryPoints.websecure.address=:443/tcp'
+              - '--entryPoints.web.forwardedHeaders.insecure=true'
+              - '--entryPoints.websecure.forwardedHeaders.insecure=true'
+              - '--api.dashboard=true'
+              - '--api.insecure=true'
+              - '--providers.file.filename=/dynamic_config/dynamic_config.yaml'
+              - '--log.level=INFO'
+              - "--log.format=json"
+              - "--log.otlp.grpc=true"
+              - "--log.otlp.grpc.insecure=true"
+              - '--log.otlp.grpc.endpoint=http://otel-collector.opentelemetry.svc.cluster.local:4317'
+              - "--accesslog=true"
+              - "--accesslog.format=json"
+              - "--accesslog.otlp.grpc=true"
+              - "--accesslog.otlp.grpc.insecure=true"
+              - "--accesslog.otlp.grpc.endpoint=http://otel-collector.opentelemetry.svc.cluster.local:4317"
+              - '--experimental.otlpLogs=true'
+              - '--tracing=true'
         extraObjects:
           - apiVersion: v1
             kind: Secret
