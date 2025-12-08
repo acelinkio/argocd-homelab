@@ -48,6 +48,8 @@ spec:
                 path: /spin0/media/movies
         traefikproxy:
           traefik:
+            image:
+              tag: "v3.6.4"
             extraArgs:
               - "--entryPoints.web.address=:80/tcp"
               - "--entryPoints.websecure.address=:443/tcp"
