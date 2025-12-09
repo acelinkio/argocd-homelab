@@ -58,6 +58,7 @@ spec:
               - "--api.dashboard=true"
               - "--api.insecure=true"
               - "--providers.file.filename=/dynamic_config/dynamic_config.yaml"
+              # https://doc.traefik.io/traefik/master/reference/install-configuration/observability/logs-and-accesslogs/
               - "--experimental.otlpLogs=true"
               - "--log.level=INFO"
               - "--log.format=json"
@@ -69,6 +70,16 @@ spec:
               - "--accesslog.otlp.grpc=true"
               - "--accesslog.otlp.grpc.insecure=true"
               - "--accesslog.otlp.grpc.endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
+              # https://doc.traefik.io/traefik/master/reference/install-configuration/observability/metrics/
+              - "--metrics.otlp=true"
+              - "--metrics.otlp.grpc=true"
+              - "--metrics.otlp.grpc.insecure=true"
+              - "--metrics.otlp.grpc.endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
+              # https://doc.traefik.io/traefik/master/reference/install-configuration/observability/tracing/
+              - "--tracing=true"
+              - "--tracing.otlp.grpc=true"
+              - "--tracing.otlp.grpc.insecure=true"
+              - "--tracing.otlp.grpc.endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
         extraObjects:
           - apiVersion: v1
             kind: Secret
