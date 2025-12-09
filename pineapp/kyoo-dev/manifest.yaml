@@ -60,15 +60,15 @@ spec:
               - "--providers.file.filename=/dynamic_config/dynamic_config.yaml"
               - "--experimental.otlpLogs=true"
               - "--log.level=INFO"
-              # - "--log.format=json"
-              # - "--log.otlp.grpc=true"
-              # - "--log.otlp.grpc.insecure=true"
-              # - "--log.otlp.grpc.endpoint=http://otel-collector.opentelemetry.svc.cluster.local:4317"
+              - "--log.format=json"
+              - "--log.otlp.grpc=true"
+              - "--log.otlp.grpc.insecure=true"
+              - "--log.otlp.grpc.endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
               - "--accesslog=true"
               - "--accesslog.format=json"
               - "--accesslog.otlp.grpc=true"
               - "--accesslog.otlp.grpc.insecure=true"
-              - "--accesslog.otlp.grpc.endpoint=http://otel-collector.opentelemetry.svc.cluster.local:4317"
+              - "--accesslog.otlp.grpc.endpoint=otel-collector.opentelemetry.svc.cluster.local:4317"
         extraObjects:
           - apiVersion: v1
             kind: Secret
