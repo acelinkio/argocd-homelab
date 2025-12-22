@@ -36,4 +36,4 @@ spec:
           certManager:
             enabled: false
           autoGenerateCert:
-            enabled: true
+            enabled: false
