@@ -33,6 +33,7 @@ spec:
           collectorImage:
             repository: otel/opentelemetry-collector-k8s
         admissionWebhooks:
+          create: false
           certManager:
             enabled: false
           autoGenerateCert:
