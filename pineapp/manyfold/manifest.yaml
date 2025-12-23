@@ -187,7 +187,7 @@ spec:
                   name: sso
           # pending: https://github.com/bjw-s-labs/container-images/pull/425
           # image: ghcr.io/bjw-s/manyfold:0.94.0
-          image: ghcr.io/manyfold3d/manyfold:0.129.4
+          image: ghcr.io/manyfold3d/manyfold:0.130.2
           name: main
           volumeMounts:
             - mountPath: /media
