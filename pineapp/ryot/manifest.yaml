@@ -150,7 +150,7 @@ spec:
               value: "postgres://$(HELPERVAR_POSTGRES_USER):$(HELPERVAR_POSTGRES_PASSWORD)@cluster01.postgres/ryot"
             - name: ANIME_AND_MANGA_ANILIST_PREFERRED_LANGUAGE
               value: "english"
-          image: ghcr.io/ignisda/ryot:v9.6.2
+          image: ghcr.io/ignisda/ryot:v10.0.2
           name: main
 ---
 apiVersion: gateway.networking.k8s.io/v1
