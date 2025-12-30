@@ -1,0 +1,37 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: clickhouse-operator
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: clickhouse-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: clickhouse-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+  source:
+    repoURL: https://helm.altinity.com
+    chart: altinity-clickhouse-operator
+    targetRevision: 0.25.6
+    helm:
+      valuesObject:
+        rbac:
+          namespaceScoped: false
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      # https://github.com/Altinity/helm-charts/issues/110
+      jqPathExpressions:
+        - .spec.template.spec.containers[].env[]?.valueFrom?.resourceFieldRef?.divisor
