@@ -35,7 +35,7 @@ spec:
             config.yaml:
               watch:
                 namespaces:
-                  - clickhouse
+                  - observability
   ignoreDifferences:
     - group: apps
       kind: Deployment
