@@ -30,6 +30,12 @@ spec:
         fullnameOverride: clickhouse-operator # clickhouse-operator-altinity-clickhouse-operator is too long
         metrics:
           enabled: false
+        configs:
+          files:
+            config.yaml:
+              watch:
+                namespaces:
+                  - clickhouse
   ignoreDifferences:
     - group: apps
       kind: Deployment
