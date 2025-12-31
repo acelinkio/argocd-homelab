@@ -27,6 +27,7 @@ spec:
     targetRevision: 0.25.6
     helm:
       valuesObject:
+        fullnameOverride: clickhouse-operator # clickhouse-operator-altinity-clickhouse-operator is too long
         metrics:
           enabled: false
   ignoreDifferences:
