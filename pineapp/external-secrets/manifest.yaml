@@ -64,3 +64,25 @@ spec:
       allowEmpty: true
       prune: true
       selfHeal: true
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ClusterGenerator
+metadata:
+  name: uuid
+spec:
+  kind: UUID
+  generator:
+    uuidSpec: {}
+---
+apiVersion: generators.external-secrets.io/v1alpha1
+kind: ClusterGenerator
+metadata:
+  name: password
+spec:
+  kind: Password
+  generator:
+    passwordSpec:
+      length: 24
+      allowRepeat: true
+      symbolCharacters: "~!@#%^&*_+-=:<>?,./"
+      noUpper: false
