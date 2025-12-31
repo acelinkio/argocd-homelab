@@ -127,3 +127,163 @@ spec:
       recordType: CNAME
       targets:
         - intgw.bitey.life
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: clickhouse-passwords
+  namespace: observability
+spec:
+  refreshPolicy: CreatedOnce
+  dataFrom:
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: ClusterGenerator
+          name: uuid
+      rewrite:
+        - regexp:
+            source: uuid
+            target: collector
+    - sourceRef:
+        generatorRef:
+          apiVersion: generators.external-secrets.io/v1alpha1
+          kind: ClusterGenerator
+          name: uuid
+      rewrite:
+        - regexp:
+            source: uuid
+            target: grafana
+---
+apiVersion: clickhouse.altinity.com/v1
+kind: ClickHouseInstallation
+metadata:
+  name: clickhouse
+  namespace: observability
+spec:
+  configuration:
+    settings:
+      logger/size: "500M"
+      logger/count: 1
+    clusters:
+      - name: otel-cluster
+        layout:
+          shardsCount: 1
+          replicasCount: 1
+        templates:
+          podTemplate: clickhouse-pod-template
+    users:
+      collector/password:
+        valueFrom:
+          secretKeyRef:
+            name: clickhouse-passwords
+            key: collector
+      collector/networks/ip: "::/0"
+      collector/grants/query:
+        - GRANT SELECT, INSERT, UPDATE, DROP, DELETE, ALTER, CREATE ON otel.*
+        - GRANT CREATE DATABASE ON *.*
+      grafana/password:
+        valueFrom:
+          secretKeyRef:
+            name: clickhouse-passwords
+            key: grafana
+      grafana/networks/ip: "::/0"
+      grafana/grants/query:
+        - GRANT SELECT ON otel.*
+  defaults:
+    templates:
+      podTemplate: pod-template
+      dataVolumeClaimTemplate: data-volume-template
+      logVolumeClaimTemplate: log-volume-template
+  templates:
+    podTemplates:
+      - name: pod-template
+        spec:
+          containers:
+            - name: clickhouse
+              image: clickhouse/clickhouse-server:latest
+              env:
+                - name: CLICKHOUSE_ALWAYS_RUN_INITDB_SCRIPTS
+                  value: "true"
+              volumeMounts:
+                - name: bootstrap-configmap-volume
+                  mountPath: /docker-entrypoint-initdb.d
+          volumes:
+            - name: bootstrap-configmap-volume
+              configMap:
+                name: bootstrap-mounted-configmap
+    volumeClaimTemplates:
+      - name: data-volume-template
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 5Gi
+      - name: log-volume-template
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1Gi
+---
+apiVersion: opentelemetry.io/v1beta1
+kind: OpenTelemetryCollector
+metadata:
+  name: otel
+  namespace: observability
+spec:
+  mode: daemonset
+  env:
+    - name: CLICKHOUSE_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: clickhouse-passwords
+          key: collector
+  config:
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 15
+    exporters:
+      debug:
+        verbosity: detailed
+      # https://github.com/open-telemetry/opentelemetry-collector-contrib/blob/main/exporter/clickhouseexporter/README.md#example-config
+      clickhouse:
+        endpoint: tcp://clickhouse-clickhouse.observability.svc.cluster.local:9000?dial_timeout=10s&compress=lz4&async_insert=1
+        username: collector
+        password: ${env:CLICKHOUSE_PASSWORD}
+        ttl: 168h # a week
+        create_schema: true
+        timeout: 5s
+        database: otel
+        sending_queue:
+          queue_size: 1000
+        retry_on_failure:
+          enabled: true
+          initial_interval: 5s
+          max_interval: 30s
+          max_elapsed_time: 300s
+    service:
+      pipelines:
+        traces:
+          receivers: [otlp]
+          processors: [memory_limiter]
+          exporters: [clickhouse]
+        metrics:
+          receivers: [otlp]
+          processors: [memory_limiter]
+          exporters: [clickhouse]
+        logs:
+          receivers: [otlp]
+          processors: [memory_limiter]
+          exporters: [clickhouse]
