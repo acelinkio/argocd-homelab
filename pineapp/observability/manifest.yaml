@@ -43,6 +43,11 @@ spec:
     helm:
       valuesObject:
         adminUser: admin
+        plugins:
+          # https://github.com/Altinity/clickhouse-grafana
+          - vertamedia-clickhouse-datasource
+          # https://github.com/grafana/clickhouse-datasource
+          - grafana-clickhouse-datasource
         datasources:
           datasources.yaml:
             apiVersion: 1
