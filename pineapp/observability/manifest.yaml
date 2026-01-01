@@ -142,7 +142,7 @@ spec:
     isDefault: true
     type: grafana-clickhouse-datasource
     jsonData:
-      host: clickhouse-clickhouse.otel.svc.cluster.local
+      host: clickhouse-clickhouse.observability.svc.cluster.local
       port: 9000
       username: grafana
       defaultDatabase: otel
