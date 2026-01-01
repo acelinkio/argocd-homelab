@@ -31,6 +31,8 @@ kind: Grafana
 metadata:
   name: grafana
   namespace: observability
+  labels:
+    dashboards: "grafana"
 spec:
   config:
     log:
@@ -121,6 +123,48 @@ spec:
       recordType: CNAME
       targets:
         - intgw.bitey.life
+---
+apiVersion: grafana.integreatly.org/v1beta1
+kind: GrafanaDatasource
+metadata:
+  name: clickhouse
+  namespace: observability
+spec:
+  valuesFrom:
+  - targetPath: "secureJsonData.password"
+    valueFrom:
+      secretKeyRef:
+        name: clickhouse-passwords
+        key: grafana
+  datasource:
+    name: clickhouse
+    access: proxy
+    isDefault: true
+    type: grafana-clickhouse-datasource
+    jsonData:
+      host: clickhouse-clickhouse.otel.svc.cluster.local
+      port: 9000
+      username: grafana
+      defaultDatabase: otel
+      protocol: native
+      logs:
+        defaultDatabase: otel
+        defaultTable: otel_logs
+        otelEnabled: true
+        otelVersion: latest
+      traces:
+        defaultDatabase: otel
+        defaultTable: otel_traces
+        otelEnabled: true
+        otelVersion: latest
+    secureJsonData:
+      password: ${grafana}
+  instanceSelector:
+    matchLabels:
+      dashboards: grafana
+  plugins:
+    - name: grafana-clickhouse-datasource
+      version: 4.11.2
 ---
 apiVersion: external-secrets.io/v1
 kind: ExternalSecret
