@@ -26,73 +26,65 @@ spec:
         key: sso
         property: grafana_client_secret
 ---
-apiVersion: argoproj.io/v1alpha1
-kind: Application
+apiVersion: grafana.integreatly.org/v1beta1
+kind: Grafana
 metadata:
   name: grafana
-  namespace: argocd
+  namespace: observability
 spec:
-  destination:
-    namespace: observability
-    server: https://kubernetes.default.svc
-  project: homelab
-  source:
-    chart: grafana
-    repoURL: https://grafana.github.io/helm-charts
-    targetRevision: 10.4.2
-    helm:
-      valuesObject:
-        adminUser: admin
-        plugins:
-          # https://github.com/Altinity/clickhouse-grafana
-          - vertamedia-clickhouse-datasource
-          # https://github.com/grafana/clickhouse-datasource
-          - grafana-clickhouse-datasource
-        datasources:
-          datasources.yaml:
-            apiVersion: 1
-            deleteDatasources:
-              - { name: Alertmanager, orgId: 1 }
-              - { name: Loki, orgId: 1 }
-              - { name: Prometheus, orgId: 1 }
-            datasources:
-              - name: Prometheus
-                type: prometheus
-                uid: prometheus
-                access: proxy
-                url: http://kube-prometheus-stack-prometheus.observability.svc.cluster.local:9090
-                isDefault: true
-              - name: Loki
-                type: loki
-                uid: loki
-                access: proxy
-                url: http://loki-gateway.observability.svc.cluster.local
-                jsonData:
-                  maxLines: 250
-        env:
-          GF_SERVER_ROOT_URL: "https://grafana.bitey.life"
-          GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
-          GF_AUTH_DISABLE_LOGIN_FORM: "true"
-          GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
-          GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email offline_access"
-          GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://auth.bitey.life/application/o/authorize/"
-          GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://auth.bitey.life/application/o/token/"
-          GF_AUTH_GENERIC_OAUTH_API_URL: "https://auth.bitey.life/application/o/userinfo/"
-          GF_AUTH_GENERIC_OAUTH_ROLE_ATTRIBUTE_PATH: "contains(groups[*], 'Grafana Admin') && 'Admin' || 'Viewer'"
-        envValueFrom:
-          GF_AUTH_GENERIC_OAUTH_CLIENT_ID:
-            secretKeyRef:
-              key: grafana_client_id
-              name: sso
-          GF_AUTH_GENERIC_OAUTH_CLIENT_SECRET:
-            secretKeyRef:
-              key: grafana_client_secret
-              name: sso
-  syncPolicy:
-    automated:
-      allowEmpty: true
-      prune: true
-      selfHeal: true
+  config:
+    log:
+      mode: "console"
+    auth:
+      disable_login_form: "true"
+      signout_redirect_url: "https://auth.bitey.life/application/o/grafana/end-session/"
+      oauth_auto_login: "true"
+    server:
+      root_url: https://grafana.bitey.life
+    auth.generic_oauth:
+      name: authentik
+      enabled: "true"
+      allow_sign_up: "true"
+      client_id: ${AUTH_CLIENT_ID}
+      client_secret: ${AUTH_CLIENT_SECRET}
+      scopes: "openid profile email offline_access"
+      auth_url: "https://auth.bitey.life/application/o/authorize/"
+      token_url: "https://auth.bitey.life/application/o/token/"
+      api_url: "https://auth.bitey.life/application/o/userinfo/"
+      role_attribute_path: contains(groups[*], 'Grafana Admin') && 'Admin' || 'Viewer'
+      allow_assign_grafana_admin: "true"
+  persistentVolumeClaim:
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      resources:
+        requests:
+          storage: 2Gi
+  deployment:
+    spec:
+      template:
+        spec:
+          containers:
+            - name: grafana
+              env:
+                - name: AUTH_CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      name: sso
+                      key: grafana_client_id
+                - name: AUTH_CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      name: sso
+                      key: grafana_client_secret
+              readinessProbe:
+                failureThreshold: 3
+          volumes:
+            - name: grafana-data
+              persistentVolumeClaim:
+                claimName: grafana-pvc
+      strategy:
+        type: Recreate
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
@@ -111,8 +103,8 @@ spec:
     - "grafana.bitey.life"
   rules:
     - backendRefs:
-        - name: grafana
-          port: 80
+        - name: grafana-service
+          port: 3000
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
