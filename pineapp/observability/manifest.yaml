@@ -64,6 +64,8 @@ spec:
     spec:
       template:
         spec:
+          securityContext:
+            fsGroup: 10001
           containers:
             - name: grafana
               env:
