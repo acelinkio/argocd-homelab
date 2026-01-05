@@ -157,8 +157,8 @@ spec:
         # spanIdField: SpanId
         # below contxtColumns did not appear to work.  leaving for now
         contextColumns:
-          - TraceId
-          - SpanId
+          - traceID
+          - spanID
         otelEnabled: true
         otelVersion: latest
       traces:
