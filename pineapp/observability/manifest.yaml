@@ -155,6 +155,7 @@ spec:
         # Make sure your query returns at least one log context column from your ClickHouse Data Source settings
         # traceIdField: TraceId
         # spanIdField: SpanId
+        # below contxtColumns did not appear to work.  leaving for now
         contextColumns:
           - TraceId
           - SpanId
