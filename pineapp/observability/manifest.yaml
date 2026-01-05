@@ -150,6 +150,8 @@ spec:
       logs:
         defaultDatabase: otel
         defaultTable: otel_logs
+        traceIdField: TraceId
+        spanIdField: SpanId
         otelEnabled: true
         otelVersion: latest
       traces:
