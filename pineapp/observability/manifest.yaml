@@ -150,15 +150,8 @@ spec:
       logs:
         defaultDatabase: otel
         defaultTable: otel_logs
-        # attempting to address
-        # Unable to match any context columns. 
-        # Make sure your query returns at least one log context column from your ClickHouse Data Source settings
-        # traceIdField: TraceId
-        # spanIdField: SpanId
-        # below contxtColumns did not appear to work.  leaving for now
         contextColumns:
-          - traceID
-          - spanID
+          - ServiceName
         otelEnabled: true
         otelVersion: latest
       traces:
