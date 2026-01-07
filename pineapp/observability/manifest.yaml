@@ -258,6 +258,7 @@ spec:
         spec:
           accessModes:
             - ReadWriteOnce
+          storageClassName: development
           resources:
             requests:
               storage: 5Gi
@@ -265,6 +266,7 @@ spec:
         spec:
           accessModes:
             - ReadWriteOnce
+          storageClassName: development
           resources:
             requests:
               storage: 1Gi
