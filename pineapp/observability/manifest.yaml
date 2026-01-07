@@ -150,6 +150,7 @@ spec:
       logs:
         defaultDatabase: otel
         defaultTable: otel_logs
+        selectContextColumns: true
         contextColumns:
           - ServiceName
         otelEnabled: true
