@@ -1,6 +1,8 @@
 # These are commands that are ran manually until automated
 
 # apply gateway crds during installation
+note these are now managed via envoy-gateway installations--however they still need to be installed for now--cilium relies upon them atm.
+
 ```sh
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_gatewayclasses.yaml
 kubectl apply -f https://raw.githubusercontent.com/kubernetes-sigs/gateway-api/v1.4.1/config/crd/standard/gateway.networking.k8s.io_httproutes.yaml
