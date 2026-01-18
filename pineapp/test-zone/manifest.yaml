@@ -129,6 +129,53 @@ spec:
                 value: "setviahttproute"
           type: RequestHeaderModifier
 ---
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: echo
+  namespace: test-zone-otel
+spec:
+  parentRefs:
+    - name: internal-envoygateway-otel
+      namespace: gateway
+      sectionName: https
+  hostnames:
+    - "echo.bitey.life"
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: echo
+          port: 80
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            path:
+              type: ReplacePrefixMatch
+              replacePrefixMatch: /
+    - backendRefs:
+        - name: echo
+          port: 80
+          filters:
+            - requestHeaderModifier:
+                add:
+                  - name: mytestheader1backend1
+                    value: "setviahttproute"
+              type: RequestHeaderModifier
+      filters:
+        - type: URLRewrite
+          urlRewrite:
+            hostname: why.hello.there
+        - requestHeaderModifier:
+            set:
+              - name: mytestheader1all
+                value: "setviahttproute"
+              - name: mytestheader2all
+                value: "setviahttproute"
+          type: RequestHeaderModifier
+---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
 metadata:
@@ -141,7 +188,7 @@ spec:
     - dnsName: echo.bitey.life
       recordType: CNAME
       targets:
-        - intgw.bitey.life
+        - intgw-envoygateway-otel.bitey.life
 ---
 apiVersion: externaldns.k8s.io/v1alpha1
 kind: DNSEndpoint
