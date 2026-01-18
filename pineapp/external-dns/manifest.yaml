@@ -94,7 +94,7 @@ spec:
                 valueFrom:
                   secretKeyRef:
                     name: external-dns
-                    key: unifi-user
+                    key: unifi-apikey
             livenessProbe:
               httpGet:
                 path: /healthz
