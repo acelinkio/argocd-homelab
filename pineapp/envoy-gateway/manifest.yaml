@@ -67,6 +67,19 @@ spec:
       envoyService:
         externalTrafficPolicy: Local
   telemetry:
+    accessLog:
+      settings:
+        - format:
+            type: Text
+            text: |
+              [%START_TIME%] "%REQ(:METHOD)% %REQ(X-ENVOY-ORIGINAL-PATH?:PATH)% %PROTOCOL%" %RESPONSE_CODE% %RESPONSE_FLAGS% %BYTES_RECEIVED% %BYTES_SENT% %DURATION% "%REQ(X-FORWARDED-FOR)%" "%REQ(USER-AGENT)%" "%REQ(X-REQUEST-ID)%" "%REQ(:AUTHORITY)%" "%UPSTREAM_HOST%"
+          sinks:
+            - type: OpenTelemetry
+              openTelemetry:
+                host: otel-collector.observability.svc.cluster.local
+                port: 4317
+                resources:
+                  k8s.cluster.name: "pineapp"
     tracing:
       # sample 100% of requests
       samplingRate: 100
