@@ -1,0 +1,78 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: envoy-gateway
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: envoy-gateway
+  namespace: argocd
+spec:
+  destination:
+    namespace: envoy-gateway
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: gateway-helm
+    repoURL: mirror.gcr.io/envoyproxy
+    targetRevision: v1.6.2
+    helm:
+      valuesObject:
+        global:
+          imageRegistry: mirror.gcr.io
+        config:
+          envoyGateway:
+            provider:
+              type: Kubernetes
+              kubernetes:
+                deploy:
+                  # https://gateway.envoyproxy.io/docs/api/extension_types/#kubernetesdeploymodetype
+                  type: GatewayNamespace
+  syncPolicy:
+    syncOptions:
+    - CreateNamespace=true
+    - ServerSideApply=true
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
+---
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: envoygateway-otel
+spec:
+  controllerName: gateway.envoyproxy.io/gatewayclass-controller
+  parametersRef:
+    group: gateway.envoyproxy.io
+    kind: EnvoyProxy
+    name: otel
+    namespace: envoy-gateway
+---
+apiVersion: gateway.envoyproxy.io/v1alpha1
+kind: EnvoyProxy
+metadata:
+  name: otel
+  namespace: envoy-gateway
+spec:
+  logging:
+    level:
+      default: info
+  shutdown:
+    drainTimeout: 180s
+  provider:
+    type: Kubernetes
+    kubernetes:
+      envoyService:
+        externalTrafficPolicy: Local
+  telemetry:
+    tracing:
+      # sample 100% of requests
+      samplingRate: 100
+      provider:
+        backendRefs:
+        - name: otel-collector
+          namespace: observability
+          port: 4317
+        type: OpenTelemetry
