@@ -20,14 +20,10 @@ spec:
       remoteRef:
         key: external-dns
         property: cloudflare-token
-    - secretKey: unifi-user
+    - secretKey: unifi-apikey
       remoteRef:
         key: external-dns
-        property: unifi-user
-    - secretKey: unifi-password
-      remoteRef:
-        key: external-dns
-        property: unifi-password
+        property: unifi-apikey
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -94,16 +90,11 @@ spec:
             env:
               - name: UNIFI_HOST
                 value: https://192.168.1.1
-              - name: UNIFI_USER
+              - name: UNIFI_API_KEY
                 valueFrom:
                   secretKeyRef:
                     name: external-dns
                     key: unifi-user
-              - name: UNIFI_PASS
-                valueFrom:
-                  secretKeyRef:
-                    name: external-dns
-                    key: unifi-password
             livenessProbe:
               httpGet:
                 path: /healthz
