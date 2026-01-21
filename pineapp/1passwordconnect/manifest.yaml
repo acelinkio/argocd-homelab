@@ -40,7 +40,7 @@ spec:
   source:
     chart: connect
     repoURL: https://1password.github.io/connect-helm-charts
-    targetRevision: 2.2.0
+    targetRevision: 2.2.1
     helm:
       valuesObject:
         connect:
