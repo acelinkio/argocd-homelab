@@ -34,6 +34,7 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+      - ClientSideApplyMigration=false
     automated: {}
     #   allowEmpty: true
     #   prune: true
@@ -88,6 +89,7 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+      - ClientSideApplyMigration=false
     automated:
       allowEmpty: true
       prune: true
@@ -120,6 +122,7 @@ spec:
                 auto_kubernetes_labels on
   syncPolicy:
     syncOptions:
+      - ClientSideApplyMigration=false
       - ServerSideApply=true
     automated:
       allowEmpty: true

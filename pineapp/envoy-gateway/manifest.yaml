@@ -33,6 +33,7 @@ spec:
     syncOptions:
     - CreateNamespace=true
     - ServerSideApply=true
+    - ClientSideApplyMigration=false
     automated:
       allowEmpty: true
       prune: true
