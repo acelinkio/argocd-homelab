@@ -79,6 +79,7 @@ spec:
   syncPolicy:
     syncOptions:
       - ServerSideApply=true
+      - ClientSideApplyMigration=false
     automated:
       allowEmpty: true
       prune: true
