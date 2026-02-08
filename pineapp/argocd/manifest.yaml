@@ -77,6 +77,8 @@ spec:
           deploymentAnnotations:
             reloader.stakater.com/auto: "true"
   syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
     automated:
       allowEmpty: true
       prune: true
