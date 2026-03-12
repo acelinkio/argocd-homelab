@@ -16,7 +16,7 @@ spec:
   source:
     chart: gateway-helm
     repoURL: mirror.gcr.io/envoyproxy
-    targetRevision: v1.7.0
+    targetRevision: 1.7.1
     helm:
       valuesObject:
         global:
