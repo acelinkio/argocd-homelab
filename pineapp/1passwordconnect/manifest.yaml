@@ -20,7 +20,7 @@ spec:
     creationPolicy: Owner
     template:
       data:
-        1password-credentials.json: "{{ .json | b64enc }}"
+        1password-credentials.json: "{{ .json }}"
   data:
     - secretKey: json
       remoteRef:

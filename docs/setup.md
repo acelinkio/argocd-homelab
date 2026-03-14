@@ -196,7 +196,7 @@ kubectl label nodes mynodename kubernetes.io/role=worker
 ## https://developer.1password.com/docs/cli/get-started
 # login via `eval $(op signin)`
 
-export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1password-credentials.json | base64)"
+export onepasswordconnect_json="$(op read op://homelab/1passwordconnect/1password-credentials.json)"
 export externalsecrets_token="$(op read op://homelab/external-secrets/token)"
 
 kubectl create namespace 1passwordconnect
