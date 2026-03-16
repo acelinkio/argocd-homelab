@@ -74,45 +74,45 @@ spec:
         remoteRef:
           remoteKey: certificate.wildcard-production
           property: tls.key
-# ---
-# apiVersion: cert-manager.io/v1
-# kind: Certificate
-# metadata:
-#   name: wildcarddotwork-production
-#   namespace: certificate
-# spec:
-#   secretName: wildcarddotwork-production
-#   issuerRef:
-#     name: letsencrypt-production
-#     kind: ClusterIssuer
-#   commonName: "work.bitey.life"
-#   dnsNames:
-#     - "work.bitey.life"
-#     - "*.work.bitey.life"
-# ---
-# apiVersion: external-secrets.io/v1alpha1
-# kind: PushSecret
-# metadata:
-#   name: wildcarddotwork-production
-#   namespace: certificate
-#   annotations:
-#     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
-# spec:
-#   refreshInterval: "5m"
-#   secretStoreRefs:
-#     - name: 1password
-#       kind: ClusterSecretStore
-#   selector:
-#     secret:
-#       name: wildcarddotwork-production
-#   data:
-#     - match:
-#         secretKey: tls.crt
-#         remoteRef:
-#           remoteKey: certificate.wildcarddotwork-production
-#           property: tls.crt
-#     - match:
-#         secretKey: tls.key
-#         remoteRef:
-#           remoteKey: certificate.wildcarddotwork-production
-#           property: tls.key
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcarddotwork-production
+  namespace: certificate
+spec:
+  secretName: wildcarddotwork-production
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "work.bitey.life"
+  dnsNames:
+    - "work.bitey.life"
+    - "*.work.bitey.life"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: wildcarddotwork-production
+  namespace: certificate
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "5m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: wildcarddotwork-production
+  data:
+    - match:
+        secretKey: tls.crt
+        remoteRef:
+          remoteKey: certificate.wildcarddotwork-production
+          property: tls.crt
+    - match:
+        secretKey: tls.key
+        remoteRef:
+          remoteKey: certificate.wildcarddotwork-production
+          property: tls.key
