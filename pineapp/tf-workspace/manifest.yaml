@@ -634,7 +634,7 @@ spec:
       variable "federation_google_client_secret" {}
       data "authentik_flow" "default-source-authentication" {
         slug = "default-source-authentication"
-      }      
+      }
       resource "authentik_source_oauth" "google" {
         name                = "google"
         slug                = "google"
