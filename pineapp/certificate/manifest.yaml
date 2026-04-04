@@ -98,7 +98,7 @@ metadata:
   annotations:
     argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
 spec:
-  refreshInterval: "5m"
+  refreshInterval: "120m"
   secretStoreRefs:
     - name: 1password
       kind: ClusterSecretStore
@@ -115,4 +115,46 @@ spec:
         secretKey: tls.key
         remoteRef:
           remoteKey: certificate.wildcarddotwork-production
+          property: tls.key
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcarddotdev-production
+  namespace: certificate
+spec:
+  secretName: wildcarddotdev-production
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "dev.bitey.life"
+  dnsNames:
+    - "dev.bitey.life"
+    - "*.dev.bitey.life"
+---
+apiVersion: external-secrets.io/v1alpha1
+kind: PushSecret
+metadata:
+  name: wildcarddotdev-production
+  namespace: certificate
+  annotations:
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  refreshInterval: "120m"
+  secretStoreRefs:
+    - name: 1password
+      kind: ClusterSecretStore
+  selector:
+    secret:
+      name: wildcarddotdev-production
+  data:
+    - match:
+        secretKey: tls.crt
+        remoteRef:
+          remoteKey: certificate.wildcarddotdev-production
+          property: tls.crt
+    - match:
+        secretKey: tls.key
+        remoteRef:
+          remoteKey: certificate.wildcarddotdev-production
           property: tls.key
