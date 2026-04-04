@@ -1,0 +1,30 @@
+---
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: grafana-operator
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: grafana-operator
+  namespace: argocd
+spec:
+  destination:
+    namespace: grafana-operator
+    server: https://kubernetes.default.svc
+  project: homelab
+  source:
+    chart: grafana-operator
+    repoURL: ghcr.io/grafana/helm-charts
+    targetRevision: 5.22.2
+    helm:
+      valuesObject: {}
+  syncPolicy:
+    syncOptions:
+      - ServerSideApply=true
+      - ClientSideApplyMigration=false
+    automated:
+      allowEmpty: true
+      prune: true
+      selfHeal: true
