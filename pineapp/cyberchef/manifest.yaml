@@ -46,9 +46,7 @@ spec:
       containers:
         - name: main
           env: []
-          # https://github.com/gchq/CyberChef/issues/1487
-          # image: ghcr.io/gchq/cyberchef:10.19.4
-          image:  ghcr.io/vaskozl/cyberchef-web:10.19.4
+          image:  ghcr.io/gchq/cyberchef:11.1.0
 ---
 apiVersion: gateway.networking.k8s.io/v1
 kind: HTTPRoute
