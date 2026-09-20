@@ -17,7 +17,7 @@ spec:
   source:
     chart: cilium
     repoURL: https://helm.cilium.io/
-    targetRevision: 1.20.1 # keep for now, due to kernel 5.10
+    targetRevision: 1.20.2 # keep for now, due to kernel 5.10
     helm:
       valuesObject:
         autoDirectNodeRoutes: true
