@@ -85,8 +85,8 @@ spec:
           name: webhook
           webhook:
             image:
-              repository: ghcr.io/kashalls/external-dns-unifi-webhook
-              tag: v0.8.1
+              repository: ghcr.io/home-operations/external-dns-unifi-webhook
+              tag: v0.10.12
             env:
               - name: UNIFI_HOST
                 value: https://192.168.1.1
