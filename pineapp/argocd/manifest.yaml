@@ -44,6 +44,9 @@ spec:
     targetRevision: 10.9.2
     helm:
       valuesObject:
+        global:
+          networkPolicy:
+            create: false
         configs:
           params:
             server.insecure: true
