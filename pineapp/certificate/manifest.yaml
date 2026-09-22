@@ -74,21 +74,21 @@ spec:
         remoteRef:
           remoteKey: certificate.wildcard-production
           property: tls.key
-# ---
-# apiVersion: cert-manager.io/v1
-# kind: Certificate
-# metadata:
-#   name: wildcarddotwork-production
-#   namespace: certificate
-# spec:
-#   secretName: wildcarddotwork-production
-#   issuerRef:
-#     name: letsencrypt-production
-#     kind: ClusterIssuer
-#   commonName: "work.bitey.life"
-#   dnsNames:
-#     - "work.bitey.life"
-#     - "*.work.bitey.life"
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcarddotwork-production
+  namespace: certificate
+spec:
+  secretName: wildcarddotwork-production
+  issuerRef:
+    name: letsencrypt-production
+    kind: ClusterIssuer
+  commonName: "work.bitey.life"
+  dnsNames:
+    - "work.bitey.life"
+    - "*.work.bitey.life"
 ---
 apiVersion: external-secrets.io/v1alpha1
 kind: PushSecret
